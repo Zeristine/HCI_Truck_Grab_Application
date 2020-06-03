@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "15470860558",
+    "firebase_url": "https://hci-truck-application.firebaseio.com",
+    "project_id": "hci-truck-application",
+    "storage_bucket": "hci-truck-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15470860558:android:4e3d4efa5a95b733299f5f",
+        "android_client_info": {
+          "package_name": "fpt.summer.u2020.hci.assignment.truck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15470860558-jk44nfu3200betcb56mvlj36o29qve9e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUBFfwr1M_LNAXb7uD9h9Y3fpJOMpmkkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15470860558-jk44nfu3200betcb56mvlj36o29qve9e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
