@@ -1,15 +1,9 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:truck/screens/home.dart';
 import 'package:truck/screens/login.dart';
-
-class SignUp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SignUpScreen(),
-    );
-  }
-}
+import 'package:truck/services/auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -17,8 +11,25 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class SignUpScreenState extends State<SignUpScreen> {
-void toLoginScreen(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+  final FocusNode focus = FocusNode();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void toLoginScreen(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
+
+  void signUp(BuildContext context) async{
+    await FirebaseAuthService.signUp(emailController.text, passwordController.text).then((value) {
+      if(value == null){
+
+      }else{
+        Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => HomeScreen()));
+        
+      }
+    });
   }
 
   @override
@@ -43,6 +54,9 @@ void toLoginScreen(BuildContext context){
                         InputDecoration(labelText: 'Enter your username'),
                     maxLines: 1,
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   TextField(
                     decoration:
                         InputDecoration(labelText: 'Enter your password'),
@@ -61,6 +75,9 @@ void toLoginScreen(BuildContext context){
                           child: Text('Back to Sign in'),
                           color: Colors.brown[200],
                         ),
+                      ),
+                      SizedBox(
+                        width: 10,
                       ),
                       SizedBox(
                         width: (MediaQuery.of(context).size.width) * 0.4,
