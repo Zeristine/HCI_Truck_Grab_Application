@@ -40,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     decoration:
-                        InputDecoration(labelText: 'Enter your username'),
+                        InputDecoration(labelText: 'Your email'),
                     maxLines: 1,
                     controller: emailController,
                     onFieldSubmitted: (v) {
@@ -53,7 +53,7 @@ class LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                     focusNode: focus,
                     decoration:
-                        InputDecoration(labelText: 'Enter your password'),
+                        InputDecoration(labelText: 'Your password'),
                     maxLines: 1,
                     controller: passwordController,
                     obscureText: true,

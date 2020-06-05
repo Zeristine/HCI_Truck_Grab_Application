@@ -32,7 +32,7 @@ class  FirebaseAuthService {
   }
 
   // Sign up
-  static Future signUp(email, password) async {
+  static Future<FirebaseUser> signUp(email, password) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
