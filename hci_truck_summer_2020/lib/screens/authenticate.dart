@@ -8,11 +8,7 @@ import 'package:truck/screens/login.dart';
 class AuthenticateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: FutureBuilder(
+    return FutureBuilder(
         future: FirebaseAuthService.checkLoggedUser(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -21,11 +17,29 @@ class AuthenticateScreen extends StatelessWidget {
             } else {
               return LoginScreen();
             }
-          }else{
+          } else {
             return ErrorScreen();
           }
-        },
-      ),
-    );
+        });
   }
 }
+//   return MaterialApp(
+//     theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//         visualDensity: VisualDensity.adaptivePlatformDensity),
+//     home: FutureBuilder(
+//       future: FirebaseAuthService.checkLoggedUser(),
+//       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+//         if (snapshot.connectionState == ConnectionState.done) {
+//           if (snapshot.data) {
+//             return HomeScreen();
+//           } else {
+//             return LoginScreen();
+//           }
+//         }else{
+//           return ErrorScreen();
+//         }
+//       },
+//     ),
+//   );
+// }

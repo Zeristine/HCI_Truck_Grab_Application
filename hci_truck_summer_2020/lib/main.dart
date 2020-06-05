@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:truck/screens/home.dart';
+import 'package:truck/screens/signup.dart';
 import 'screens/authenticate.dart';
 
 void main() {
-  runApp(AuthenticateScreen());
+  runApp(
+    MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/' : (context) => AuthenticateScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/home': (context) => HomeScreen(),
+      },
+    )
+    );
 }
 
 // class MyApp extends StatelessWidget {
