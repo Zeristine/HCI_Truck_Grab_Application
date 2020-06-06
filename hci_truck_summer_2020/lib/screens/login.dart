@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/signup.dart';
+import 'package:truck/services/appUi.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -24,11 +25,11 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          backgroundColor: Color.fromRGBO(243, 244, 246, 1),
+    return Scaffold(
+          backgroundColor: AppConstants.backgroundColor,
           resizeToAvoidBottomInset: false,
-          body: Container(
+          body: SingleChildScrollView(
+            child: Container(
             padding: EdgeInsets.all(AppConstants.edgePadding),
             child: Center(
                 child: Column(
@@ -42,8 +43,7 @@ class LoginScreenState extends State<LoginScreen> {
                       context, focus, emailController, passwordController),
                   loginButtonGroup(context),
                 ])),
-          )),
-    );
+          )));
   }
 }
 
@@ -139,19 +139,9 @@ Widget loginButtonGroup(BuildContext context) {
                                 border: InputBorder.none,
                                 hintText: 'What do you want to remember?'),
                           ),
-                          SizedBox(
-                            width: 320.0,
-                            child: RaisedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                "Save",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              color: AppConstants.buttonColor,
-                            ),
-                          )
+                          PrimaryButton(onPressed: () {
+                            Navigator.pop(context);
+                          })
                         ],
                       ),
                     ),
@@ -173,53 +163,20 @@ Widget loginButtonGroup(BuildContext context) {
       SizedBox(
         height: 24,
       ),
-      SizedBox(
-        width: double.infinity,
-        height: 52.0,
-        child: RaisedButton(
-          onPressed: () {
-            login(context);
-          },
-          elevation: 0.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            side: BorderSide(color: AppConstants.buttonColor),
-          ),
-          child: Text(
-            'SIGN IN',
-            style: TextStyle(
-              fontSize: AppConstants.minFontSize,
-              color: Colors.white,
-            ),
-          ),
-          color: Color.fromRGBO(8, 93, 207, 1),
-        ),
+      PrimaryButton(
+        onPressed: null,
+        text: 'LOGIN',
       ),
       SizedBox(
-        height: AppConstants.componantSpacing,
+        height: 12,
       ),
-      SizedBox(
-        width: double.infinity,
-        height: 52.0,
-        child: RaisedButton(
-          elevation: 0.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            side: BorderSide(color: AppConstants.buttonColor, width: 2.0),
-          ),
-          onPressed: () {
-            toSignUpScreen(context);
-          },
-          child: Text(
-            'SIGN UP',
-            style: TextStyle(
-              fontSize: AppConstants.minFontSize,
-              color: AppConstants.buttonColor,
-            ),
-          ),
-          color: Colors.white,
-        ),
-      ),
+      PrimaryButton(
+        onPressed: () {
+          toSignUpScreen(context);
+        },
+        text: 'SIGN UP',
+        color: AppConstants.buttonColorSecRed,
+      )
     ],
   );
 }
@@ -231,16 +188,12 @@ Widget logo() {
         padding: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: AppConstants.buttonColor,
+          color: AppConstants.logoColor,
         ),
-        child: Icon(
-          Icons.local_shipping,
-          size: 80,
-          color: Colors.white,
-        ),
+        child: Image.asset('assets/images/delivery-truck.png'),
       ),
       SizedBox(
-        height: 12,
+        height: 12.0,
       ),
       Text(
         'DELTRU',

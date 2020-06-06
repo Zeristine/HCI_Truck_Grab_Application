@@ -13,7 +13,7 @@ class ErrorScreenState extends State<ErrorScreen> {
       home: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Center(
-          child: Text('ERROR'),
+          child: null,
         ),
       ),
     );    
