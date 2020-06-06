@@ -26,15 +26,15 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          backgroundColor: AppConstants.backgroundColor,
-          resizeToAvoidBottomInset: false,
-          body: SingleChildScrollView(
-            child: Container(
+      backgroundColor: AppConstants.backgroundColor,
+      resizeToAvoidBottomInset: false,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
             padding: EdgeInsets.all(AppConstants.edgePadding),
-            child: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   logo(),
                   SizedBox(
                     height: 40,
@@ -42,8 +42,11 @@ class LoginScreenState extends State<LoginScreen> {
                   loginform(
                       context, focus, emailController, passwordController),
                   loginButtonGroup(context),
-                ])),
-          )));
+                ]),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -164,8 +167,9 @@ Widget loginButtonGroup(BuildContext context) {
         height: 24,
       ),
       PrimaryButton(
-        onPressed: (){
-          Navigator.pushNamedAndRemoveUntil(context, '/userLocation', (route) => false);
+        onPressed: () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/userLocation', (route) => false);
         },
         text: 'LOGIN',
       ),
