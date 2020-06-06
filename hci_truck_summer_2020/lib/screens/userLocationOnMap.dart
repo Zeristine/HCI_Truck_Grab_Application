@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class UserLocation extends StatefulWidget {
+class UserLocationScreen extends StatefulWidget {
 
   @override
   UserLocationState createState() => UserLocationState();
 }
 
-class UserLocationState extends State<UserLocation> {
+class UserLocationState extends State<UserLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+
     );
   }
 }

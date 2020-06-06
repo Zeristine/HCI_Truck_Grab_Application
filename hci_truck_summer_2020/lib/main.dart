@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:truck/screens/home.dart';
 import 'package:truck/screens/signup.dart';
+import 'package:truck/screens/userLocationOnMap.dart';
 import 'screens/authenticate.dart';
 
 void main() {
@@ -11,6 +12,7 @@ void main() {
         '/' : (context) => AuthenticateScreen(),
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
+        '/userLocation' : (context) => UserLocationScreen(),
       },
     )
     );

@@ -164,7 +164,9 @@ Widget loginButtonGroup(BuildContext context) {
         height: 24,
       ),
       PrimaryButton(
-        onPressed: null,
+        onPressed: (){
+          Navigator.pushNamedAndRemoveUntil(context, '/userLocation', (route) => false);
+        },
         text: 'LOGIN',
       ),
       SizedBox(
