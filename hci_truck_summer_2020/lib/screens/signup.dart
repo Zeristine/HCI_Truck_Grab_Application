@@ -77,96 +77,233 @@ class SignUpScreenState extends State<SignUpScreen> {
             key: formKey,
             child: Center(
                 child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image(
-                  image: AssetImage('assets/images/background.jpg'),
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.contain,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: usernameController,
-                  decoration: InputDecoration(labelText: 'Enter your username'),
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  maxLines: 1,
-                  validator: (text) {
-                    if (text.length == 0) {
-                      return "Please enter your Username";
-                    } else if (text.length < 4) {
-                      return "The Username has at least 5 characters";
-                    } else {
-                      return null;
-                    }
-                  },
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(emailFocus);
-                  },
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: 'Enter your email'),
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  maxLines: 1,
-                  focusNode: emailFocus,
-                  validator: (text) {
-                    if (!EmailValidator.validate(text)) {
-                      return "Incorrect email";
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(passwordFocus);
-                  },
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(labelText: 'Enter your password'),
-                  maxLines: 1,
-                  obscureText: true,
-                  focusNode: passwordFocus,
-                  validator: (text) {
-                    if (text.length == 0) {
-                      return "Please enter your password..";
-                    } else if (text.length < 8) {
-                      return "The password has at least 8 characters";
-                    } else {
-                      return null;
-                    }
-                  },
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(repasswordFocus);
-                  },
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: repasswordController,
-                  decoration:
-                      InputDecoration(labelText: 'Enter your password again'),
-                  maxLines: 1,
-                  obscureText: true,
-                  focusNode: repasswordFocus,
-                ),
+                signUpForm(
+                    context,
+                    usernameController,
+                    emailController,
+                    passwordController,
+                    repasswordController,
+                    emailFocus,
+                    passwordFocus,
+                    repasswordFocus),
                 SizedBox(
                   height: 24,
                 ),
-                PrimaryButton(onPressed: null, text: 'SIGN UP',)
+                signUpButtonGroup(
+                    formKey, context, passwordController, repasswordController),
               ],
             ))),
       ),
     );
   }
+}
+
+Widget signUpForm(
+    BuildContext context,
+    TextEditingController usernameController,
+    TextEditingController emailController,
+    TextEditingController passwordController,
+    TextEditingController repasswordController,
+    FocusNode emailFocus,
+    FocusNode passwordFocus,
+    FocusNode repasswordFocus) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      TextFormField(
+        style: TextStyle(
+          fontSize: AppConstants.minFontSize,
+          fontFamily: 'Roboto',
+        ),
+        decoration: InputDecoration(
+          //labelText: 'EMAIL',
+          filled: true,
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
+          ),
+          hintText: "USERNAME",
+        ),
+        controller: usernameController,
+        keyboardType: TextInputType.emailAddress,
+        autocorrect: false,
+        maxLines: 1,
+        validator: (text) {
+          if (text.length == 0) {
+            return "Please enter your Username";
+          } else if (text.length < 4) {
+            return "The Username has at least 5 characters";
+          } else {
+            return null;
+          }
+        },
+        onFieldSubmitted: (v) {
+          FocusScope.of(context).requestFocus(emailFocus);
+        },
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      TextFormField(
+        style: TextStyle(
+          fontSize: AppConstants.minFontSize,
+          fontFamily: 'Roboto',
+        ),
+        decoration: InputDecoration(
+          //labelText: 'EMAIL',
+          filled: true,
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
+          ),
+          hintText: "YOUR EMAIL",
+        ),
+        controller: emailController,
+        keyboardType: TextInputType.emailAddress,
+        autocorrect: false,
+        maxLines: 1,
+        focusNode: emailFocus,
+        validator: (text) {
+          if (!EmailValidator.validate(text)) {
+            return "Incorrect email";
+          }
+          return null;
+        },
+        onFieldSubmitted: (v) {
+          FocusScope.of(context).requestFocus(passwordFocus);
+        },
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      TextFormField(
+        style: TextStyle(
+          fontSize: AppConstants.minFontSize,
+          fontFamily: 'Roboto',
+        ),
+        decoration: InputDecoration(
+          //labelText: 'EMAIL',
+          filled: true,
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
+          ),
+          hintText: "YOUR PASSWORD",
+        ),
+        controller: passwordController,
+        maxLines: 1,
+        obscureText: true,
+        focusNode: passwordFocus,
+        validator: (text) {
+          if (text.length == 0) {
+            return "Please enter your password..";
+          } else if (text.length < 8) {
+            return "The password has at least 8 characters";
+          } else {
+            return null;
+          }
+        },
+        onFieldSubmitted: (v) {
+          FocusScope.of(context).requestFocus(repasswordFocus);
+        },
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      TextFormField(
+        style: TextStyle(
+          fontSize: AppConstants.minFontSize,
+          fontFamily: 'Roboto',
+        ),
+        decoration: InputDecoration(
+          //labelText: 'EMAIL',
+          filled: true,
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
+          ),
+          hintText: "ENTER YOUR PASSWORD AGAIN",
+        ),
+        controller: repasswordController,
+        maxLines: 1,
+        obscureText: true,
+        focusNode: repasswordFocus,
+      ),
+    ],
+  );
+}
+
+Widget signUpButtonGroup(
+    GlobalKey<FormState> formKey,
+    BuildContext context,
+    TextEditingController passwordController,
+    TextEditingController repasswordController) {
+  return PrimaryButton(
+    onPressed: () {
+      if (formKey.currentState.validate()) {
+        if (passwordController.text
+                .trim()
+                .compareTo(repasswordController.text.trim()) ==
+            0) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/userLocation', (route) => false);
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: Container(
+                    height: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText:
+                                    "Your Passwords aren't matched with each other!"),
+                          ),
+                          PrimaryButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            text: 'Close',
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        }
+      }
+    },
+    text: 'SIGN UP',
+  );
 }
