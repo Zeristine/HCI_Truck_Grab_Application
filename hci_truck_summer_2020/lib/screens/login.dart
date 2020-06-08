@@ -79,7 +79,7 @@ Widget loginform(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "EMAIL",
+          hintText: "Email",
         ),
         maxLines: 1,
         controller: emailController,
@@ -105,7 +105,7 @@ Widget loginform(
         ),
         decoration: InputDecoration(
           //labelText: 'PASSWORD',
-          hintText: 'PASSWORD',
+          hintText: 'Password',
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -194,7 +194,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
                 context, '/userLocation', (route) => false);
           }
         },
-        text: 'LOGIN',
+        text: 'Login',
       ),
       SizedBox(
         height: 12,
@@ -203,7 +203,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
         onPressed: () {
           toSignUpScreen(context);
         },
-        text: 'SIGN UP',
+        text: 'Create an account',
         color: AppConstants.buttonColorSecRed,
       )
     ],

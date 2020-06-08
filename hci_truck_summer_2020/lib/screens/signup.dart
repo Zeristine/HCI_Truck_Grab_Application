@@ -128,7 +128,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "USERNAME",
+          hintText: "Username",
         ),
         controller: usernameController,
         keyboardType: TextInputType.emailAddress,
@@ -167,7 +167,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "YOUR EMAIL",
+          hintText: "Your Email",
         ),
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
@@ -204,7 +204,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "YOUR PASSWORD",
+          hintText: "Your Password",
         ),
         controller: passwordController,
         maxLines: 1,
@@ -243,7 +243,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "ENTER YOUR PASSWORD AGAIN",
+          hintText: "Enter your password again",
         ),
         controller: repasswordController,
         maxLines: 1,
@@ -262,48 +262,44 @@ Widget signUpButtonGroup(
   return PrimaryButton(
     onPressed: () {
       if (formKey.currentState.validate()) {
-        if (passwordController.text
-                .trim()
-                .compareTo(repasswordController.text.trim()) ==
-            0) {
+        if (passwordController.text.trim() == repasswordController.text.trim())
           Navigator.pushNamedAndRemoveUntil(
               context, '/userLocation', (route) => false);
-        } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: Container(
-                    height: 200,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText:
-                                    "Your Passwords aren't matched with each other!"),
-                          ),
-                          PrimaryButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            text: 'Close',
-                          )
-                        ],
-                      ),
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                  height: 200,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText:
+                                  "Your Passwords aren't matched with each other!"),
+                        ),
+                        PrimaryButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          text: 'Close',
+                        )
+                      ],
                     ),
                   ),
-                );
-              });
-        }
+                ),
+              );
+            });
       }
     },
-    text: 'SIGN UP',
+    text: 'Create',
   );
 }
