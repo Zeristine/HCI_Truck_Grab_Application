@@ -76,6 +76,12 @@ flutter:
         - asset: fonts/Oswald-Regular.ttf
         - asset: fonts/Oswald-Bold.ttf
           weight: 700
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: fonts/Poppins-SemiBold.ttf
+          weight: 600
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

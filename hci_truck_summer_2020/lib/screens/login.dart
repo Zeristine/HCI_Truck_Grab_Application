@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/signup.dart';
+import 'package:truck/screens/userListQuotation.dart';
 import 'package:truck/services/appUi.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -75,7 +76,7 @@ Widget loginform(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "EMAIL",
+          hintText: "Email",
         ),
         maxLines: 1,
         controller: emailController,
@@ -94,7 +95,7 @@ Widget loginform(
         ),
         decoration: InputDecoration(
           //labelText: 'PASSWORD',
-          hintText: 'PASSWORD',
+          hintText: 'Password',
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -166,12 +167,18 @@ Widget loginButtonGroup(BuildContext context) {
       SizedBox(
         height: 24,
       ),
-      PrimaryButton(
-        onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/userLocation', (route) => false);
-        },
-        text: 'LOGIN',
+      Hero(
+        tag: 'background',
+        child: PrimaryButton(
+          color: Colors.blue,
+          onPressed: () {
+            Navigator.push(
+                context,
+                PageRouteBuilder(
+                    pageBuilder: (context, a, b) => UserListQuotaionScreen()));
+          },
+          text: 'Login',
+        ),
       ),
       SizedBox(
         height: 12,
@@ -180,7 +187,7 @@ Widget loginButtonGroup(BuildContext context) {
         onPressed: () {
           toSignUpScreen(context);
         },
-        text: 'SIGN UP',
+        text: 'Create an Account',
         color: AppConstants.buttonColorSecRed,
       )
     ],

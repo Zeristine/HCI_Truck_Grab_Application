@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:truck/screens/home.dart';
 import 'package:truck/screens/signup.dart';
+import 'package:truck/screens/userListQuotation.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
 import 'screens/authenticate.dart';
 
 void main() {
   runApp(
     MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/userListQuotation',
       routes: {
         '/' : (context) => AuthenticateScreen(),
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
         '/userLocation' : (context) => UserLocationScreen(),
+        '/userListQuotation' : (context) => UserListQuotaionScreen(),
       },
     )
     );
