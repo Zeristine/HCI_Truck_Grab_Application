@@ -1,12 +1,8 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
-import 'package:truck/models/user.dart';
-import 'package:truck/screens/home.dart';
 import 'package:truck/services/appUi.dart';
-import 'package:truck/services/auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -14,6 +10,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class SignUpScreenState extends State<SignUpScreen> {
+  String role = "booker";
   final GlobalKey<FormState> formKey = GlobalKey();
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
@@ -29,28 +26,28 @@ class SignUpScreenState extends State<SignUpScreen> {
     Navigator.pop(context);
   }
 
-  void signUp(BuildContext context) async {
-    if (emailController.text.trim() == repasswordController.text.trim()) {
-      await FirebaseAuthService.signUp(
-              emailController.text, passwordController.text)
-          .then((value) {
-        if (value == null) {
-        } else {
-          final databaseReference = FirebaseDatabase.instance.reference();
-          User user = User(value.uid, usernameController.text,
-              emailController.text, passwordController.text);
-          databaseReference
-              .child("Users")
-              .child(value.uid)
-              .set(user)
-              .then((value) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomeScreen()));
-          });
-        }
-      });
-    }
-  }
+  // void signUp(BuildContext context) async {
+  //   if (emailController.text.trim() == repasswordController.text.trim()) {
+  //     await FirebaseAuthService.signUp(
+  //             emailController.text, passwordController.text)
+  //         .then((value) {
+  //       if (value == null) {
+  //       } else {
+  //         final databaseReference = FirebaseDatabase.instance.reference();
+  //         User user = User(value.uid, usernameController.text,
+  //             emailController.text, passwordController.text);
+  //         databaseReference
+  //             .child("Users")
+  //             .child(value.uid)
+  //             .set(user)
+  //             .then((value) {
+  //           Navigator.of(context)
+  //               .push(MaterialPageRoute(builder: (context) => HomeScreen()));
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,29 +68,57 @@ class SignUpScreenState extends State<SignUpScreen> {
         centerTitle: true,
         elevation: 0.0,
       ),
-      body: Container(
-        padding: EdgeInsets.all(24.0),
-        child: Form(
-            key: formKey,
-            child: Center(
-                child: Column(
-              children: <Widget>[
-                signUpForm(
-                    context,
-                    usernameController,
-                    emailController,
-                    passwordController,
-                    repasswordController,
-                    emailFocus,
-                    passwordFocus,
-                    repasswordFocus),
-                SizedBox(
-                  height: 24,
-                ),
-                signUpButtonGroup(
-                    formKey, context, passwordController, repasswordController),
-              ],
-            ))),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(24.0),
+          child: Form(
+              key: formKey,
+              child: Center(
+                  child: Column(
+                children: <Widget>[
+                  signUpForm(
+                      context,
+                      usernameController,
+                      emailController,
+                      passwordController,
+                      repasswordController,
+                      emailFocus,
+                      passwordFocus,
+                      repasswordFocus),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("You are :"),
+                  ListTile(
+                    title: Text('Booker'),
+                    leading: Radio(
+                        value: 'booker',
+                        groupValue: role,
+                        onChanged: (String value) {
+                          setState(() {
+                            this.role = value;
+                          });
+                        }),
+                  ),
+                  ListTile(
+                    title: Text('Truck Driver'),
+                    leading: Radio(
+                        value: 'truckdriver',
+                        groupValue: role,
+                        onChanged: (String value) {
+                          setState(() {
+                            this.role = value;
+                          });
+                        }),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  signUpButtonGroup(formKey, context, passwordController,
+                      repasswordController),
+                ],
+              ))),
+        ),
       ),
     );
   }
@@ -261,46 +286,47 @@ Widget signUpButtonGroup(
     TextEditingController repasswordController) {
   return PrimaryButton(
     onPressed: () {
-      if (formKey.currentState.validate()) {
-        if (passwordController.text.trim() ==
-            repasswordController.text.trim()) {
           Navigator.pushNamedAndRemoveUntil(
-              context, '/userLocation', (route) => false);
-        } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: Container(
-                    height: 200,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText:
-                                    "Your Passwords aren't matched with each other!"),
-                          ),
-                          PrimaryButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            text: 'Close',
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              });
-        }
-      }
+              context, '/homeTruck', (route) => false);
+      // if (formKey.currentState.validate()) {
+      //   if (passwordController.text.trim() ==
+      //       repasswordController.text.trim()) {
+      //     Navigator.pushNamedAndRemoveUntil(
+      //         context, '/homeTruck', (route) => false);
+      //   } else {
+      //     showDialog(
+      //         context: context,
+      //         builder: (BuildContext context) {
+      //           return Dialog(
+      //             shape: RoundedRectangleBorder(
+      //                 borderRadius: BorderRadius.circular(20.0)),
+      //             child: Container(
+      //               height: 200,
+      //               child: Padding(
+      //                 padding: const EdgeInsets.all(12.0),
+      //                 child: Column(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   children: [
+      //                     Center(
+      //                       child: Text(
+      //                           "Your Passwords aren't matched with each other!"),
+      //  style: TextStyle(fontSize: 25.0),
+      //                     ),
+      //                     PrimaryButton(
+      //                       onPressed: () {
+      //                         Navigator.pop(context);
+      //                       },
+      //                       text: 'Close',
+      //                     )
+      //                   ],
+      //                 ),
+      //               ),
+      //             ),
+      //           );
+      //         });
+      //   }
+      // }
     },
     text: 'Create',
   );
