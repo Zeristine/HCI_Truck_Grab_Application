@@ -70,8 +70,23 @@ Widget profileDetail() {
 Widget profileButtonGroup(BuildContext context) {
   return Column(
     children: <Widget>[
-      RaisedButton(
-        onPressed: () {
+      Divider(
+        color: Colors.black,
+      ),
+      ListTile(
+        title: Row(
+          children: <Widget>[
+            Icon(Icons.edit),
+            SizedBox(
+              width: 15.0,
+            ),
+            Text(
+              'Edit Profile',
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ],
+        ),
+        onTap: () {
           showDialog(
             context: context,
             child: Dialog(
@@ -86,21 +101,24 @@ Widget profileButtonGroup(BuildContext context) {
             ),
           );
         },
-        child: Row(
+      ),
+      Divider(
+        color: Colors.black,
+      ),
+      ListTile(
+        title: Row(
           children: <Widget>[
             Icon(Icons.edit),
             SizedBox(
               width: 15.0,
             ),
             Text(
-              'Edit Profile',
+              'Change Password',
               style: TextStyle(fontSize: 20.0),
             ),
           ],
         ),
-      ),
-      RaisedButton(
-        onPressed: () {
+        onTap: () {
           showDialog(
             context: context,
             child: Dialog(
@@ -114,40 +132,30 @@ Widget profileButtonGroup(BuildContext context) {
             ),
           );
         },
-        child: Row(
+      ),
+      Divider(
+        color: Colors.black,
+      ),
+      ListTile(
+        title: Row(
           children: <Widget>[
-            Icon(Icons.edit),
+            Icon(Icons.library_books),
             SizedBox(
               width: 15.0,
             ),
             Text(
-              'Change Password',
-              style: TextStyle(fontSize: 20.0),
+              'Open Delivery History',
+              style: TextStyle(fontSize: 20.0,),
             ),
           ],
         ),
+        onTap: () {},
       ),
-      RaisedButton(
-        onPressed: () {},
-        child: Row(
-          children: <Widget>[
-            Icon(Icons.edit),
-            SizedBox(
-              width: 15.0,
-            ),
-            Text(
-              'Check Delivery History',
-              style: TextStyle(fontSize: 20.0),
-            ),
-          ],
-        ),
+      Divider(
+        color: Colors.black,
       ),
-      RaisedButton(
-        onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/login', (route) => false);
-        },
-        child: Row(
+      ListTile(
+        title: Row(
           children: <Widget>[
             Icon(Icons.exit_to_app),
             SizedBox(
@@ -159,6 +167,13 @@ Widget profileButtonGroup(BuildContext context) {
             ),
           ],
         ),
+        onTap: () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/login', (route) => false);
+        },
+      ),
+      Divider(
+        color: Colors.black,
       ),
     ],
   );

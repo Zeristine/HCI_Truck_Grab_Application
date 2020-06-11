@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:truck/screens/home.dart';
 import 'package:truck/screens/profile.dart';
-import 'package:truck/screens/signup.dart';
+import 'package:truck/screens/requestListTruck.dart';
+import 'package:truck/screens/userLocationOnMap.dart';
 
 class HomeTruckScreen extends StatefulWidget {
   @override
@@ -47,14 +47,14 @@ Widget homeScreenStack(int index) {
         offstage: index != 0,
         child: TickerMode(
           enabled: index == 0,
-          child: HomeScreen(),
+          child: RequestListTruckScreen(),
         ),
       ),
       Offstage(
         offstage: index != 1,
         child: TickerMode(
           enabled: index == 1,
-          child: SignUpScreen(),
+          child: UserLocationScreen(),
         ),
       ),
       Offstage(
