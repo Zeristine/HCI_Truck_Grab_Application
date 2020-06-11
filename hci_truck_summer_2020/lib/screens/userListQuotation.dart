@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:marquee_widget/marquee_widget.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
 
 class UserListQuotaionScreen extends StatefulWidget {
+  final int heroIndex;
+  UserListQuotaionScreen(this.heroIndex);
   @override
-  UserListQuotaionScreenState createState() => UserListQuotaionScreenState();
+  UserListQuotaionScreenState createState() =>
+      UserListQuotaionScreenState(heroIndex);
 }
 
 ScrollController _scrollController;
@@ -83,17 +87,24 @@ List<Quotation> quotations = <Quotation>[
 ];
 
 class UserListQuotaionScreenState extends State<UserListQuotaionScreen> {
+  int heroIndex;
+  UserListQuotaionScreenState(this.heroIndex);
+
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'background',
+      tag: 'background' + heroIndex.toString(),
       child: Scaffold(
-        backgroundColor: Colors.blue,
+        backgroundColor: AppConstants.buttonColor,
         appBar: AppBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: AppConstants.buttonColor,
           title: Text(
             '#34568 Details',
-            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Poppins',
+              fontSize: 16,
+            ),
           ),
           centerTitle: true,
           elevation: 0.0,
@@ -107,7 +118,7 @@ class UserListQuotaionScreenState extends State<UserListQuotaionScreen> {
                 borderRadius: BorderRadius.circular(.0),
               ),
               //Color.fromRGBO(236, 126, 114, 1)
-              color: Colors.blue,
+              color: AppConstants.buttonColor,
               child: InkWell(
                 onTap: () {},
                 child: AnimatedContainer(
@@ -132,7 +143,7 @@ class UserListQuotaionScreenState extends State<UserListQuotaionScreen> {
                   color: Colors.white,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
-                  fontSize: AppConstants.h5,
+                  fontSize: AppConstants.medFontSize,
                 ),
               ),
             ),
@@ -343,6 +354,7 @@ class UserListQuotaionScreenState extends State<UserListQuotaionScreen> {
 Widget header() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Flexible(
         child: Container(
@@ -353,15 +365,28 @@ Widget header() {
                 children: <Widget>[
                   Icon(
                     Icons.my_location,
+                    color: Color.fromRGBO(207, 8, 108, 1),
                   ),
                   SizedBox(
-                    width: 8,
+                    width: 8.0,
                   ),
                   Flexible(
-                    child: Text(
-                      "415/25 Trường Chinh, Phường 14, Quận Tân Bình, TP.HCM",
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
+                    child: Marquee(
+                      direction: Axis.horizontal,
+                      textDirection: TextDirection.ltr,
+                      animationDuration: Duration(seconds: 3),
+                      backDuration: Duration(seconds: 3),
+                      pauseDuration: Duration(seconds: 4),
+                      directionMarguee: DirectionMarguee.TwoDirection,
+                      child: Text(
+                        "415/25 Trường Chinh, Phường 14, Quận Tân Bình, TP.HCM",
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -372,19 +397,62 @@ Widget header() {
               Row(
                 children: <Widget>[
                   Icon(
-                    Icons.location_on,
+                    Icons.more_vert,
+                    color: Color.fromRGBO(207, 8, 108, 0.7),
                   ),
+                  SizedBox(
+                    width: 8.0,
+                  ),
+                  Icon(
+                    Icons.looks_4,
+                    color: Colors.grey,
+                  ),
+                  Flexible(
+                    child: Text(
+                      "Kilometer",
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Icon(Icons.location_on,
+                      color: Color.fromRGBO(207, 183, 8, 1)),
                   SizedBox(
                     width: 8,
                   ),
                   Flexible(
-                    child: Text(
-                      "415/25 Trường Chinh, Phường 14, Quận Tân Bình, TP.HCM",
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
+                    child: Marquee(
+                      direction: Axis.horizontal,
+                      textDirection: TextDirection.ltr,
+                      animationDuration: Duration(seconds: 3),
+                      backDuration: Duration(seconds: 3),
+                      pauseDuration: Duration(seconds: 4),
+                      directionMarguee: DirectionMarguee.TwoDirection,
+                      child: Text(
+                        "585/5 Nguyễn Thị Thập, Phường 3, Quận 7, TP.HCM",
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
                     ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 8.0,
               ),
             ],
           ),
