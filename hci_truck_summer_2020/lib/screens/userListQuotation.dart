@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:marquee_widget/marquee_widget.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
+import 'package:truck/services/marquee.dart';
 
 class UserListQuotaionScreen extends StatefulWidget {
   final int heroIndex;
@@ -192,6 +192,10 @@ class UserListQuotaionScreenState extends State<UserListQuotaionScreen> {
     _scrollController.addListener(_scrollListener);
     super.initState();
   }
+  @override
+  void dispose(){
+      super.dispose();
+  }
 
   Widget listQuotaion() {
     return ListView.builder(
@@ -373,11 +377,8 @@ Widget header() {
                   Flexible(
                     child: Marquee(
                       direction: Axis.horizontal,
-                      textDirection: TextDirection.ltr,
-                      animationDuration: Duration(seconds: 3),
-                      backDuration: Duration(seconds: 3),
-                      pauseDuration: Duration(seconds: 4),
-                      directionMarguee: DirectionMarguee.TwoDirection,
+                      //textDirection: TextDirection.ltr,
+                      //directionMarguee: DirectionMarguee.TwoDirection,
                       child: Text(
                         "415/25 Trường Chinh, Phường 14, Quận Tân Bình, TP.HCM",
                         overflow: TextOverflow.ellipsis,
@@ -433,11 +434,8 @@ Widget header() {
                   Flexible(
                     child: Marquee(
                       direction: Axis.horizontal,
-                      textDirection: TextDirection.ltr,
-                      animationDuration: Duration(seconds: 3),
-                      backDuration: Duration(seconds: 3),
-                      pauseDuration: Duration(seconds: 4),
-                      directionMarguee: DirectionMarguee.TwoDirection,
+                      //textDirection: TextDirection.ltr,
+                      //directionMarguee: DirectionMarguee.TwoDirection,
                       child: Text(
                         "585/5 Nguyễn Thị Thập, Phường 3, Quận 7, TP.HCM",
                         overflow: TextOverflow.ellipsis,

@@ -47,6 +47,7 @@ class HomeScreenState extends State<UserHomeScreen> {
           child: optionsWidget[_selectesIndex],
         ),
         bottomNavigationBar: BottomNavigationBar(
+          unselectedItemColor: Colors.black54,
           selectedItemColor: AppConstants.buttonColor,
           showSelectedLabels: false,
           showUnselectedLabels: false,
@@ -58,6 +59,10 @@ class HomeScreenState extends State<UserHomeScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
               title: Text('History'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              title: Text('Message'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
