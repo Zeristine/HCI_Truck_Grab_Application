@@ -175,7 +175,7 @@ Widget loginButtonGroup(BuildContext context) {
             Navigator.push(
                 context,
                 PageRouteBuilder(
-                    pageBuilder: (context, a, b) => UserListQuotaionScreen()));
+                    pageBuilder: (context, a, b) => UserListQuotaionScreen(1)));
           },
           text: 'Login',
         ),

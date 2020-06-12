@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/screens/error.dart';
-import 'package:truck/screens/home.dart';
+import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/auth.dart';
 import 'package:truck/screens/login.dart';
 
@@ -13,7 +13,7 @@ class AuthenticateScreen extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data) {
-              return HomeScreen();
+              return UserHomeScreen();
             } else {
               return LoginScreen();
             }
