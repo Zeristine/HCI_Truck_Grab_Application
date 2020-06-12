@@ -1,10 +1,12 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/user.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/appUi.dart';
+import 'package:truck/services/auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:truck/screens/home.dart';
+import 'package:truck/screens/authenticate.dart';
 import 'package:truck/screens/homeTruck.dart';
 import 'package:truck/screens/login.dart';
 import 'package:truck/screens/UserListRequest.dart';
@@ -13,13 +13,13 @@ void main() {
     initialRoute: '/',
     routes: {
       '/': (context) => AuthenticateScreen(),
-      '/login' : (context) => LoginScreen(),
+      '/login': (context) => LoginScreen(),
       '/signup': (context) => SignUpScreen(),
-      '/home': (context) => HomeScreen(),
+      '/home': (context) => UserHomeScreen(),
       '/userLocation': (context) => UserLocationScreen(),
       '/homeTruck': (context) => HomeTruckScreen(),
-        '/userListQuotation' : (context) => UserListQuotaionScreen(1),
-        //'/userListRequest' : (context) => UserListRequestScreen(),
+      '/userListQuotation': (context) => UserListQuotaionScreen(1),
+      //'/userListRequest' : (context) => UserListRequestScreen(),
     },
   ));
 }
