@@ -2,6 +2,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/models/user.dart';
+import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/appUi.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -26,28 +28,28 @@ class SignUpScreenState extends State<SignUpScreen> {
     Navigator.pop(context);
   }
 
-  // void signUp(BuildContext context) async {
-  //   if (emailController.text.trim() == repasswordController.text.trim()) {
-  //     await FirebaseAuthService.signUp(
-  //             emailController.text, passwordController.text)
-  //         .then((value) {
-  //       if (value == null) {
-  //       } else {
-  //         final databaseReference = FirebaseDatabase.instance.reference();
-  //         User user = User(value.uid, usernameController.text,
-  //             emailController.text, passwordController.text);
-  //         databaseReference
-  //             .child("Users")
-  //             .child(value.uid)
-  //             .set(user)
-  //             .then((value) {
-  //           Navigator.of(context)
-  //               .push(MaterialPageRoute(builder: (context) => HomeScreen()));
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
+  void signUp(BuildContext context) async {
+    if (emailController.text.trim() == repasswordController.text.trim()) {
+      await FirebaseAuthService.signUp(
+              emailController.text, passwordController.text)
+          .then((value) {
+        if (value == null) {
+        } else {
+          final databaseReference = FirebaseDatabase.instance.reference();
+          User user = User(value.uid, usernameController.text,
+              emailController.text, passwordController.text);
+          databaseReference
+              .child("Users")
+              .child(value.uid)
+              .set(user)
+              .then((value) {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => UserHomeScreen()));
+          });
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
