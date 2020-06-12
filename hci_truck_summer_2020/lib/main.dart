@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:truck/screens/home.dart';
+import 'package:truck/screens/homeTruck.dart';
+import 'package:truck/screens/login.dart';
 import 'package:truck/screens/UserListRequest.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/screens/signup.dart';
@@ -6,19 +9,19 @@ import 'package:truck/screens/userListQuotation.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
 
 void main() {
-  runApp(
-    MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/' : (context) => UserHomeScreen(),
-        '/signup': (context) => SignUpScreen(),
-        '/home': (context) => UserHomeScreen(),
-        '/userLocation' : (context) => UserLocationScreen(),
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => AuthenticateScreen(),
+      '/login' : (context) => LoginScreen(),
+      '/signup': (context) => SignUpScreen(),
+      '/home': (context) => HomeScreen(),
+      '/userLocation': (context) => UserLocationScreen(),
+      '/homeTruck': (context) => HomeTruckScreen(),
         '/userListQuotation' : (context) => UserListQuotaionScreen(1),
         //'/userListRequest' : (context) => UserListRequestScreen(),
-      },
-    )
-    );
+    },
+  ));
 }
 
 // class MyApp extends StatelessWidget {
