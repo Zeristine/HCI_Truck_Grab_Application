@@ -11,6 +11,7 @@ class LoginScreen extends StatefulWidget {
 
 final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
+final GlobalKey<FormState> formKey = GlobalKey();
 
 void toSignUpScreen(BuildContext context) {
   Navigator.of(context)
@@ -31,19 +32,22 @@ class LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       body: Center(
         child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(AppConstants.edgePadding),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  logo(),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  loginform(
-                      context, focus, emailController, passwordController),
-                  loginButtonGroup(context),
-                ]),
+          child: Form(
+            key: formKey,
+            child: Container(
+              padding: EdgeInsets.all(AppConstants.edgePadding),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    logo(),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    loginform(
+                        context, focus, emailController, passwordController),
+                    loginButtonGroup(context, formKey),
+                  ]),
+            ),
           ),
         ),
       ),
@@ -83,6 +87,13 @@ Widget loginform(
         onFieldSubmitted: (v) {
           FocusScope.of(context).requestFocus(focus);
         },
+        validator: (text) {
+          if (text.length == 0) {
+            return "Please enter your Email";
+          } else {
+            return null;
+          }
+        },
       ),
       SizedBox(
         height: 12,
@@ -110,6 +121,13 @@ Widget loginform(
         maxLines: 1,
         controller: passwordController,
         obscureText: true,
+        validator: (text) {
+          if (text.length == 0) {
+            return "Please enter your Password";
+          } else {
+            return null;
+          }
+        },
       ),
       SizedBox(
         height: 12,
@@ -118,7 +136,7 @@ Widget loginform(
   );
 }
 
-Widget loginButtonGroup(BuildContext context) {
+Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
   return Column(
     children: <Widget>[
       GestureDetector(
@@ -143,9 +161,12 @@ Widget loginButtonGroup(BuildContext context) {
                                 border: InputBorder.none,
                                 hintText: 'What do you want to remember?'),
                           ),
-                          PrimaryButton(onPressed: () {
-                            Navigator.pop(context);
-                          })
+                          PrimaryButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            text: 'Close',
+                          )
                         ],
                       ),
                     ),
@@ -167,18 +188,14 @@ Widget loginButtonGroup(BuildContext context) {
       SizedBox(
         height: 24,
       ),
-      Hero(
-        tag: 'background',
-        child: PrimaryButton(
-          color: Colors.blue,
-          onPressed: () {
-            Navigator.push(
-                context,
-                PageRouteBuilder(
-                    pageBuilder: (context, a, b) => UserListQuotaionScreen()));
-          },
-          text: 'Login',
-        ),
+      PrimaryButton(
+        onPressed: () {
+          if (formKey.currentState.validate()) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/userLocation', (route) => false);
+          }
+        },
+        text: 'Login',
       ),
       SizedBox(
         height: 12,
