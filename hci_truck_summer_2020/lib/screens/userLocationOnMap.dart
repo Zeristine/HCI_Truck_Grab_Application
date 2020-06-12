@@ -1,7 +1,8 @@
+import 'dart:typed_data';
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:truck/constants/appConstans.dart';
 //import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -11,6 +12,16 @@ class UserLocationScreen extends StatefulWidget {
 }
 
 class UserLocationState extends State<UserLocationScreen> {
+  GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(10.739274, 106.704211);
+
+  void _onMapCreated(GoogleMapController mapController) {
+    this.mapController = mapController;
+  }
+
+  BitmapDescriptor myLocationMarker;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,63 +38,77 @@ class UserLocationState extends State<UserLocationScreen> {
           ),
         ),
       ),
-      body: Container(
-          margin: const EdgeInsets.only(left: 24, right: 24, top: 12),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 400,
-                  
-                  //child: Image.asset('images/mapdemo.png'),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  
-                  child: infomation(),
-                  height: 220,
-                )
-              ],
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: _center,
+              zoom: 15.0,
             ),
-          )
-          // child: <Widget>{
-          //  _Googlemap(context),
-
+            zoomControlsEnabled: false,
+            markers: Set.of([
+              Marker(
+                markerId: MarkerId('my_location'),
+                position: _center,
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+              ),
+            ]),
+            circles: Set.from([
+              Circle(
+                circleId: CircleId("myCircle"),
+                radius: 50.0,
+                center: _center,
+                fillColor: Colors.blue.withAlpha(70),
+                strokeColor: Colors.blue,
+                strokeWidth: 0,
+              ),
+            ]),
           ),
+          Padding(
+            padding: EdgeInsets.all(24.0),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: EdgeInsets.all(24.0),
+                height: 220,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 3,
+                      blurRadius: 7,
+                      offset: Offset(0, 5),
+                    )
+                  ],
+                ),
+                child: infomation(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  // Widget _Googlemap (BuildContext context){
-  //   return Container (
-  //     height: MediaQuery.of(context).size.height,
-  //     width: MediaQuery.of(context).size.width,
-  //     child: googlemap(
-  //       mapType:
-  //     ),
-
-  //   )
-  // }
   Widget infomation() {
     return Column(
-       
       children: [
         Row(
           children: [
             Icon(
               Icons.my_location,
-              size: AppConstants.h4,
+              size: AppConstants.h5,
+              color: Colors.blue,
             ),
-            SizedBox(width: 10),
+            SizedBox(width: 8.0),
             Text('Nơi nhận hàng',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: AppConstants.h5)),
+                style: TextStyle(fontSize: AppConstants.minFontSize)),
           ],
         ),
-      Container(
-          width: 320.0,
+        Container(
           margin: const EdgeInsets.only(left: 32, top: 8),
           child: TextFormField(
             textInputAction: TextInputAction.next,
@@ -92,37 +117,43 @@ class UserLocationState extends State<UserLocationScreen> {
               fontFamily: 'Roboto',
             ),
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
               filled: true,
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Colors.white, width: 2.0),
+                borderSide: BorderSide(
+                  color: Color.fromRGBO(132, 212, 255, 1),
+                  width: 2.0,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
-                borderSide:
-                    BorderSide(color: AppConstants.linkColor, width: 2.0),
+                borderSide: BorderSide(
+                    color: Color.fromRGBO(132, 212, 255, 1), width: 2.0),
               ),
             ),
             maxLines: 1,
           ),
         ),
+        SizedBox(
+          height: 12.0,
+        ),
         Row(
           children: [
             Icon(
               Icons.location_on,
-              size: AppConstants.h4,
+              size: AppConstants.h5,
+              color: Colors.red,
             ),
-           SizedBox(width: 10),
+            SizedBox(width: 8.0),
             Text(
               'Nơi giao hàng',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: AppConstants.h5),
+              style: TextStyle(fontSize: AppConstants.minFontSize),
             ),
           ],
         ),
-          Container(
-          width: 320.0,
+        Container(
           margin: const EdgeInsets.only(left: 32, top: 8),
           child: TextFormField(
             textInputAction: TextInputAction.next,
@@ -131,16 +162,20 @@ class UserLocationState extends State<UserLocationScreen> {
               fontFamily: 'Roboto',
             ),
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
               filled: true,
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Colors.white, width: 2.0),
+                borderSide: BorderSide(
+                  color: Color.fromRGBO(132, 212, 255, 1),
+                  width: 2.0,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
-                borderSide:
-                    BorderSide(color: AppConstants.linkColor, width: 2.0),
+                borderSide: BorderSide(
+                    color: Color.fromRGBO(132, 212, 255, 1), width: 2.0),
               ),
             ),
             maxLines: 1,
