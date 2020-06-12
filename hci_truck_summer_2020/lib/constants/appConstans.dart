@@ -9,6 +9,7 @@ class AppConstants {
   static final double h5 = 24;
   static final double componantSpacing = 24.0;
   static final double minFontSize = 16.0;
+  static final double medFontSize = 20.0;
   static final Color backgroundColor = Color.fromRGBO(243, 244, 246, 1);
   static final Color buttonColor = Color.fromRGBO(8, 93, 207, 1);
   static final Color logoColor = Color.fromRGBO(157, 181, 207, 1);

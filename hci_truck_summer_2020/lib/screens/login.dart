@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/signup.dart';
+import 'package:truck/screens/userListQuotation.dart';
 import 'package:truck/services/appUi.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -203,7 +204,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
         onPressed: () {
           toSignUpScreen(context);
         },
-        text: 'Create an account',
+        text: 'Create an Account',
         color: AppConstants.buttonColorSecRed,
       )
     ],

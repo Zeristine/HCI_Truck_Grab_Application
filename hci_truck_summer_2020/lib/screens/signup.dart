@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/user.dart';
-import 'package:truck/screens/home.dart';
+import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/appUi.dart';
 import 'package:truck/services/auth.dart';
 
@@ -45,7 +45,7 @@ class SignUpScreenState extends State<SignUpScreen> {
               .set(user)
               .then((value) {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomeScreen()));
+                .push(MaterialPageRoute(builder: (context) => UserHomeScreen()));
           });
         }
       });
