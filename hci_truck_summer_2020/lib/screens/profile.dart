@@ -47,11 +47,11 @@ Widget profileDetail() {
         height: 10,
       ),
       Text(
-        'user 1',
+        'Truck 1',
         style: TextStyle(fontSize: 25.0),
       ),
       Text(
-        'user_1@gmail.com',
+        'Truck_1@gmail.com',
         style: TextStyle(fontSize: 25.0),
       ),
     ],
