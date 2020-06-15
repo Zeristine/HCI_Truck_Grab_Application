@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:truck/screens/authenticate.dart';
 import 'package:truck/screens/homeTruck.dart';
+import 'package:truck/screens/inputRequestDetail.dart';
 import 'package:truck/screens/login.dart';
 import 'package:truck/screens/UserListRequest.dart';
+import 'package:truck/screens/profile.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/screens/signup.dart';
 import 'package:truck/screens/userListQuotation.dart';

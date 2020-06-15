@@ -89,7 +89,7 @@ Widget loginform(
         },
         validator: (text) {
           if (text.length == 0) {
-            return "Please enter your Email";
+            return "Xin hãy nhập email ở đây";
           } else {
             return null;
           }
@@ -106,7 +106,7 @@ Widget loginform(
         ),
         decoration: InputDecoration(
           //labelText: 'PASSWORD',
-          hintText: 'Password',
+          hintText: 'Mật khẩu',
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -123,7 +123,7 @@ Widget loginform(
         obscureText: true,
         validator: (text) {
           if (text.length == 0) {
-            return "Please enter your Password";
+            return "Xin hãy điền mật khẩu ở đây";
           } else {
             return null;
           }
@@ -159,7 +159,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
                           TextField(
                             decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: 'What do you want to remember?'),
+                                hintText: 'Bạn muốn nhớ gì?'),
                           ),
                           PrimaryButton(
                             onPressed: () {
@@ -177,7 +177,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
         child: Container(
           width: double.infinity,
           child: Text(
-            'Forgot your password?',
+            'Bạn quên mật khẩu?',
             textAlign: TextAlign.right,
             style: TextStyle(
               fontFamily: 'OpenSans',
@@ -195,7 +195,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
                 context, '/userHome', (route) => false);
           }
         },
-        text: 'Login',
+        text: 'Đăng Nhập',
       ),
       SizedBox(
         height: 12,
@@ -204,7 +204,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
         onPressed: () {
           toSignUpScreen(context);
         },
-        text: 'Create an Account',
+        text: 'Tạo tài khoản mới',
         color: AppConstants.buttonColorSecRed,
       )
     ],
