@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:truck/screens/UserListRequest.dart';
+import 'package:truck/screens/authenticate.dart';
+import 'package:truck/screens/inputRequestDetail.dart';
+import 'package:truck/screens/profile.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/screens/signup.dart';
 import 'package:truck/screens/userListQuotation.dart';
@@ -8,14 +10,16 @@ import 'package:truck/screens/userLocationOnMap.dart';
 void main() {
   runApp(
     MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/auth',
       routes: {
         '/' : (context) => UserHomeScreen(),
         '/signup': (context) => SignUpScreen(),
-        '/home': (context) => UserHomeScreen(),
+        '/userHome': (context) => UserHomeScreen(),
         '/userLocation' : (context) => UserLocationScreen(),
         '/userListQuotation' : (context) => UserListQuotaionScreen(1),
-        //'/userListRequest' : (context) => UserListRequestScreen(),
+        '/inputRequestDetailScreen' : (context) => InputRequestDetailScreen(),
+        '/profile' : (context) => ProfileScreen(),
+        '/auth' : (context) => AuthenticateScreen(),
       },
     )
     );
