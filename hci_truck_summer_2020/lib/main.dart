@@ -9,19 +9,21 @@ import 'package:truck/screens/userListQuotation.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
 
 void main() {
-  runApp(MaterialApp(
-    initialRoute: '/',
-    routes: {
-      '/': (context) => AuthenticateScreen(),
-      '/login': (context) => LoginScreen(),
-      '/signup': (context) => SignUpScreen(),
-      '/home': (context) => UserHomeScreen(),
-      '/userLocation': (context) => UserLocationScreen(),
-      '/homeTruck': (context) => HomeTruckScreen(),
-      '/userListQuotation': (context) => UserListQuotaionScreen(1),
-      //'/userListRequest' : (context) => UserListRequestScreen(),
-    },
-  ));
+  runApp(
+    MaterialApp(
+      initialRoute: '/auth',
+      routes: {
+        '/' : (context) => UserHomeScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/userHome': (context) => UserHomeScreen(),
+        '/userLocation' : (context) => UserLocationScreen(),
+        '/userListQuotation' : (context) => UserListQuotaionScreen(1),
+        '/inputRequestDetailScreen' : (context) => InputRequestDetailScreen(),
+        '/profile' : (context) => ProfileScreen(),
+        '/auth' : (context) => AuthenticateScreen(),
+      },
+    )
+    );
 }
 
 // class MyApp extends StatelessWidget {

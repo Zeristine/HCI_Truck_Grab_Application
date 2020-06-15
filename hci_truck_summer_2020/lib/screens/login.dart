@@ -192,7 +192,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
         onPressed: () {
           if (formKey.currentState.validate()) {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/userLocation', (route) => false);
+                context, '/userHome', (route) => false);
           }
         },
         text: 'Login',

@@ -13,15 +13,6 @@ class ProfileState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppConstants.backgroundColor,
-        title: Text(
-          'Your Profile',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        elevation: 0.0,
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

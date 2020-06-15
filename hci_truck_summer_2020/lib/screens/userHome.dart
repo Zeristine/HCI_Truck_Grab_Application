@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/UserListRequest.dart';
 import 'package:truck/screens/login.dart';
+import 'package:truck/screens/profile.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -14,9 +15,10 @@ List<Widget> optionsWidget = <Widget>[
   UserLocationScreen(),
   UserListRequestScreen(),
   LoginScreen(),
+  ProfileScreen(),
 ];
 
-List<String> screenTitle = <String>['Location', 'Your Request', 'Login'];
+List<String> screenTitle = <String>['Create request', 'My Request', 'Login', 'Profile'];
 
 class HomeScreenState extends State<UserHomeScreen> {
   int _selectesIndex = 0;
@@ -53,7 +55,7 @@ class HomeScreenState extends State<UserHomeScreen> {
           showUnselectedLabels: false,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.playlist_add),
               title: Text('Home'),
             ),
             BottomNavigationBarItem(
