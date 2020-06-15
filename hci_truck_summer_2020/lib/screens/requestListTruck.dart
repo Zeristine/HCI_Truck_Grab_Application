@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/screens/requestDetail.dart';
 
 class RequestListTruckScreen extends StatefulWidget {
   @override
@@ -73,10 +74,10 @@ Widget availableRequestList(BuildContext context) {
                 elevation: 0.0,
                 child: InkWell(
                   onTap: () {
-                    // Navigator.push(context,
-                    //     PageRouteBuilder(pageBuilder: (context, a, b) {
-                    //   return UserListQuotaionScreen(index);
-                    // }));
+                    Navigator.push(context,
+                        PageRouteBuilder(pageBuilder: (context, a, b) {
+                      return RequestDetailScreen();
+                    }));
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),

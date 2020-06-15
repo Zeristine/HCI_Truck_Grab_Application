@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:truck/screens/profile.dart';
 import 'package:truck/screens/requestListTruck.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
+import 'package:truck/constants/appConstans.dart';
 
 class HomeTruckScreen extends StatefulWidget {
   @override
@@ -17,6 +18,10 @@ class HomeTruckState extends State<HomeTruckScreen> {
       body: homeScreenStack(index),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: index,
+          unselectedItemColor: Colors.black54,
+          selectedItemColor: AppConstants.buttonColor,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           onTap: (int index) {
             setState(() {
               this.index = index;
@@ -24,19 +29,24 @@ class HomeTruckState extends State<HomeTruckScreen> {
           },
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),              
+              icon: Icon(Icons.home),
+              title: Text('Home'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.map),              
+              icon: Icon(Icons.map),
+              title: Text('Map'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.message),              
+              icon: Icon(Icons.message),
+              title: Text('Chat'),
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.history),
+            //   title: Text('History'),
+            // ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.history),              
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),              
+              icon: Icon(Icons.person),
+              title: Text('Profile'),
             ),
           ]),
     );
@@ -67,17 +77,17 @@ Widget homeScreenStack(int index) {
           child: UserLocationScreen(),
         ),
       ),
+      // Offstage(
+      //   offstage: index != 3,
+      //   child: TickerMode(
+      //     enabled: index == 3,
+      //     child: UserLocationScreen(),
+      //   ),
+      // ),
       Offstage(
         offstage: index != 3,
         child: TickerMode(
           enabled: index == 3,
-          child: UserLocationScreen(),
-        ),
-      ),
-      Offstage(
-        offstage: index != 4,
-        child: TickerMode(
-          enabled: index == 4,
           child: ProfileScreen(),
         ),
       ),
