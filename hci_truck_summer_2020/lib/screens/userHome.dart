@@ -11,13 +11,6 @@ class UserHomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
-List<Widget> optionsWidget = <Widget>[
-  UserLocationScreen(),
-  UserListRequestScreen(),
-  LoginScreen(),
-  ProfileScreen(),
-];
-
 List<String> screenTitle = <String>['Create request', 'My Request', 'Login', 'Profile'];
 
 class HomeScreenState extends State<UserHomeScreen> {
@@ -46,7 +39,7 @@ class HomeScreenState extends State<UserHomeScreen> {
           ],
         ),
         body: Center(
-          child: optionsWidget[_selectesIndex],
+          child: homeScreenStack(_selectesIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
           unselectedItemColor: Colors.black54,
@@ -81,4 +74,39 @@ class HomeScreenState extends State<UserHomeScreen> {
       ),
     );
   }
+}
+
+Widget homeScreenStack(int index) {
+  return Stack(
+    children: <Widget>[
+      Offstage(
+        offstage: index != 0,
+        child: TickerMode(
+          enabled: index == 0,
+          child: UserLocationScreen(),
+        ),
+      ),
+      Offstage(
+        offstage: index != 1,
+        child: TickerMode(
+          enabled: index == 1,
+          child: UserListRequestScreen(),
+        ),
+      ),
+      Offstage(
+        offstage: index != 2,
+        child: TickerMode(
+          enabled: index == 2,
+          child: LoginScreen(),
+        ),
+      ),      
+      Offstage(
+        offstage: index != 3,
+        child: TickerMode(
+          enabled: index == 3,
+          child: ProfileScreen(),
+        ),
+      ),
+    ],
+  );
 }

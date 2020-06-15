@@ -39,11 +39,7 @@ class HomeTruckState extends State<HomeTruckScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.message),
               title: Text('Chat'),
-            ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.history),
-            //   title: Text('History'),
-            // ),
+            ),            
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               title: Text('Profile'),
@@ -76,14 +72,7 @@ Widget homeScreenStack(int index) {
           enabled: index == 2,
           child: UserLocationScreen(),
         ),
-      ),
-      // Offstage(
-      //   offstage: index != 3,
-      //   child: TickerMode(
-      //     enabled: index == 3,
-      //     child: UserLocationScreen(),
-      //   ),
-      // ),
+      ),      
       Offstage(
         offstage: index != 3,
         child: TickerMode(

@@ -13,16 +13,19 @@ import 'package:truck/screens/userLocationOnMap.dart';
 void main() {
   runApp(
     MaterialApp(
-      initialRoute: '/auth',
+      initialRoute: '/login',
       routes: {
         '/' : (context) => UserHomeScreen(),
+        '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
         '/userHome': (context) => UserHomeScreen(),
         '/userLocation' : (context) => UserLocationScreen(),
         '/userListQuotation' : (context) => UserListQuotaionScreen(1),
+        '/userListRequest': (context) => UserListRequestScreen(),
         '/inputRequestDetailScreen' : (context) => InputRequestDetailScreen(),
         '/profile' : (context) => ProfileScreen(),
         '/auth' : (context) => AuthenticateScreen(),
+        '/homeTruck' : (context) => HomeTruckScreen(),
       },
     )
     );

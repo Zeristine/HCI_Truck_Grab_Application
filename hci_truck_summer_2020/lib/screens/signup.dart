@@ -3,10 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
-import 'package:truck/models/user.dart';
-import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/appUi.dart';
-import 'package:truck/services/auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -15,7 +12,7 @@ class SignUpScreen extends StatefulWidget {
 
 class SignUpScreenState extends State<SignUpScreen> {
   String role = "booker";
-  final GlobalKey<FormState> formKey = GlobalKey();
+  final GlobalKey<FormState> signupformKey = GlobalKey(debugLabel: 'signupformKey');
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
   final FocusNode repasswordFocus = FocusNode();
@@ -28,30 +25,7 @@ class SignUpScreenState extends State<SignUpScreen> {
     // Navigator.of(context)
     //     .push(MaterialPageRoute(builder: (context) => LoginScreen()));
     Navigator.pop(context);
-  }
-
-  void signUp(BuildContext context) async {
-    if (emailController.text.trim() == repasswordController.text.trim()) {
-      await FirebaseAuthService.signUp(
-              emailController.text, passwordController.text)
-          .then((value) {
-        if (value == null) {
-        } else {
-          final databaseReference = FirebaseDatabase.instance.reference();
-          User user = User(value.uid, usernameController.text,
-              emailController.text, passwordController.text);
-          databaseReference
-              .child("Users")
-              .child(value.uid)
-              .set(user)
-              .then((value) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => UserHomeScreen()));
-          });
-        }
-      });
-    }
-  }
+  }  
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +40,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           },
         ),
         title: Text(
-          'Create Account',
+          'Tạo tài khoản mới',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -76,7 +50,7 @@ class SignUpScreenState extends State<SignUpScreen> {
         child: Container(
           padding: EdgeInsets.all(24.0),
           child: Form(
-              key: formKey,
+              key: signupformKey,
               child: Center(
                   child: Column(
                 children: <Widget>[
@@ -92,9 +66,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("You are :"),
+                  Text("Bạn là :"),
                   ListTile(
-                    title: Text('Booker'),
+                    title: Text('Người sử dụng app thông thường'),
                     leading: Radio(
                         value: 'booker',
                         groupValue: role,
@@ -105,7 +79,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         }),
                   ),
                   ListTile(
-                    title: Text('Truck Driver'),
+                    title: Text('Tài xế xe tải lớn'),
                     leading: Radio(
                         value: 'truckdriver',
                         groupValue: role,
@@ -118,7 +92,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  signUpButtonGroup(formKey, context, passwordController,
+                  signUpButtonGroup(signupformKey, context, passwordController,
                       repasswordController),
                 ],
               ))),
@@ -157,7 +131,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "Username",
+          hintText: "Tên người dùng",
         ),
         controller: usernameController,
         keyboardType: TextInputType.emailAddress,

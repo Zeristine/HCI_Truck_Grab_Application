@@ -8,7 +8,7 @@ class ProfileScreen extends StatefulWidget {
   ProfileState createState() => ProfileState();
 }
 
-class ProfileState extends State<ProfileScreen> {
+class ProfileState extends State<ProfileScreen> {  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +136,9 @@ Widget profileButtonGroup(BuildContext context) {
             ),
             Text(
               'Open Delivery History',
-              style: TextStyle(fontSize: 20.0,),
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
             ),
           ],
         ),

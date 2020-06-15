@@ -19,36 +19,32 @@ class RequestDetailState extends State<RequestDetailScreen> {
             },
           ),
         ),
-        body: Flexible(
-          child: SingleChildScrollView(
-            child: Container(
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    driverDetail(context),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    priceDetail(context),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-                      child: Divider(
-                        color: Colors.black,
-                        thickness: 3.0,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    driverJourneyDetail(),
-                    Spacer(),
-                    detailButtonGroup(),
-                  ],
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                driverDetail(context),
+                SizedBox(
+                  height: 10.0,
                 ),
-              ),
+                priceDetail(context),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+                  child: Divider(
+                    color: Colors.black,
+                    thickness: 3.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                driverJourneyDetail(),                  
+                // Spacer(),
+                detailButtonGroup(),
+              ],
             ),
           ),
         ));
