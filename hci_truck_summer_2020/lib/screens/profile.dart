@@ -162,8 +162,10 @@ Widget profileButtonGroup(BuildContext context) {
           ],
         ),
         onTap: () {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/login', (route) => false);          
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+              (route) => false);
         },
       ),
       Divider(
