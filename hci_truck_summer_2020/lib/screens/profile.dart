@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/screens/login.dart';
 import 'package:truck/services/appUi.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -8,7 +9,7 @@ class ProfileScreen extends StatefulWidget {
   ProfileState createState() => ProfileState();
 }
 
-class ProfileState extends State<ProfileScreen> {  
+class ProfileState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,7 +163,7 @@ Widget profileButtonGroup(BuildContext context) {
         ),
         onTap: () {
           Navigator.pushNamedAndRemoveUntil(
-              context, '/login', (route) => false);
+              context, '/login', (route) => false);          
         },
       ),
       Divider(
@@ -218,7 +219,7 @@ Widget editProfileDialog(BuildContext context) {
           ),
           PrimaryButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context, rootNavigator: true).pop();
             },
             text: 'Save Changes',
           ),
@@ -227,7 +228,7 @@ Widget editProfileDialog(BuildContext context) {
           ),
           PrimaryButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context, rootNavigator: true).pop();
             },
             text: 'Close',
           ),
@@ -364,7 +365,7 @@ Widget changePasswordDialog(BuildContext context) {
             ),
             PrimaryButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pop();
               },
               text: 'Change Password',
             ),
@@ -373,7 +374,7 @@ Widget changePasswordDialog(BuildContext context) {
             ),
             PrimaryButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pop();
               },
               text: 'Close',
             ),

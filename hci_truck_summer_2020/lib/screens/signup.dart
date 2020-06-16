@@ -12,7 +12,8 @@ class SignUpScreen extends StatefulWidget {
 
 class SignUpScreenState extends State<SignUpScreen> {
   String role = "booker";
-  final GlobalKey<FormState> signupformKey = GlobalKey(debugLabel: 'signupformKey');
+  final GlobalKey<FormState> signupformKey =
+      GlobalKey(debugLabel: 'signupformKey');
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
   final FocusNode repasswordFocus = FocusNode();
@@ -25,7 +26,7 @@ class SignUpScreenState extends State<SignUpScreen> {
     // Navigator.of(context)
     //     .push(MaterialPageRoute(builder: (context) => LoginScreen()));
     Navigator.pop(context);
-  }  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -264,47 +265,46 @@ Widget signUpButtonGroup(
     TextEditingController repasswordController) {
   return PrimaryButton(
     onPressed: () {
+      if (formKey.currentState.validate()) {
+        if (passwordController.text.trim() ==
+            repasswordController.text.trim()) {
           Navigator.pushNamedAndRemoveUntil(
               context, '/homeTruck', (route) => false);
-      // if (formKey.currentState.validate()) {
-      //   if (passwordController.text.trim() ==
-      //       repasswordController.text.trim()) {
-      //     Navigator.pushNamedAndRemoveUntil(
-      //         context, '/homeTruck', (route) => false);
-      //   } else {
-      //     showDialog(
-      //         context: context,
-      //         builder: (BuildContext context) {
-      //           return Dialog(
-      //             shape: RoundedRectangleBorder(
-      //                 borderRadius: BorderRadius.circular(20.0)),
-      //             child: Container(
-      //               height: 200,
-      //               child: Padding(
-      //                 padding: const EdgeInsets.all(12.0),
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   crossAxisAlignment: CrossAxisAlignment.start,
-      //                   children: [
-      //                     Center(
-      //                       child: Text(
-      //                           "Your Passwords aren't matched with each other!"),
-      //  style: TextStyle(fontSize: 25.0),
-      //                     ),
-      //                     PrimaryButton(
-      //                       onPressed: () {
-      //                         Navigator.pop(context);
-      //                       },
-      //                       text: 'Close',
-      //                     )
-      //                   ],
-      //                 ),
-      //               ),
-      //             ),
-      //           );
-      //         });
-      //   }
-      // }
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: Container(
+                    height: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              "Your Passwords aren't matched with each other!",
+                              style: TextStyle(fontSize: 25.0),
+                            ),
+                          ),
+                          PrimaryButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            text: 'Close',
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        }
+      }
     },
     text: 'Create',
   );

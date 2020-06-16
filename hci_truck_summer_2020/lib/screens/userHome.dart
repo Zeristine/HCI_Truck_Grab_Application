@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/UserListRequest.dart';
+import 'package:truck/screens/error.dart';
 import 'package:truck/screens/login.dart';
 import 'package:truck/screens/profile.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
@@ -11,7 +12,7 @@ class UserHomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
-List<String> screenTitle = <String>['Create request', 'My Request', 'Login', 'Profile'];
+List<String> screenTitle = <String>['Create request', 'My Requests', 'Chats', 'My Profile'];
 
 class HomeScreenState extends State<UserHomeScreen> {
   int _selectesIndex = 0;
@@ -97,7 +98,7 @@ Widget homeScreenStack(int index) {
         offstage: index != 2,
         child: TickerMode(
           enabled: index == 2,
-          child: LoginScreen(),
+          child: ErrorScreen(),
         ),
       ),      
       Offstage(

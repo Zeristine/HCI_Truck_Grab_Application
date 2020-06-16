@@ -2,12 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+final double requestDetailButtonGroupHeight = 75.0;
+
 class RequestDetailScreen extends StatefulWidget {
   @override
   RequestDetailState createState() => RequestDetailState();
 }
 
 class RequestDetailState extends State<RequestDetailScreen> {
+  BoxConstraints constraints = BoxConstraints();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +24,13 @@ class RequestDetailState extends State<RequestDetailScreen> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height -
+                AppBar().preferredSize.height -
+                requestDetailButtonGroupHeight,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 driverDetail(context),
                 SizedBox(
@@ -41,8 +50,8 @@ class RequestDetailState extends State<RequestDetailScreen> {
                 SizedBox(
                   height: 10.0,
                 ),
-                driverJourneyDetail(),                  
-                // Spacer(),
+                driverJourneyDetail(),                
+                Spacer(),
                 detailButtonGroup(),
               ],
             ),
@@ -60,7 +69,7 @@ Widget driverDetail(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 75.0,
+              height: requestDetailButtonGroupHeight,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(100.0)),
                 color: Colors.blueAccent,
@@ -136,7 +145,7 @@ Widget priceDetail(BuildContext context) {
           Text(
               'Đường khó đi, Công an nhiều nên giá hơi cao, \nmong and/chị thông cảm'),
         ],
-      )
+      ),
     ],
   );
 }
