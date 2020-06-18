@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/signup.dart';
+import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/appUi.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,7 +22,8 @@ void login(BuildContext context) {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> loginformKey = GlobalKey(debugLabel: 'loginformKey');
+  final GlobalKey<FormState> loginformKey =
+      GlobalKey(debugLabel: 'loginformKey');
   final FocusNode focus = FocusNode();
 
   @override
@@ -104,7 +106,6 @@ Widget loginform(
           fontFamily: 'Roboto',
         ),
         decoration: InputDecoration(
-          //labelText: 'PASSWORD',
           hintText: 'Mật khẩu',
           filled: true,
           fillColor: Colors.white,
@@ -190,8 +191,10 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
       PrimaryButton(
         onPressed: () {
           if (formKey.currentState.validate()) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/userHome', (route) => false);
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                (route) => false);
           }
         },
         text: 'Đăng Nhập',

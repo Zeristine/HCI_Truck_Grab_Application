@@ -14,7 +14,7 @@ class RequestListTruckSate extends State<RequestListTruckScreen> {
         appBar: AppBar(
           backgroundColor: AppConstants.backgroundColor,
           title: Text(
-            'Request List',
+            'Các đơn hàng vận chuyển',
             style: TextStyle(color: Colors.black),
           ),
           centerTitle: true,
@@ -46,7 +46,7 @@ Widget availableRequestList(BuildContext context) {
             children: <Widget>[
               Icon(Icons.arrow_forward_ios),
               Text(
-                'Available Requests',
+                'Đơn hàng có sẵn:',
                 style: TextStyle(
                   fontSize: 20.0,
                 ),
@@ -60,7 +60,7 @@ Widget availableRequestList(BuildContext context) {
       ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(24.0, 4.0, 24.0, 0),
+          padding: EdgeInsets.fromLTRB(24.0, 4.0, 24.0, 0),
           itemCount: 2,
           itemBuilder: (context, index) {
             return Hero(
@@ -133,8 +133,7 @@ Widget availableRequestList(BuildContext context) {
                                 Row(
                                   children: <Widget>[
                                     Icon(Icons.location_on,
-                                        color:
-                                            Color.fromRGBO(207, 183, 8, 1)),
+                                        color: Color.fromRGBO(207, 183, 8, 1)),
                                     SizedBox(
                                       width: 8,
                                     ),
@@ -182,12 +181,6 @@ Widget availableRequestList(BuildContext context) {
                                       color: Colors.yellow,
                                       size: 16.0,
                                     ),
-                                    // Text(
-                                    //   'Wait',
-                                    //   style: TextStyle(
-                                    //     color: Colors.white,
-                                    //   ),
-                                    // )
                                   ],
                                 )
                               ],
@@ -215,7 +208,7 @@ Widget inProgressRequestList() {
             children: <Widget>[
               Icon(Icons.arrow_forward_ios),
               Text(
-                'In Progress Requests',
+                'Các đơn hàng đang thực hiện:',
                 style: TextStyle(
                   fontSize: 20.0,
                 ),
@@ -243,10 +236,10 @@ Widget inProgressRequestList() {
                 elevation: 0.0,
                 child: InkWell(
                   onTap: () {
-                    // Navigator.push(context,
-                    //     PageRouteBuilder(pageBuilder: (context, a, b) {
-                    //   return UserListQuotaionScreen(index);
-                    // }));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RequestDetailScreen()));
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),
