@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/signup.dart';
 import 'package:truck/services/appUi.dart';
@@ -24,6 +25,24 @@ class LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> loginformKey = GlobalKey(debugLabel: 'loginformKey');
   final FocusNode focus = FocusNode();
 
+  var settings = new ConnectionSettings(
+      host: '34.87.73.5',
+      port: 3306,
+      user: 'root',
+      password: '123@Admin',
+      db: 'hci');
+  var conn;
+
+  @override
+  void initState() { 
+    super.initState();
+    addConnection();
+  }
+
+  void addConnection() async {
+    conn = await MySqlConnection.connect(settings);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +63,7 @@ class LoginScreenState extends State<LoginScreen> {
                     ),
                     loginform(
                         context, focus, emailController, passwordController),
-                    loginButtonGroup(context, loginformKey),
+                    loginButtonGroup(context, loginformKey, conn),
                   ]),
             ),
           ),
@@ -135,7 +154,7 @@ Widget loginform(
   );
 }
 
-Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
+Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey, MySqlConnection conn) {
   return Column(
     children: <Widget>[
       GestureDetector(
@@ -188,11 +207,15 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
         height: 24,
       ),
       PrimaryButton(
-        onPressed: () {
-          if (formKey.currentState.validate()) {
+        onPressed: () async {
+          var results = await conn.query('select fullName, roleId from hci.user where userId = ? and password = ?',[emailController.text, passwordController.text]);
+          if(results != null){
             Navigator.pushNamedAndRemoveUntil(
                 context, '/userHome', (route) => false);
           }
+          // if (formKey.currentState.validate()) {
+            
+          // }
         },
         text: 'Đăng Nhập',
       ),

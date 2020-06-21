@@ -5,6 +5,7 @@ import 'package:truck/screens/inputRequestDetail.dart';
 import 'package:truck/screens/login.dart';
 import 'package:truck/screens/UserListRequest.dart';
 import 'package:truck/screens/profile.dart';
+import 'package:truck/screens/userCreateRequest.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/screens/signup.dart';
 import 'package:truck/screens/userListQuotation.dart';
@@ -25,6 +26,7 @@ void main() {
       '/profile': (context) => ProfileScreen(),
       '/auth': (context) => AuthenticateScreen(),
       '/homeTruck': (context) => HomeTruckScreen(),
+      '/createRequest' : (context) => UserCreateRequestScreen(),
     },
   ));
 }
