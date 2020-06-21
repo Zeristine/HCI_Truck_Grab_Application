@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/signup.dart';
+import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/appUi.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,7 +23,8 @@ void login(BuildContext context) {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> loginformKey = GlobalKey(debugLabel: 'loginformKey');
+  final GlobalKey<FormState> loginformKey =
+      GlobalKey(debugLabel: 'loginformKey');
   final FocusNode focus = FocusNode();
 
   var settings = new ConnectionSettings(
@@ -123,7 +125,6 @@ Widget loginform(
           fontFamily: 'Roboto',
         ),
         decoration: InputDecoration(
-          //labelText: 'PASSWORD',
           hintText: 'Mật khẩu',
           filled: true,
           fillColor: Colors.white,
@@ -207,11 +208,13 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey, MySq
         height: 24,
       ),
       PrimaryButton(
-        onPressed: () async {
-          var results = await conn.query('select fullName, roleId from hci.user where userId = ? and password = ?',[emailController.text, passwordController.text]);
-          if(results != null){
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/userHome', (route) => false);
+
+        onPressed: () {
+          if (formKey.currentState.validate()) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                (route) => false);
           }
           // if (formKey.currentState.validate()) {
             

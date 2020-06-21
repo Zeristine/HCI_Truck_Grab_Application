@@ -1,8 +1,9 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/screens/homeTruck.dart';
+import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/appUi.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -23,8 +24,6 @@ class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController repasswordController = TextEditingController();
 
   void toLoginScreen(BuildContext context) {
-    // Navigator.of(context)
-    //     .push(MaterialPageRoute(builder: (context) => LoginScreen()));
     Navigator.pop(context);
   }
 
@@ -69,7 +68,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                   Text("Bạn là :"),
                   ListTile(
-                    title: Text('Người sử dụng app thông thường'),
+                    title: Text('Chủ đơn hàng'),
                     leading: Radio(
                         value: 'booker',
                         groupValue: role,
@@ -82,7 +81,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ListTile(
                     title: Text('Tài xế xe tải lớn'),
                     leading: Radio(
-                        value: 'truckdriver',
+                        value: 'driver',
                         groupValue: role,
                         onChanged: (String value) {
                           setState(() {
@@ -93,8 +92,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  signUpButtonGroup(signupformKey, context, passwordController,
-                      repasswordController),
+                  signUpButtonGroup(role, signupformKey, context,
+                      passwordController, repasswordController),
                 ],
               ))),
         ),
@@ -121,7 +120,6 @@ Widget signUpForm(
           fontFamily: 'Roboto',
         ),
         decoration: InputDecoration(
-          //labelText: 'EMAIL',
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -140,9 +138,9 @@ Widget signUpForm(
         maxLines: 1,
         validator: (text) {
           if (text.length == 0) {
-            return "Please enter your Username";
+            return "Xin hãy nhập tên người dùng của bạn.";
           } else if (text.length < 4) {
-            return "The Username has at least 5 characters";
+            return "Tên người dùng có ít nhất 5 chữ.";
           } else {
             return null;
           }
@@ -160,7 +158,6 @@ Widget signUpForm(
           fontFamily: 'Roboto',
         ),
         decoration: InputDecoration(
-          //labelText: 'EMAIL',
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -171,7 +168,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "Your Email",
+          hintText: "Email của bạn",
         ),
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
@@ -179,8 +176,10 @@ Widget signUpForm(
         maxLines: 1,
         focusNode: emailFocus,
         validator: (text) {
-          if (!EmailValidator.validate(text)) {
-            return "Incorrect email";
+          if (text.isEmpty) {
+            return "Xin hãy nhập email của bạn.";
+          } else if (!EmailValidator.validate(text)) {
+            return "Email này sai cú pháp.";
           }
           return null;
         },
@@ -197,7 +196,6 @@ Widget signUpForm(
           fontFamily: 'Roboto',
         ),
         decoration: InputDecoration(
-          //labelText: 'EMAIL',
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -208,7 +206,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "Your Password",
+          hintText: "Mật khẩu của bạn",
         ),
         controller: passwordController,
         maxLines: 1,
@@ -216,9 +214,9 @@ Widget signUpForm(
         focusNode: passwordFocus,
         validator: (text) {
           if (text.length == 0) {
-            return "Please enter your password..";
+            return "Xin hãy nhập mật khẩu của bạn.";
           } else if (text.length < 8) {
-            return "The password has at least 8 characters";
+            return "Mật khẩu có ít nhất 8 chữ.";
           } else {
             return null;
           }
@@ -236,7 +234,6 @@ Widget signUpForm(
           fontFamily: 'Roboto',
         ),
         decoration: InputDecoration(
-          //labelText: 'EMAIL',
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -247,7 +244,7 @@ Widget signUpForm(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
           ),
-          hintText: "Enter your password again",
+          hintText: "Nhập lại mật khẩu của bạn",
         ),
         controller: repasswordController,
         maxLines: 1,
@@ -259,6 +256,7 @@ Widget signUpForm(
 }
 
 Widget signUpButtonGroup(
+    String role,
     GlobalKey<FormState> formKey,
     BuildContext context,
     TextEditingController passwordController,
@@ -268,8 +266,17 @@ Widget signUpButtonGroup(
       if (formKey.currentState.validate()) {
         if (passwordController.text.trim() ==
             repasswordController.text.trim()) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/homeTruck', (route) => false);
+          if (role == 'driver') {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomeTruckScreen()),
+                (route) => false);
+          } else if (role == 'booker') {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                (route) => false);
+          }
         } else {
           showDialog(
               context: context,
@@ -287,7 +294,7 @@ Widget signUpButtonGroup(
                         children: [
                           Center(
                             child: Text(
-                              "Your Passwords aren't matched with each other!",
+                              "Mật khẩu bạn nhập lại không khớp với mật khẩu của bạn",
                               style: TextStyle(fontSize: 25.0),
                             ),
                           ),
@@ -295,7 +302,7 @@ Widget signUpButtonGroup(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            text: 'Close',
+                            text: 'Đóng',
                           )
                         ],
                       ),
@@ -306,6 +313,6 @@ Widget signUpButtonGroup(
         }
       }
     },
-    text: 'Create',
+    text: 'Tạo tài khoản',
   );
 }
