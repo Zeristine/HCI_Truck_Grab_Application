@@ -41,7 +41,8 @@ dependencies:
   firebase_storage: ^3.1.6
   firebase_messaging: ^6.0.16
   email_validator: ^1.0.4
-  flutter_rating_bar: ^3.0.1+1
+  flutter_rating_bar: ^3.0.1+1   
+  shared_preferences: ^0.5.7+3 
 
 dev_dependencies:
   flutter_test:

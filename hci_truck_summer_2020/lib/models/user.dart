@@ -12,7 +12,6 @@ class User {
   final List<Request> requests;
 
   final List<Quotation> quotations;
-
   User({
     this.userId,
     this.fullName,
