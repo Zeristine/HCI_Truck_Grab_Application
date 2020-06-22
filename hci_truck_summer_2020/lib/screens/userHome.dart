@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/UserListRequest.dart';
 import 'package:truck/screens/error.dart';
 import 'package:truck/screens/login.dart';
 import 'package:truck/screens/profile.dart';
+import 'package:truck/screens/userCreateRequest.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -12,10 +14,32 @@ class UserHomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
-List<String> screenTitle = <String>['Create request', 'My Requests', 'Chats', 'My Profile'];
+List<String> screenTitle = <String>[
+  'Create request',
+  'My Requests',
+  'Chats',
+  'My Profile'
+];
 
 class HomeScreenState extends State<UserHomeScreen> {
   int _selectesIndex = 0;
+  var settings = new ConnectionSettings(
+      host: '34.87.73.5',
+      port: 3306,
+      user: 'root',
+      password: '123@Admin',
+      db: 'hci');
+  var conn;
+  @override
+  void initState() {
+    super.initState();
+    addConnection();
+  }
+
+  void addConnection() async {
+    conn = await MySqlConnection.connect(settings);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,8 +50,11 @@ class HomeScreenState extends State<UserHomeScreen> {
           elevation: 0.0,
           title: Text(
             screenTitle[_selectesIndex],
-            style: TextStyle(color: Colors.black, fontFamily: 'Poppins',
-            fontSize: 16,),
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Poppins',
+              fontSize: 16,
+            ),
           ),
           actions: <Widget>[
             Icon(
@@ -98,9 +125,9 @@ Widget homeScreenStack(int index) {
         offstage: index != 2,
         child: TickerMode(
           enabled: index == 2,
-          child: ErrorScreen(),
+          child: UserCreateRequestScreen(),
         ),
-      ),      
+      ),
       Offstage(
         offstage: index != 3,
         child: TickerMode(
