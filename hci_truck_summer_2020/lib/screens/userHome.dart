@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/UserListRequest.dart';
 import 'package:truck/screens/error.dart';
@@ -23,21 +22,17 @@ List<String> screenTitle = <String>[
 
 class HomeScreenState extends State<UserHomeScreen> {
   int _selectesIndex = 0;
-  var settings = new ConnectionSettings(
-      host: '34.87.73.5',
-      port: 3306,
-      user: 'root',
-      password: '123@Admin',
-      db: 'hci');
-  var conn;
+
+  List<Widget> _optionScreen = <Widget>[
+    UserCreateRequestScreen(),
+    ProfileScreen(),
+    UserCreateRequestScreen(),
+    ProfileScreen(),
+  ];
+
   @override
   void initState() {
     super.initState();
-    addConnection();
-  }
-
-  void addConnection() async {
-    conn = await MySqlConnection.connect(settings);
   }
 
   @override
@@ -67,7 +62,7 @@ class HomeScreenState extends State<UserHomeScreen> {
           ],
         ),
         body: Center(
-          child: homeScreenStack(_selectesIndex),
+          child: _optionScreen[_selectesIndex],
         ),
         bottomNavigationBar: BottomNavigationBar(
           unselectedItemColor: Colors.black54,
@@ -104,37 +99,38 @@ class HomeScreenState extends State<UserHomeScreen> {
   }
 }
 
-Widget homeScreenStack(int index) {
-  return Stack(
-    children: <Widget>[
-      Offstage(
-        offstage: index != 0,
-        child: TickerMode(
-          enabled: index == 0,
-          child: UserLocationScreen(),
-        ),
-      ),
-      Offstage(
-        offstage: index != 1,
-        child: TickerMode(
-          enabled: index == 1,
-          child: UserListRequestScreen(),
-        ),
-      ),
-      Offstage(
-        offstage: index != 2,
-        child: TickerMode(
-          enabled: index == 2,
-          child: UserCreateRequestScreen(),
-        ),
-      ),
-      Offstage(
-        offstage: index != 3,
-        child: TickerMode(
-          enabled: index == 3,
-          child: ProfileScreen(),
-        ),
-      ),
-    ],
-  );
-}
+// Widget homeScreenStack(int index) {
+//   return Stack(
+//     children: <Widget>[
+//       Offstage(
+//         offstage: index != 0,
+//         child: TickerMode(
+//           enabled: index == 0,
+//           child: UserCreateRequestScreen(),
+//         ),
+//       ),
+//       Offstage(
+//         offstage: index != 1,
+//         child: TickerMode(
+//           enabled: index == 1,
+//           // child: UserListRequestScreen(),
+//           child: ProfileScreen(),
+//         ),
+//       ),
+//       Offstage(
+//         offstage: index != 2,
+//         child: TickerMode(
+//           enabled: index == 2,
+//           child: UserCreateRequestScreen(),
+//         ),
+//       ),
+//       Offstage(
+//         offstage: index != 3,
+//         child: TickerMode(
+//           enabled: index == 3,
+//           child: ProfileScreen(),
+//         ),
+//       ),
+//     ],
+//   );
+// }

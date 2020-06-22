@@ -86,3 +86,37 @@ class BorderButton extends StatelessWidget {
     );
   }
 }
+
+
+class DialogButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final Color textColor;
+  final Color focusColor;
+  final String text;
+
+  const DialogButton(
+      {Key key,
+      @required this.onPressed,
+      this.textColor,
+      this.focusColor,
+      this.text})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 52.0,
+      child: RaisedButton(
+        elevation: 0.0,
+        onPressed: onPressed,
+        child: Text(
+          'SIGN UP',
+          style: TextStyle(
+            fontSize: AppConstants.minFontSize,
+            color: textColor == null ? AppConstants.buttonColorRed : textColor,
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,17 +1,35 @@
+import 'package:truck/models/Quotation.dart';
+import 'package:truck/models/Request.dart';
+import 'package:truck/models/Role.dart';
+
 class User {
-  String id;
-  String username;
-  String email;
-  String password;
+  final String userId;
+  final String fullName;
+  final String password;
 
-  User(this.id, this.username, this.email, this.password);
+  final Role role;
 
-  toJson() {
-    return {
-      "id": id,
-      "username": username,
-      "email": email,
-      "password": password,
-    };
+  final List<Request> requests;
+
+  final List<Quotation> quotations;
+
+  User({
+    this.userId,
+    this.fullName,
+    this.password,
+    this.role,
+    this.requests,
+    this.quotations,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      userId: json['userId'],
+      fullName: json['fullName'],
+      password: json['password'],
+      role: Role.fromJson(json['role']),
+      requests: json['requests'] != null ? List.from(json['requests']): new List<Request>(),
+      quotations: json['quotations'] != null ? List.from(json['quotations']) : new List<Quotation>(),
+    );
   }
 }

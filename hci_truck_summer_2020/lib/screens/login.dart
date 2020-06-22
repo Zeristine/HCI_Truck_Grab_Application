@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/models/User.dart';
 import 'package:truck/screens/signup.dart';
 import 'package:truck/screens/userHome.dart';
+import 'package:truck/services/Dialog.dart';
 import 'package:truck/services/appUi.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,22 +31,13 @@ class LoginScreenState extends State<LoginScreen> {
       GlobalKey(debugLabel: 'loginformKey');
   final FocusNode focus = FocusNode();
 
-  var settings = new ConnectionSettings(
-      host: '34.87.73.5',
-      port: 3306,
-      user: 'root',
-      password: '123@Admin',
-      db: 'hci');
-  var conn;
-
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    addConnection();
   }
 
-  void addConnection() async {
-    conn = await MySqlConnection.connect(settings);
+  Future<http.Response> fetchAlbum() {
+    return http.get('https://jsonplaceholder.typicode.com/albums/1');
   }
 
   @override
@@ -65,7 +60,7 @@ class LoginScreenState extends State<LoginScreen> {
                     ),
                     loginform(
                         context, focus, emailController, passwordController),
-                    loginButtonGroup(context, loginformKey, conn),
+                    loginButtonGroup(context, loginformKey),
                   ]),
             ),
           ),
@@ -155,7 +150,7 @@ Widget loginform(
   );
 }
 
-Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey, MySqlConnection conn) {
+Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
   return Column(
     children: <Widget>[
       GestureDetector(
@@ -167,29 +162,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey, MySq
                   shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(20.0)), //this right here
-                  child: Container(
-                    height: 200,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Bạn muốn nhớ gì?'),
-                          ),
-                          PrimaryButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            text: 'Close',
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: DialogMessage(message: 'Quên mật khẩu hả'),
                 );
               });
         },
@@ -208,17 +181,34 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey, MySq
         height: 24,
       ),
       PrimaryButton(
-
-        onPressed: () {
+        onPressed: () async {
           if (formKey.currentState.validate()) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => UserHomeScreen()),
-                (route) => false);
+            String email = emailController.text.trim();
+            String pass = passwordController.text.trim();
+            var response = await http.get('https://truck-api.azurewebsites.net/api/login?userId=' +
+                email +
+                '&password=' +
+                pass);
+            if (response.statusCode == HttpStatus.ok) {
+              User user = User.fromJson(json.decode(response.body));
+              print(user.fullName);
+              if (user != null) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                    (route) => false);
+              }
+            }else {
+              showDialog(context: context, builder: (BuildContext context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(5.0)), //this right here
+                  child: DialogMessage(message: 'Sai email hoặc mật khẩu!'),
+                );
+              });
+            }
           }
-          // if (formKey.currentState.validate()) {
-            
-          // }
         },
         text: 'Đăng Nhập',
       ),
