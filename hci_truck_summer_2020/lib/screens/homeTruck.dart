@@ -10,12 +10,36 @@ class HomeTruckScreen extends StatefulWidget {
   HomeTruckState createState() => HomeTruckState();
 }
 
+List<String> screenTitle = <String>[
+  'Đơn hàng vận chuyển',
+  'Chats',
+  'Hồ sơ của bạn'
+];
+
+List<Widget> _optionScreen = <Widget>[
+  RequestListTruckScreen(),
+  UserLocationScreen(),
+  ProfileScreen(),
+];
+
 class HomeTruckState extends State<HomeTruckScreen> {
   int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: homeScreenStack(index),
+      appBar: AppBar(
+        title: Text(
+          screenTitle[index],
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'Poppins',
+            fontSize: 16,
+          ),
+        ),
+      ),
+      body: Center(
+        child: _optionScreen[index],
+      ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: index,
           unselectedItemColor: Colors.black54,
@@ -33,13 +57,9 @@ class HomeTruckState extends State<HomeTruckScreen> {
               title: Text('Home'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              title: Text('Map'),
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.message),
               title: Text('Chat'),
-            ),            
+            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               title: Text('Profile'),
@@ -47,39 +67,4 @@ class HomeTruckState extends State<HomeTruckScreen> {
           ]),
     );
   }
-}
-
-Widget homeScreenStack(int index) {
-  return Stack(
-    children: <Widget>[
-      Offstage(
-        offstage: index != 0,
-        child: TickerMode(
-          enabled: index == 0,
-          child: RequestListTruckScreen(),
-        ),
-      ),
-      Offstage(
-        offstage: index != 1,
-        child: TickerMode(
-          enabled: index == 1,
-          child: UserLocationScreen(),
-        ),
-      ),
-      Offstage(
-        offstage: index != 2,
-        child: TickerMode(
-          enabled: index == 2,
-          child: UserLocationScreen(),
-        ),
-      ),      
-      Offstage(
-        offstage: index != 3,
-        child: TickerMode(
-          enabled: index == 3,
-          child: ProfileScreen(),
-        ),
-      ),
-    ],
-  );
 }
