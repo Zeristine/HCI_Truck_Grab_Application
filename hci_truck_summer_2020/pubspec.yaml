@@ -32,6 +32,7 @@ dependencies:
   google_maps_webservice: ^0.0.17
   flutter_polyline_points: ^0.2.2
   http: ^0.12.1
+  searchable_dropdown: ^1.1.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -18,6 +18,9 @@ class ProfileState extends State<ProfileScreen> {
         child: Center(
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 24,
+              ),
               profileDetail(),
               SizedBox(
                 height: 24,
@@ -34,144 +37,150 @@ class ProfileState extends State<ProfileScreen> {
 Widget profileDetail() {
   return Column(
     children: <Widget>[
-      Center(
-        child: Container(
-          height: 150.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(100.0)),
-            color: Colors.blueAccent,
-          ),
-          child: Image.asset('assets/images/delivery-truck.png'),
-        ),
+      CircleAvatar(
+        radius: 64,
+        backgroundImage: AssetImage("assets/images/avatar1.jpg"),
       ),
       SizedBox(
-        height: 10,
+        height: 12,
       ),
       Text(
-        'Truck 1',
-        style: TextStyle(fontSize: 25.0),
+        'Nguyễn Văn Lợi',
+        style: TextStyle(
+            fontSize: AppConstants.medFontSize,
+            fontWeight: FontWeight.bold),
+      ),
+      SizedBox(
+        height: 8.0,
       ),
       Text(
-        'Truck_1@gmail.com',
-        style: TextStyle(fontSize: 25.0),
+        'Loinguyen.hg.n@gmail.com',
+        style: TextStyle(fontSize: AppConstants.minFontSize),
       ),
     ],
   );
 }
 
 Widget profileButtonGroup(BuildContext context) {
-  return Column(
-    children: <Widget>[
-      Divider(
-        color: Colors.black,
-      ),
-      ListTile(
-        title: Row(
-          children: <Widget>[
-            Icon(Icons.edit),
-            SizedBox(
-              width: 15.0,
-            ),
-            Text(
-              'Edit Profile',
-              style: TextStyle(fontSize: 20.0),
-            ),
-          ],
+  return Container(
+    padding: EdgeInsets.all(24.0),
+    child: Column(
+      children: <Widget>[
+        Divider(
+          color: Colors.grey[600],
         ),
-        onTap: () {
-          showDialog(
-            context: context,
-            child: Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: editProfileDialog(context),
+        ListTile(
+          contentPadding: EdgeInsets.all(0.0),
+          title: Row(
+            children: <Widget>[
+              Icon(Icons.edit),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text(
+                'Edit Profile',
+                style: TextStyle(fontSize: AppConstants.medFontSize),
+              ),
+            ],
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: editProfileDialog(context),
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      ),
-      Divider(
-        color: Colors.black,
-      ),
-      ListTile(
-        title: Row(
-          children: <Widget>[
-            Icon(Icons.edit),
-            SizedBox(
-              width: 15.0,
-            ),
-            Text(
-              'Change Password',
-              style: TextStyle(fontSize: 20.0),
-            ),
-          ],
+            );
+          },
         ),
-        onTap: () {
-          showDialog(
-            context: context,
-            child: Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: SingleChildScrollView(
-                  child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: changePasswordDialog(context),
-              )),
-            ),
-          );
-        },
-      ),
-      Divider(
-        color: Colors.black,
-      ),
-      ListTile(
-        title: Row(
-          children: <Widget>[
-            Icon(Icons.library_books),
-            SizedBox(
-              width: 15.0,
-            ),
-            Text(
-              'Open Delivery History',
-              style: TextStyle(
-                fontSize: 20.0,
+        Divider(
+          color: Colors.grey[600],
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.all(0.0),
+          title: Row(
+            children: <Widget>[
+              Icon(Icons.lock),
+              SizedBox(
+                width: 12.0,
               ),
-            ),
-          ],
+              Text(
+                'Change Password',
+                style: TextStyle(fontSize: AppConstants.medFontSize),
+              ),
+            ],
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: SingleChildScrollView(
+                    child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: changePasswordDialog(context),
+                )),
+              ),
+            );
+          },
         ),
-        onTap: () {},
-      ),
-      Divider(
-        color: Colors.black,
-      ),
-      ListTile(
-        title: Row(
-          children: <Widget>[
-            Icon(Icons.exit_to_app),
-            SizedBox(
-              width: 15.0,
-            ),
-            Text(
-              'Log out',
-              style: TextStyle(fontSize: 20.0),
-            ),
-          ],
+        Divider(
+          color: Colors.grey[600],
         ),
-        onTap: () {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-              (route) => false);
-        },
-      ),
-      Divider(
-        color: Colors.black,
-      ),
-    ],
+        ListTile(
+          contentPadding: EdgeInsets.all(0.0),
+          title: Row(
+            children: <Widget>[
+              Icon(Icons.library_books),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text(
+                'Open Delivery History',
+                style: TextStyle(
+                  fontSize: AppConstants.medFontSize,
+                ),
+              ),
+            ],
+          ),
+          onTap: () {},
+        ),
+        Divider(
+          color: Colors.grey[600],
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.all(0.0),
+          title: Row(
+            children: <Widget>[
+              Icon(Icons.exit_to_app),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text(
+                'Log out',
+                style: TextStyle(fontSize: AppConstants.medFontSize),
+              ),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (route) => false);
+          },
+        ),
+        Divider(
+          color: Colors.grey[600],
+        ),
+      ],
+    ),
   );
 }
 

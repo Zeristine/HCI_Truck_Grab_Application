@@ -162,7 +162,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
                   shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(20.0)), //this right here
-                  child: DialogMessage(message: 'Quên mật khẩu hả'),
+                  child: DialogMessage(message: 'Quên mật khẩu'),
                 );
               });
         },
@@ -191,7 +191,6 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
                 pass);
             if (response.statusCode == HttpStatus.ok) {
               User user = User.fromJson(json.decode(response.body));
-              print(user.fullName);
               if (user != null) {
                 Navigator.pushAndRemoveUntil(
                     context,
