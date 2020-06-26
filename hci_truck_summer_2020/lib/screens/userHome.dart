@@ -14,10 +14,9 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 List<String> screenTitle = <String>[
-  'Tạo đơn hàng',
-  'Đơn hàng của bạn',
-  'Chats',
-  'Hồ sơ của bạn'
+  'Danh sách đơn hàng',
+  'Tin nhắn',
+  'Hồ sơ'
 ];
 
 class HomeScreenState extends State<UserHomeScreen> {
