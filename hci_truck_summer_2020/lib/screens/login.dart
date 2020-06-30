@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/User.dart';
 import 'package:truck/screens/signup.dart';
@@ -182,32 +183,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
       ),
       PrimaryButton(
         onPressed: () async {
-          if (formKey.currentState.validate()) {
-            String email = emailController.text.trim();
-            String pass = passwordController.text.trim();
-            var response = await http.get('https://truck-api.azurewebsites.net/api/login?userId=' +
-                email +
-                '&password=' +
-                pass);
-            if (response.statusCode == HttpStatus.ok) {
-              User user = User.fromJson(json.decode(response.body));
-              if (user != null) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserHomeScreen()),
-                    (route) => false);
-              }
-            }else {
-              showDialog(context: context, builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(5.0)), //this right here
-                  child: DialogMessage(message: 'Sai email hoặc mật khẩu!'),
-                );
-              });
-            }
-          }
+          checkLogin(context, formKey);
         },
         text: 'Đăng Nhập',
       ),
@@ -251,4 +227,51 @@ Widget logo() {
       )
     ],
   );
+}
+
+Future checkLogin(context, formKey) async {
+  var progressDialog = ProgressDialog(context,
+      type: ProgressDialogType.Normal, isDismissible: false);
+  progressDialog.style(
+    progressWidget: Container(
+        padding: EdgeInsets.all(12), child: CircularProgressIndicator()),
+  );
+  await progressDialog.show();
+  if (formKey.currentState.validate()) {
+    String email = emailController.text.trim();
+    String pass = passwordController.text.trim();
+    var response = await http.get(
+        'https://truck-api.azurewebsites.net/api/login?userId=' +
+            email +
+            '&password=' +
+            pass);
+    if (response.statusCode == HttpStatus.ok) {
+      User user = User.fromJson(json.decode(response.body));
+      if (user != null) {
+        await progressDialog.hide().then(
+              (value) => {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                    (route) => false)
+              },
+            );
+      }
+    } else {
+      await progressDialog.hide().then(
+            (value) => {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(5.0)), //this right here
+                      child: DialogMessage(message: 'Sai email hoặc mật khẩu!'),
+                    );
+                  })
+            },
+          );
+    }
+  }
 }

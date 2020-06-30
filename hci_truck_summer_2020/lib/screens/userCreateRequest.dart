@@ -1,14 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:truck/constants/appConstans.dart';
-import 'package:http/http.dart' as http;
 import 'package:truck/models/Address.dart';
-import 'package:truck/models/Place.dart';
 import 'package:truck/screens/inputAdress.dart';
-import 'package:truck/services/addressDialog.dart';
 import 'package:truck/services/appUi.dart';
 
 class UserCreateRequestScreen extends StatefulWidget {
@@ -38,8 +32,8 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color.fromRGBO(240, 58, 58, 1),
-          title: Text("Tạo đơn hàng"),
+        backgroundColor: Color.fromRGBO(240, 58, 58, 1),
+        title: Text("Tạo đơn hàng"),
       ),
       backgroundColor: AppConstants.backgroundColor,
       body: Container(
@@ -124,20 +118,6 @@ Widget pickUpWidget(BuildContext context, TextEditingController controller) {
 
             controller.text = address;
           }
-          // showDialog(
-          //   context: context,
-          //   builder: (context) {
-          //     return Dialog(
-          //       insetPadding: EdgeInsets.all(24.0),
-          //       shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(5.0)),
-          //       child: AddressDialog(
-          //         provinceSelectedValue: null,
-          //         districSelectedValue: null,
-          //       ),
-          //     );
-          //   },
-          // );
         },
         controller,
         true,
@@ -229,120 +209,5 @@ Widget textField(BuildContext context, String hint, IconData icon,
         return null;
       }
     },
-  );
-}
-
-Widget addressDialog(BuildContext context,
-    List<DropdownMenuItem> provineMenuList, int provineValue) {
-  return SingleChildScrollView(
-    child: Container(
-      padding: EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Text(
-              "Nhập địa chỉ",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: AppConstants.medFontSize,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          DropdownButtonFormField(
-            decoration: InputDecoration(
-              //labelText: 'EMAIL',
-              filled: true,
-              fillColor: Colors.white,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Colors.white, width: 2.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide:
-                    BorderSide(color: AppConstants.linkColor, width: 2.0),
-              ),
-            ),
-            items: provineMenuList,
-            hint: Text("Tỉnh/Thành phố"),
-            value: provineValue,
-            isExpanded: true,
-            onChanged: (value) {
-              provineValue = value;
-            },
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          DropdownButtonFormField(
-            decoration: InputDecoration(
-              //labelText: 'EMAIL',
-              filled: true,
-              fillColor: Colors.white,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Colors.white, width: 2.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide:
-                    BorderSide(color: AppConstants.linkColor, width: 2.0),
-              ),
-            ),
-            items: provineMenuList,
-            hint: Text("Quận/Huyện"),
-            value: provineValue,
-            isExpanded: true,
-            onChanged: (value) {
-              provineValue = value;
-            },
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          DropdownButtonFormField(
-            decoration: InputDecoration(
-              //labelText: 'EMAIL',
-              filled: true,
-              fillColor: Colors.white,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Colors.white, width: 2.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide:
-                    BorderSide(color: AppConstants.linkColor, width: 2.0),
-              ),
-            ),
-            items: provineMenuList,
-            hint: Text("Phường/Xã"),
-            value: provineValue,
-            isExpanded: true,
-            onChanged: (value) {
-              provineValue = value;
-            },
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          textField(context, "Đường, Số nhà...", null, null, null, false),
-          SizedBox(
-            height: 8,
-          ),
-          PrimaryButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            text: "Xác nhận",
-          )
-        ],
-      ),
-    ),
   );
 }
