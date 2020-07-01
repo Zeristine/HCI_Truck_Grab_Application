@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/login.dart';
 import 'package:truck/services/appUi.dart';
@@ -47,8 +48,7 @@ Widget profileDetail() {
       Text(
         'Nguyễn Văn Lợi',
         style: TextStyle(
-            fontSize: AppConstants.medFontSize,
-            fontWeight: FontWeight.bold),
+            fontSize: AppConstants.minFontSize, fontWeight: FontWeight.bold),
       ),
       SizedBox(
         height: 8.0,
@@ -79,7 +79,7 @@ Widget profileButtonGroup(BuildContext context) {
               ),
               Text(
                 'Edit Profile',
-                style: TextStyle(fontSize: AppConstants.medFontSize),
+                style: TextStyle(fontSize: AppConstants.minFontSize),
               ),
             ],
           ),
@@ -112,7 +112,7 @@ Widget profileButtonGroup(BuildContext context) {
               ),
               Text(
                 'Change Password',
-                style: TextStyle(fontSize: AppConstants.medFontSize),
+                style: TextStyle(fontSize: AppConstants.minFontSize),
               ),
             ],
           ),
@@ -145,7 +145,7 @@ Widget profileButtonGroup(BuildContext context) {
               Text(
                 'Open Delivery History',
                 style: TextStyle(
-                  fontSize: AppConstants.medFontSize,
+                  fontSize: AppConstants.minFontSize,
                 ),
               ),
             ],
@@ -165,11 +165,15 @@ Widget profileButtonGroup(BuildContext context) {
               ),
               Text(
                 'Log out',
-                style: TextStyle(fontSize: AppConstants.medFontSize),
+                style: TextStyle(fontSize: AppConstants.minFontSize),
               ),
             ],
           ),
-          onTap: () {
+          onTap: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.remove('roleId');
+            await prefs.remove('userId');
+            await prefs.remove('isLoggedIn');
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => LoginScreen()),

@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/User.dart';
+import 'package:truck/screens/homeTruck.dart';
 import 'package:truck/screens/signup.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/Dialog.dart';
@@ -236,8 +238,8 @@ Future checkLogin(context, formKey) async {
     progressWidget: Container(
         padding: EdgeInsets.all(12), child: CircularProgressIndicator()),
   );
-  await progressDialog.show();
   if (formKey.currentState.validate()) {
+    await progressDialog.show();
     String email = emailController.text.trim();
     String pass = passwordController.text.trim();
     var response = await http.get(
@@ -249,13 +251,26 @@ Future checkLogin(context, formKey) async {
       User user = User.fromJson(json.decode(response.body));
       if (user != null) {
         await progressDialog.hide().then(
-              (value) => {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserHomeScreen()),
-                    (route) => false)
-              },
-            );
+          (value) async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString('userId', user.userId);
+            await prefs.setInt('roleId', user.role.roleId);
+            await prefs.setBool('isLoggedIn', true);
+            if (user.roleId == 1) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                  (route) => false);
+            } else if (user.roleId == 2) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeTruckScreen()),
+                  (route) => false);
+            }
+          },
+        );
+      } else {
+        await progressDialog.hide();
       }
     } else {
       await progressDialog.hide().then(
