@@ -9,50 +9,49 @@ class MessageScreen extends StatefulWidget {
 class MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
-    return Scaffold(
-         body: messageList()
-    );
+    return Scaffold(body: messageList());
     //  body: ChatItem(),
     // );
   }
-  }
-Widget messageList(){
+}
+
+Widget messageList() {
   return ListView.builder(
-    itemCount: 6,
-    itemBuilder: (context,index){
-      return ChatItem();
-    }
-  );
+      itemCount: 6,
+      itemBuilder: (context, index) {
+        return ChatItem();
+      });
 }
 
 class ChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 50,
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: 50,
+        ),
+        Container(
+          padding: EdgeInsets.all(24.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              leftSection,
+              middleSection,
+              Spacer(),
+              rightSection
+            ],
           ),
-          Container(
-            padding: EdgeInsets.all(24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[leftSection, middleSection, Spacer(), rightSection],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   final leftSection = new Container(
     height: 50,
     child: new CircleAvatar(
-      backgroundImage: AssetImage('/assests/images/avatar2.jpg'),
+      backgroundImage: AssetImage('assets/images/avatar2.jpg'),
       backgroundColor: Colors.lightGreen,
       radius: 24.0,
     ),
@@ -99,6 +98,4 @@ class ChatItem extends StatelessWidget {
       ],
     ),
   );
-
-  
 }
