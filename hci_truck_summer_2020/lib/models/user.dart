@@ -49,4 +49,18 @@ class User {
           : new List<Quotation>(),
     );
   }
+
+  Map<String, dynamic> toJson()=>{
+    'userId' : userId,
+    'fullName' : fullName,
+    'password' : password,
+    'phoneNumber' : phoneNumber,
+    'gender' : gender,
+    'dateOfBirth' : dateOfBirth,
+    'imagePath' : imagePath,
+    'roleId' : roleId,
+    'role' : role,
+    'requests' :requests,
+    'quotations': quotations,
+  } ;
 }
