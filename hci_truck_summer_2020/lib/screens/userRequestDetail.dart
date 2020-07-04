@@ -1,25 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
+import 'package:truck/models/Request.dart';
 import 'package:truck/services/marquee.dart';
 
 class UserRequestDetail extends StatefulWidget {
   final int heroIndex;
-  UserRequestDetail(this.heroIndex);
+  final Request request;
+  UserRequestDetail(this.heroIndex, this.request);
   @override
-  UserRequestDetailState createState() => UserRequestDetailState(heroIndex);
+  UserRequestDetailState createState() =>
+      UserRequestDetailState(heroIndex, request);
 }
 
 ScrollController _scrollController;
 double headerHeight = 20.0;
-Widget headerWidget = header();
-double headerWidgetHeight = 125.0;
+double headerWidgetHeight = 160.0;
 
 class UserRequestDetailState extends State<UserRequestDetail> {
   int heroIndex;
-  UserRequestDetailState(this.heroIndex);
+  Request request;
+  var numformat = NumberFormat("#,###,###");
+  UserRequestDetailState(this.heroIndex, this.request);
+  Widget headerWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +37,25 @@ class UserRequestDetailState extends State<UserRequestDetail> {
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
           title: Text(
-            '#34568 Details',
+            'Chi tiết đơn hàng',
             style: TextStyle(
               color: Colors.black,
-              fontFamily: 'Poppins',
+              fontFamily: 'OpenSans',
               fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: true,
           elevation: 0.0,
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Card(
-              margin: EdgeInsets.all(0.0),
+              margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
               elevation: 0.0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(10.0),
               ),
               //Color.fromRGBO(236, 126, 114, 1)
               color: Color(0xff8d08cf),
@@ -62,21 +70,18 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 12.0,
-            ),
             Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: AppConstants.backgroundColor,
+                color: Colors.white,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(30),
                 ),
               ),
               child: Text(
-                'Quotations',
+                'Báo giá',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.grey[800],
@@ -89,9 +94,9 @@ class UserRequestDetailState extends State<UserRequestDetail> {
             Expanded(
                 child: Container(
                     decoration: BoxDecoration(
-                      color: AppConstants.backgroundColor,
+                      color: Colors.white,
                     ),
-                    child: listQuotaion())),
+                    child: listQuotaion(request))),
           ],
         ),
       ),
@@ -107,10 +112,10 @@ class UserRequestDetailState extends State<UserRequestDetail> {
     //   });
     // }
     if (_scrollController.offset <
-            _scrollController.position.minScrollExtent + 150.0 &&
+            _scrollController.position.minScrollExtent + 160.0 &&
         !_scrollController.position.outOfRange) {
       setState(() {
-        headerWidgetHeight = 125.0;
+        headerWidgetHeight = 160.0;
         //headerWidget = header();
       });
     }
@@ -118,39 +123,44 @@ class UserRequestDetailState extends State<UserRequestDetail> {
     //     ScrollDirection.forward.index - 10) {
     //   headerWidget = header();
     // }
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      setState(() {
-        //headerWidget = null;
-        headerWidgetHeight = 0.0;
-      });
+    if (request.quotations.length > 7) {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        setState(() {
+          //headerWidget = null;
+          headerWidgetHeight = 0.0;
+        });
+      }
     }
   }
 
   @override
   void initState() {
+    super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    super.initState();
+    headerWidget = header(request);
   }
 
   @override
   void dispose() {
     super.dispose();
+    _scrollController.dispose();
   }
 
-  Widget listQuotaion() {
+  Widget listQuotaion(Request request) {
     return ListView.builder(
       controller: _scrollController,
       physics: BouncingScrollPhysics(),
       padding: EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 0),
-      itemCount: 5,
+      itemCount: request.quotations.length,
       itemBuilder: (BuildContext context, int index) {
+        Quotation quotaion = request.quotations[index];
         return Card(
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
-          elevation: 1.0,
+          margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+          elevation: 4.5,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(10.0),
           ),
           //Color.fromRGBO(236, 126, 114, 1)
           color: Colors.white,
@@ -164,12 +174,19 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                   Column(
                     children: <Widget>[
                       ClipOval(
-                        child: Image.asset(
-                          "assets/images/avatar1.jpg",
-                          height: 64,
-                          width: 64,
-                          fit: BoxFit.cover,
-                        ),
+                        child: quotaion.driver.imagePath != null
+                            ? Image.network(
+                                quotaion.driver.imagePath,
+                                height: 64,
+                                width: 64,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                "assets/images/no-avatar.png",
+                                height: 64,
+                                width: 64,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                       SizedBox(
                         height: 4.0,
@@ -212,7 +229,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Nguyen Van Loi",
+                        quotaion.driver.fullName,
                         style: TextStyle(
                           color: Colors.blue,
                           fontSize: 16.0,
@@ -224,7 +241,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                         height: 4.0,
                       ),
                       Text(
-                        "5000.000.000",
+                        numformat.format(quotaion.price) + " VND",
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16.0,
@@ -245,7 +262,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                             width: 4.0,
                           ),
                           Text(
-                            "5 days",
+                            quotaion.date.day.toString(),
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12.0,
@@ -265,7 +282,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                             width: 4.0,
                           ),
                           Text(
-                            '5 hours',
+                            quotaion.date.weekday.toString(),
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12.0,
@@ -283,6 +300,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                   SizedBox(
                     width: 8.0,
                   ),
+                  Spacer(),
                   Icon(
                     Icons.chevron_right,
                     color: Colors.black,
@@ -297,7 +315,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
   }
 }
 
-Widget header() {
+Widget header(Request request) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,7 +324,22 @@ Widget header() {
         child: Container(
           padding: EdgeInsets.all(12.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Text(
+                "#" +
+                    request.requestId.toString() +
+                    " - " +
+                    request.commodityName,
+                style: TextStyle(
+                  fontSize: AppConstants.medFontSize,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
               Row(
                 children: <Widget>[
                   Icon(
@@ -326,7 +359,7 @@ Widget header() {
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
                         style: TextStyle(
-                          color: Colors.grey[800],
+                          color: Colors.white,
                           fontFamily: 'Poppins',
                         ),
                       ),
@@ -334,37 +367,13 @@ Widget header() {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 8.0,
-              ),
               Row(
                 children: <Widget>[
                   Icon(
                     Icons.more_vert,
-                    color: Color.fromRGBO(207, 8, 108, 0.7),
-                  ),
-                  SizedBox(
-                    width: 4.0,
-                  ),
-                  Icon(
-                    Icons.looks_4,
-                    color: Colors.grey,
-                  ),
-                  Flexible(
-                    child: Text(
-                      "Kilometer",
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
+                    color: Colors.white,
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 4.0,
               ),
               Row(
                 children: <Widget>[
@@ -385,7 +394,7 @@ Widget header() {
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
                         style: TextStyle(
-                          color: Colors.grey[800],
+                          color: Colors.white,
                           fontFamily: 'Poppins',
                         ),
                       ),

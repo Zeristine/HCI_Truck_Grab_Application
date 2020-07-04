@@ -158,7 +158,6 @@ class HttpService {
       //   requests.add(Request.fromJson(json.decode(list[i])));
       // }
       var jsonRe = json.decode(response.body);
-      print(jsonRe.toString());
       if (jsonRe != null) {
         var list = jsonRe as List;
         if (list.length > 0) {
@@ -174,7 +173,6 @@ class HttpService {
     String url = "https://truck-api.azurewebsites.net/api/users/" + userId;
     var response = await http.get(url);
     User user;
-    Map<String, dynamic> map = json.decode(response.body);
     if (response.statusCode == 200) {
       print(response.body);
       user = User.fromJson(json.decode(response.body));

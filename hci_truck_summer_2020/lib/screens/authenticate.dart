@@ -39,7 +39,6 @@ class AuthenticateScreenState extends State<AuthenticateScreen> {
   @override
   Widget build(BuildContext context) {
     if (isLoggedIn == true) {
-      print(prefs.getInt('roleId'));
       if (prefs.getInt('roleId') == 1) {
         return UserHomeScreen();
       } else if (prefs.getInt('roleId') == 2) {

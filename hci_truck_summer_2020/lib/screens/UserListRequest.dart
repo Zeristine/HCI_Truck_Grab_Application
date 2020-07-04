@@ -91,7 +91,7 @@ Widget listRequest(List<Request> requests) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return UserRequestDetail(index);
+                      return UserRequestDetail(index, requests[index]);
                     }));
                   },
                   child: Container(
