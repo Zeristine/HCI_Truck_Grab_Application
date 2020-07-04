@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/user.dart';
@@ -12,6 +15,17 @@ class EditProfileScreen extends StatefulWidget {
 class EditProfileState extends State<EditProfileScreen> {
   SharedPreferences prefs;
   User userData;
+  File imageFile;
+  ImagePicker picker = ImagePicker();
+
+  Future pickImageFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      imageFile = File(pickedFile.path);
+    });
+  }
+
   void getUserData() async {
     prefs = await SharedPreferences.getInstance();
     userData = User(
@@ -61,17 +75,50 @@ class EditProfileState extends State<EditProfileScreen> {
         centerTitle: true,
         elevation: 0.0,
       ),
-      body: editProfileOptions(context),
+      body: SingleChildScrollView(
+        child: editProfileOptions(context, imageFile, () async {
+          pickImageFromGallery();
+        }),
+      ),
     );
   }
 }
 
-Widget editProfileOptions(BuildContext context) {
+Widget editProfileOptions(BuildContext context, File imageFile, Function pickImageFromGallery) {
   return Container(
     child: Column(
       children: <Widget>[
-                
+        imageChoose(context, imageFile, pickImageFromGallery),
+        SizedBox(
+          height: 24.0,
+        ),
       ],
+    ),
+  );
+}
+
+Widget imageChoose(
+    BuildContext context, File image, Function pickImageFromGallery) {
+  return Container(
+    height: 150.0,
+    child: Center(
+      child: InkWell(
+        onTap: pickImageFromGallery,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(100.0),
+          ),
+          child: ClipRRect(
+            child: CircleAvatar(
+              radius: 64,
+              backgroundImage: image == null
+                  ? AssetImage('assets/images/user_avatar.png')
+                  : FileImage(image),
+            ),
+          ),
+        ),
+      ),
     ),
   );
 }

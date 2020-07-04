@@ -8,10 +8,15 @@ class Role {
   Role({this.roleId, this.roleName, this.users});
 
   factory Role.fromJson(Map<String, dynamic> json) {
-    return Role(
-      roleId: json['roleId'],
-      roleName: json['roleName'],
-      users: json['users'] != null ? List.from(json['users']) : new List<User>(),
-    );
+    if (json == null) {
+      return null;
+    } else {
+      return Role(
+        roleId: json['roleId'],
+        roleName: json['roleName'],
+        users:
+            json['users'] != null ? List.from(json['users']) : new List<User>(),
+      );
+    }
   }
 }

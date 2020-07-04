@@ -39,6 +39,12 @@ class LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    focus.dispose();
+    super.dispose();
+  }
+
   Future<http.Response> fetchAlbum() {
     return http.get('https://jsonplaceholder.typicode.com/albums/1');
   }
@@ -261,8 +267,10 @@ Future checkLogin(context, formKey) async {
                 'gender', user.gender == null ? "Empty" : user.gender);
             await prefs.setString('dateOfBirth',
                 user.dateOfBirth == null ? "Empty" : user.dateOfBirth);
+            await prefs.setString('imagePath', user.imagePath == null ? 'Empty' : user.imagePath);
             await prefs.setInt('roleId', user.role.roleId);
             await prefs.setBool('isLoggedIn', true);
+            await prefs.setString('password', user.password);
             if (user.roleId == 1) {
               Navigator.pushAndRemoveUntil(
                   context,
