@@ -31,29 +31,22 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    List<Quotation> quotations = new List<Quotation>();
-    if (json != null) {
-      if (json['quotations'] != null) {
-        var list = json['quotations'] as List;
-        quotations = list.map((e) => Quotation.fromJson(e)).toList();
-      }
-    }
-    return json != null
-        ? User(
-            userId: json['userId'],
-            fullName: json['fullName'],
-            password: json['password'],
-            phoneNumber: json['phoneNumber'],
-            gender: json['gender'],
-            dateOfBirth: json['dateOfBirth'],
-            imagePath: json['imagePath'],
-            roleId: json['roleId'],
-            role: json['role'] != null ? Role.fromJson(json['role']) : null,
-            requests: json['requests'] != null
-                ? List.from(json['requests'])
-                : new List<Request>(),
-            quotations: quotations,
-          )
-        : null;
+    return User(
+      userId: json['userId'],
+      fullName: json['fullName'],
+      password: json['password'],
+      phoneNumber: json['phoneNumber'],
+      gender: json['gender'],
+      dateOfBirth: json['dateOfBirth'],
+      imagePath: json['imagePath'],
+      roleId: json['roleId'],
+      role: Role.fromJson(json['role']),
+      requests: json['requests'] != null
+          ? List.from(json['requests'])
+          : new List<Request>(),
+      quotations: json['quotations'] != null
+          ? List.from(json['quotations'])
+          : new List<Quotation>(),
+    );
   }
 }

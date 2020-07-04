@@ -8,8 +8,6 @@ import 'package:truck/models/Place.dart';
 import 'package:truck/models/Reciver.dart';
 import 'package:truck/models/Request.dart';
 
-import '../models/user.dart';
-
 class HttpService {
   static Future<Request> saveRequest(
     Request request,
@@ -151,34 +149,14 @@ class HttpService {
     var response = await http.get(url);
     List<Request> requests = new List<Request>();
     if (response.statusCode == 200) {
-      // List<String> list = List.from(
-      //   json.decode(response.body),
-      // );
-      // for (var i = 0; i < list.length; i++) {
-      //   requests.add(Request.fromJson(json.decode(list[i])));
-      // }
-      var jsonRe = json.decode(response.body);
-      print(jsonRe.toString());
-      if (jsonRe != null) {
-        var list = jsonRe as List;
-        if (list.length > 0) {
-          requests = list.map((e) => Request.fromJson(e)).toList();
-        }
+      List<dynamic> list = List.from(
+        json.decode(response.body),
+      );
+      for (var i = 0; i < list.length; i++) {
+        requests.add(Request.fromJson(list[i]));
       }
       return requests;
     }
     return null;
-  }
-
-  static Future<User> getUser(String userId) async {
-    String url = "https://truck-api.azurewebsites.net/api/users/" + userId;
-    var response = await http.get(url);
-    User user;
-    Map<String, dynamic> map = json.decode(response.body);
-    if (response.statusCode == 200) {
-      print(response.body);
-      user = User.fromJson(json.decode(response.body));
-    }
-    return user;
   }
 }

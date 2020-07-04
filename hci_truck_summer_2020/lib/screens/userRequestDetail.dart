@@ -50,7 +50,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 borderRadius: BorderRadius.circular(5.0),
               ),
               //Color.fromRGBO(236, 126, 114, 1)
-              color: Color(0xff8d08cf),
+              color: Colors.white,
               child: InkWell(
                 onTap: () {},
                 child: AnimatedContainer(
@@ -86,12 +86,12 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 ),
               ),
             ),
-            Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: AppConstants.backgroundColor,
-                    ),
-                    child: listQuotaion())),
+            Expanded(child: Container(
+              decoration: BoxDecoration(
+                color: AppConstants.backgroundColor,
+              ),
+              child: listQuotaion())
+              ),
           ],
         ),
       ),
@@ -344,7 +344,7 @@ Widget header() {
                     color: Color.fromRGBO(207, 8, 108, 0.7),
                   ),
                   SizedBox(
-                    width: 4.0,
+                    width: 8.0,
                   ),
                   Icon(
                     Icons.looks_4,
@@ -364,7 +364,7 @@ Widget header() {
                 ],
               ),
               SizedBox(
-                height: 4.0,
+                height: 8.0,
               ),
               Row(
                 children: <Widget>[
