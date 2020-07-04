@@ -42,28 +42,38 @@ class Request {
   });
 
   factory Request.fromJson(Map<String, dynamic> json) {
-    return Request(
-      requestId: json['requestId'],
-      commodityName: json['commodityName'],
-      commodityOwnerId: json['commodityOwnerId'],
-      reciverId: json['reciverId'],
-      weight: json['weight'],
-      dateCreate: DateTime.parse(json['dateCreate']),
-      validDate: DateTime.parse(json['validDate']),
-      statusId: json['statusId'],
-      status: Status.fromJson(json['status']),
-      note: json['note'],
-      userId: json['userId'],
-      user: json['user'] != null ? User.fromJson(json['user']) : null,
-      quotations: json['quotations'] != null
-          ? List.from(json['quotations'])
-          : new List<Quotation>(),
-      reciver:
-          json['reciver'] != null ? Reciver.fromJson(json['reciver']) : null,
-      commodityOwner: json['commodityOwner'] != null
-          ? CommodityOwner.fromJson(json['commodityOwner'])
-          : null,
-    );
+    List<Quotation> quotations = new List<Quotation>();
+    if (json != null) {
+      if (json['quotations'] != null && json['quotations'] != []) {
+        var list = json['quotations'] as List;
+        if (list.length > 0) {
+          quotations = list.map((e) => Quotation.fromJson(e)).toList();
+        }
+      }
+    }
+    return json != null
+        ? Request(
+            requestId: json['requestId'],
+            commodityName: json['commodityName'],
+            commodityOwnerId: json['commodityOwnerId'],
+            reciverId: json['reciverId'],
+            weight: json['weight'],
+            dateCreate: DateTime.parse(json['dateCreate']),
+            validDate: DateTime.parse(json['validDate']),
+            statusId: json['statusId'],
+            status: Status.fromJson(json['status']),
+            note: json['note'],
+            userId: json['userId'],
+            user: json['user'] != null ? User.fromJson(json['user']) : null,
+            quotations: quotations,
+            reciver: json['reciver'] != null
+                ? Reciver.fromJson(json['reciver'])
+                : null,
+            commodityOwner: json['commodityOwner'] != null
+                ? CommodityOwner.fromJson(json['commodityOwner'])
+                : null,
+          )
+        : null;
   }
 
   Map toJson() => {

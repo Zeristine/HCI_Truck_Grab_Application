@@ -6,6 +6,8 @@ import 'package:truck/screens/homeTruck.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/screens/login.dart';
 
+import '../services/HttpService.dart';
+
 class AuthenticateScreen extends StatefulWidget {
   AuthenticateScreen({Key key}) : super(key: key);
 
@@ -31,6 +33,7 @@ class AuthenticateScreenState extends State<AuthenticateScreen> {
   void initState() {
     getPrefs();
     super.initState();
+    HttpService.getUser("loinv@gmail.com");
   }
 
   @override
