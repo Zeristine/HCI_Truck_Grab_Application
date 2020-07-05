@@ -53,10 +53,10 @@ Widget profileDetail(String imagePath) {
     children: <Widget>[
       CircleAvatar(
         radius: 64,
-        backgroundImage: imagePath == null
+        backgroundImage: imagePath == 'Empty'
             ? AssetImage('assets/images/user_avatar.png')
             : NetworkImage(
-                'https://firebasestorage.googleapis.com/v0/b/hci-project-281007.appspot.com/o/image%2Fdriver.jpg?alt=media&token=fe054bc3-a6b1-4fd7-a0f6-6982c65cd153'),
+                imagePath),
       ),
       SizedBox(
         height: 12,
