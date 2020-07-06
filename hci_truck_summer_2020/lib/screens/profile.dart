@@ -36,7 +36,7 @@ class ProfileState extends State<ProfileScreen> {
                     ),
                     profileDetail(imagePath),
                     SizedBox(
-                      height: 24,
+                      height: 12.0,
                     ),
                     profileButtonGroup(context)
                   ],
@@ -137,27 +137,6 @@ Widget profileButtonGroup(BuildContext context) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ChangePasswordScreen()));
           },
-        ),
-        Divider(
-          color: Colors.grey[600],
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.all(0.0),
-          title: Row(
-            children: <Widget>[
-              Icon(Icons.library_books),
-              SizedBox(
-                width: 12.0,
-              ),
-              Text(
-                'Lịch sử đơn giao hàng',
-                style: TextStyle(
-                  fontSize: AppConstants.minFontSize,
-                ),
-              ),
-            ],
-          ),
-          onTap: () {},
         ),
         Divider(
           color: Colors.grey[600],

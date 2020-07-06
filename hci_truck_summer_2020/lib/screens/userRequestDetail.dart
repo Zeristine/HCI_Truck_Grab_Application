@@ -54,7 +54,8 @@ class UserRequestDetailState extends State<UserRequestDetail> {
           children: <Widget>[
             Card(
               margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
-              elevation: 0.0,
+              elevation: 3.0,
+              shadowColor: Color(0xff8d08cf),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -73,13 +74,11 @@ class UserRequestDetailState extends State<UserRequestDetail> {
             ),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
+              margin: EdgeInsets.only(top: 12.0),
+              padding: EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 0.0),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(30),
-                ),
               ),
               child: Text(
                 'Báo giá',

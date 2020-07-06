@@ -48,16 +48,19 @@ class ChangePasswordState extends State<ChangePasswordScreen> {
         builder: (context, snapshot) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: AppConstants.backgroundColor,
+              backgroundColor: Color.fromRGBO(240, 58, 58, 1),
               leading: BackButton(
-                color: Colors.black,
+                color: Colors.white,
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
               title: Text(
                 'Thay đổi mật khẩu',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal),
               ),
               centerTitle: true,
               elevation: 0.0,
@@ -85,6 +88,7 @@ Widget changePasswordComponents(
     child: Form(
         key: formKey,
         child: Container(
+          margin: EdgeInsets.all(24.0),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

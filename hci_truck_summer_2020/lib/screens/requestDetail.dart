@@ -101,7 +101,7 @@ Widget driverDetail(BuildContext context) {
           margin: EdgeInsets.all(0.0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          elevation: 5.0,
+          elevation: 3.0,
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
