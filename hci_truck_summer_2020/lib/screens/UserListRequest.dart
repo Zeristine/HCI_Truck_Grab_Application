@@ -78,6 +78,7 @@ Widget listRequest(List<Request> requests) {
                 reciverPlaces[1].name +
                 ", " +
                 reciverPlaces[2].name;
+
             return Hero(
               tag: 'background' + index.toString(),
               child: Card(

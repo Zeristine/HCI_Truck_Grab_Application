@@ -18,33 +18,33 @@ class ProfileState extends State<ProfileScreen> {
   Future getImagePath() async {
     prefs = await SharedPreferences.getInstance();
     imagePath = prefs.getString('imagePath');
-  }  
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getImagePath(),
-      builder: (context, snapshot) {
-      return Scaffold(
-        backgroundColor: AppConstants.backgroundColor,
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 24,
+        future: getImagePath(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            backgroundColor: AppConstants.backgroundColor,
+            body: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 24,
+                    ),
+                    profileDetail(imagePath),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    profileButtonGroup(context)
+                  ],
                 ),
-                profileDetail(imagePath),
-                SizedBox(
-                  height: 24,
-                ),
-                profileButtonGroup(context)
-              ],
+              ),
             ),
-          ),
-        ),
-      );
-    });
+          );
+        });
   }
 }
 
@@ -53,10 +53,9 @@ Widget profileDetail(String imagePath) {
     children: <Widget>[
       CircleAvatar(
         radius: 64,
-        backgroundImage: imagePath == 'Empty'
-            ? AssetImage('assets/images/user_avatar.png')
-            : NetworkImage(
-                imagePath),
+        backgroundImage: imagePath == null || imagePath == 'Empty'
+            ? AssetImage('assets/images/no-avatar.png')
+            : NetworkImage(imagePath),
       ),
       SizedBox(
         height: 12,

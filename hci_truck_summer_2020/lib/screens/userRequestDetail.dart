@@ -59,7 +59,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               //Color.fromRGBO(236, 126, 114, 1)
-              color: Colors.white,
+              color: Color(0xff8d08cf),
               child: InkWell(
                 onTap: () {},
                 child: AnimatedContainer(
