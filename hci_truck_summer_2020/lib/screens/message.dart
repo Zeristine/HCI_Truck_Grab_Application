@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/appConstans.dart';
+
 class MessageScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MessageScreenState();
@@ -12,93 +14,115 @@ class MessageScreenState extends State<MessageScreen> {
     // TODO: implement build
 
     return Scaffold(
-         body: messageList()
+      body: Container(
+        padding: EdgeInsets.all(24.0),
+        child: messageList(),
+      ),
     );
     //  body: ChatItem(),
     // );
   }
-  }
-Widget messageList(){
+}
+
+Widget messageList() {
   return ListView.builder(
-    itemCount: 6,
-    itemBuilder: (context,index){
-      return ChatItem();
-    }
+      itemCount: 6,
+      itemBuilder: (context, index) {
+        return chatItem();
+      });
+}
+
+Widget chatItem() {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 12.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        leftSection,
+        SizedBox(
+          width: 8,
+        ),
+        middleSection(),
+      ],
+    ),
   );
 }
 
-class ChatItem extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      body: Column(
+final leftSection = new CircleAvatar(
+  backgroundImage: AssetImage('assets/images/avatar2.jpg'),
+  backgroundColor: Colors.lightGreen,
+  radius: 28.0,
+);
+
+Widget middleSection() {
+  return Flexible(
+    child: Container(
+      padding: EdgeInsets.only(left: 8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              new Text(
+                "Dang van Tan",
+                style: new TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.0,
+                ),
+              ),
+              new CircleAvatar(
+                backgroundColor: AppConstants.buttonColor,
+                radius: 10.0,
+                child: new Text(
+                  "2",
+                  style: new TextStyle(color: Colors.white, fontSize: 12.0),
+                ),
+              ),
+            ],
+          ),
           SizedBox(
-            height: 50,
+            height: 8.0,
           ),
-          Container(
-            padding: EdgeInsets.all(24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[leftSection, middleSection, Spacer(), rightSection],
-            ),
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                child: new Text(
+                  "Hi whatsp? asdasd sdasd hing ajd",
+                  overflow: TextOverflow.ellipsis,
+                  style: new TextStyle(color: Colors.grey[800]),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 2, left: 8),
+                child: new Text(
+                  "9:50 AM",
+                  style: new TextStyle(color: Colors.grey, fontSize: 12.0),
+                ),
+              ),
+            ],
+          )
         ],
       ),
-    );
-  }
-
-  final leftSection = new Container(
-    height: 50,
-    child: new CircleAvatar(
-      backgroundImage: AssetImage('/assests/images/avatar2.jpg'),
-      backgroundColor: Colors.lightGreen,
-      radius: 24.0,
     ),
   );
-
-  final middleSection = new Container(
-    padding: new EdgeInsets.only(left: 8.0),
-    child: new Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        new Text(
-          "Name",
-          style: new TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-            fontSize: 16.0,
-          ),
-        ),
-        new Text(
-          "Hi whatsp?",
-          style: new TextStyle(color: Colors.grey),
-        ),
-      ],
-    ),
-  );
-
-  final rightSection = new Container(
-    child: new Column(
-      //mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        new Text(
-          "9:50",
-          style: new TextStyle(color: Colors.lightGreen, fontSize: 12.0),
-        ),
-        new CircleAvatar(
-          backgroundColor: Colors.lightGreen,
-          radius: 10.0,
-          child: new Text(
-            "2",
-            style: new TextStyle(color: Colors.white, fontSize: 12.0),
-          ),
-        )
-      ],
-    ),
-  );
-
-  
 }
+
+final rightSection = new Container(
+  child: new Column(
+    //mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: <Widget>[
+      SizedBox(
+        height: 16.0,
+      ),
+      new Text(
+        "9:50",
+        style: new TextStyle(color: Colors.grey[600], fontSize: 12.0),
+      ),
+    ],
+  ),
+);

@@ -3,16 +3,12 @@ import 'package:truck/screens/authenticate.dart';
 import 'package:truck/screens/chatdetail.dart';
 import 'package:truck/screens/message.dart';
 
+import 'screens/chatdetail.dart';
+import 'screens/message.dart';
+
 void main() {
   runApp(MaterialApp(
-    home: ChatDetailPage()
-    
-    
-    
-    
-    
-    
-    ,
+    home: ChatDetailPage(),
     // initialRoute: '/login',
     // routes: {
     //   '/': (context) => UserHomeScreen(),
