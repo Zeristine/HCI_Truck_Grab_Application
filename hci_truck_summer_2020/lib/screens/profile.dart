@@ -5,7 +5,6 @@ import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/changePassword.dart';
 import 'package:truck/screens/editProfile.dart';
 import 'package:truck/screens/login.dart';
-import 'package:truck/services/appUi.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -13,36 +12,51 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileState extends State<ProfileScreen> {
+  SharedPreferences prefs;
+  String imagePath;
+
+  Future getImagePath() async {
+    prefs = await SharedPreferences.getInstance();
+    imagePath = prefs.getString('imagePath');
+  }  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppConstants.backgroundColor,
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 24,
-              ),
-              profileDetail(),
-              SizedBox(
-                height: 24,
-              ),
-              profileButtonGroup(context)
-            ],
+    return FutureBuilder(
+      future: getImagePath(),
+      builder: (context, snapshot) {
+      return Scaffold(
+        backgroundColor: AppConstants.backgroundColor,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 24,
+                ),
+                profileDetail(imagePath),
+                SizedBox(
+                  height: 24,
+                ),
+                profileButtonGroup(context)
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
-Widget profileDetail() {
+Widget profileDetail(String imagePath) {
   return Column(
     children: <Widget>[
       CircleAvatar(
         radius: 64,
-        backgroundImage: AssetImage("assets/images/avatar1.jpg"),
+        backgroundImage: imagePath == 'Empty'
+            ? AssetImage('assets/images/user_avatar.png')
+            : NetworkImage(
+                imagePath),
       ),
       SizedBox(
         height: 12,

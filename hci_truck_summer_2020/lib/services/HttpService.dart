@@ -7,8 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:truck/models/Place.dart';
 import 'package:truck/models/Reciver.dart';
 import 'package:truck/models/Request.dart';
-
-import '../models/user.dart';
+import 'package:truck/models/user.dart';
 
 class HttpService {
   static Future<Request> saveRequest(

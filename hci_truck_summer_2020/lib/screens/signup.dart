@@ -28,6 +28,14 @@ class SignUpScreenState extends State<SignUpScreen> {
   }
 
   @override
+  void dispose() {
+    emailFocus.dispose();
+    passwordFocus.dispose();
+    repasswordFocus.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.backgroundColor,
