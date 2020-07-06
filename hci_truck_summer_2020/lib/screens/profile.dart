@@ -53,10 +53,9 @@ Widget profileDetail(String imagePath) {
     children: <Widget>[
       CircleAvatar(
         radius: 64,
-        backgroundImage: imagePath == 'Empty'
-            ? AssetImage('assets/images/user_avatar.png')
+        backgroundImage: imagePath == null || imagePath == 'Empty'
+            ? AssetImage('assets/images/no-avatar.png')
             : NetworkImage(imagePath),
-        backgroundColor: Colors.blue,
       ),
       SizedBox(
         height: 12,

@@ -31,23 +31,25 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      userId: json['userId'],
-      fullName: json['fullName'],
-      password: json['password'],
-      phoneNumber: json['phoneNumber'],
-      gender: json['gender'],
-      dateOfBirth: json['dateOfBirth'],
-      imagePath: json['imagePath'],
-      roleId: json['roleId'],
-      role: Role.fromJson(json['role']),
-      requests: json['requests'] != null
-          ? List.from(json['requests'])
-          : new List<Request>(),
-      quotations: json['quotations'] != null
-          ? List.from(json['quotations'])
-          : new List<Quotation>(),
-    );
+    return json != null
+        ? User(
+            userId: json['userId'],
+            fullName: json['fullName'],
+            password: json['password'],
+            phoneNumber: json['phoneNumber'],
+            gender: json['gender'],
+            dateOfBirth: json['dateOfBirth'],
+            imagePath: json['imagePath'],
+            roleId: json['roleId'],
+            role: Role.fromJson(json['role']),
+            requests: json['requests'] != null
+                ? List.from(json['requests'])
+                : new List<Request>(),
+            quotations: json['quotations'] != null
+                ? List.from(json['quotations'])
+                : new List<Quotation>(),
+          )
+        : null;
   }
 
   Map<String, dynamic> toJson() => {
