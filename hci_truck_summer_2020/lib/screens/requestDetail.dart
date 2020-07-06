@@ -24,7 +24,7 @@ class QuotationDetailScreenState extends State<QuotationDetailScreen> {
           title: Text(
             'Chi tiết báo giá',
             style: TextStyle(
-              fontSize: AppConstants.medFontSize,
+              fontSize: AppConstants.minFontSize,
               color: Colors.grey[800],
               fontWeight: FontWeight.normal,
             ),
@@ -268,9 +268,9 @@ Widget detailButtonGroup() {
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.grey[400],
-            offset: Offset(0, -5),
-            blurRadius: 10.0,
-            spreadRadius: 1.0,
+            offset: Offset(0, -3),
+            blurRadius: 5.0,
+            spreadRadius: .3,
           )
         ]),
     child: Column(

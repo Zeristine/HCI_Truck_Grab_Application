@@ -43,7 +43,6 @@ class UserRequestDetailState extends State<UserRequestDetail> {
               color: Colors.black,
               fontFamily: 'OpenSans',
               fontSize: 16,
-              fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: true,

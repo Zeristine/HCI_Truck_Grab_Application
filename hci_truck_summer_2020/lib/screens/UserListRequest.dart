@@ -87,7 +87,7 @@ Widget listRequest(List<Request> requests) {
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 color: Colors.white,
-                elevation: 1,
+                elevation: 3,
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context,
