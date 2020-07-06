@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:truck/screens/authenticate.dart';
+import 'package:truck/screens/requestDetail.dart';
 
 void main() {
   runApp(MaterialApp(
