@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Request.dart';
+import 'package:truck/screens/requestDetail.dart';
 import 'package:truck/services/marquee.dart';
 
 class UserRequestDetail extends StatefulWidget {
@@ -165,7 +166,13 @@ class UserRequestDetailState extends State<UserRequestDetail> {
           //Color.fromRGBO(236, 126, 114, 1)
           color: Colors.white,
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => QuotationDetailScreen(),
+                ),
+              );
+            },
             child: Container(
               padding: EdgeInsets.all(12),
               child: Row(

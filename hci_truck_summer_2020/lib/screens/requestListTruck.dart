@@ -10,20 +10,20 @@ class RequestListTruckScreen extends StatefulWidget {
 class RequestListTruckSate extends State<RequestListTruckScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(        
+    return Scaffold(
         body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                inProgressRequestList(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                availableRequestList(context),
-              ],
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            inProgressRequestList(),
+            SizedBox(
+              height: 10.0,
             ),
-          ),
-        ));
+            availableRequestList(context),
+          ],
+        ),
+      ),
+    ));
   }
 }
 
@@ -67,7 +67,7 @@ Widget availableRequestList(BuildContext context) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return RequestDetailScreen();
+                      return QuotationDetailScreen();
                     }));
                   },
                   child: Container(
@@ -230,7 +230,7 @@ Widget inProgressRequestList() {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RequestDetailScreen()));
+                            builder: (context) => QuotationDetailScreen()));
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),
