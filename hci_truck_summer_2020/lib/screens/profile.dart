@@ -13,7 +13,7 @@ class ProfileScreen extends StatefulWidget {
 
 class ProfileState extends State<ProfileScreen> {
   SharedPreferences prefs;
-  String imagePath;
+  String imagePath = 'Empty';
 
   Future getImagePath() async {
     prefs = await SharedPreferences.getInstance();
@@ -134,18 +134,6 @@ Widget profileButtonGroup(BuildContext context) {
             ],
           ),
           onTap: () {
-            // showDialog(
-            //   context: context,
-            //   child: Dialog(
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20.0)),
-            //     child: SingleChildScrollView(
-            //         child: Padding(
-            //       padding: EdgeInsets.all(10.0),
-            //       child: changePasswordDialog(context),
-            //     )),
-            //   ),
-            // );
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ChangePasswordScreen()));
           },

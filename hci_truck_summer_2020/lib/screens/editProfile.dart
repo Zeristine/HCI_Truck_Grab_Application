@@ -14,22 +14,11 @@ class EditProfileScreen extends StatefulWidget {
 
 class EditProfileState extends State<EditProfileScreen> {
   SharedPreferences prefs;
-  User userData;
   File imageFile;
+  User user;
   ImagePicker picker = ImagePicker();
-  final FocusNode phoneNumberFocus = FocusNode();
-  final FocusNode genderFocus = FocusNode();
-  final FocusNode dateOfBirthFocus = FocusNode();
   final GlobalKey<FormState> editProfileKey =
       GlobalKey(debugLabel: 'editProfileKey');
-
-  @override
-  void dispose() {
-    phoneNumberFocus.dispose();
-    genderFocus.dispose();
-    dateOfBirthFocus.dispose();
-    super.dispose();
-  }
 
   Future pickImageFromGallery() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -41,15 +30,13 @@ class EditProfileState extends State<EditProfileScreen> {
 
   Future getUserData() async {
     prefs = await SharedPreferences.getInstance();
-    userData = User(
+    user = User(
       userId: prefs.getString('userId'),
       fullName: prefs.getString('fullname'),
       phoneNumber: prefs.getString('phoneNumber'),
       gender: prefs.getString('gender'),
       dateOfBirth: prefs.getString('dateOfBirth'),
       imagePath: prefs.getString('imagePath'),
-      password: prefs.getString('password'),
-      roleId: prefs.getInt('roleId'),
     );
   }
 
@@ -100,7 +87,7 @@ class EditProfileState extends State<EditProfileScreen> {
             body: SingleChildScrollView(
               child: editProfileOptions(context, imageFile, () async {
                 pickImageFromGallery();
-              }, userData),
+              }, user),
             ),
           );
         });
@@ -111,11 +98,13 @@ Widget editProfileOptions(BuildContext context, File imageFile,
     Function pickImageFromGallery, User user) {
   return Container(
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         imageChoose(context, imageFile, pickImageFromGallery, user.imagePath),
         SizedBox(
           height: 24.0,
         ),
+        userForm(context, user),
       ],
     ),
   );
@@ -137,10 +126,11 @@ Widget imageChoose(BuildContext context, File image,
             child: CircleAvatar(
               radius: 64,
               backgroundImage: image == null
-                  ? (imagePath == 'Empty'
+                  ? (imagePath == null
                       ? AssetImage('assets/images/user_avatar.png')
-                      : NetworkImage(
-                          imagePath))
+                      : (imagePath == 'Empty'
+                          ? AssetImage('assets/images/user_avatar.png')
+                          : NetworkImage(imagePath)))
                   : FileImage(image),
             ),
           ),
@@ -150,15 +140,101 @@ Widget imageChoose(BuildContext context, File image,
   );
 }
 
-Widget userForm(User user) {
+Widget userForm(BuildContext context, User user) {
+  final TextEditingController fullnameController = TextEditingController(
+    text: user.fullName == null ? '' : (user.fullName == 'Empty' ? '' : user.fullName),
+  );
+  final TextEditingController phoneNumberController = TextEditingController(
+    text: user.phoneNumber == null ? '' : (user.phoneNumber == 'Empty' ? '' : user.phoneNumber),
+  );
+  final TextEditingController dateOfBirthController = TextEditingController(
+    text: user.dateOfBirth == null ? '' : (user.dateOfBirth == 'Empty' ? '' : user.dateOfBirth),
+  );
   return Form(
     child: Container(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          Text('Tên đầy đủ:'),
           TextFormField(
-            initialValue: user.fullName,
-          
+            textInputAction: TextInputAction.next,
+            controller: fullnameController,            
+            style: TextStyle(
+              fontSize: AppConstants.minFontSize,
+              fontFamily: 'Roboto',
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: BorderSide(color: Colors.white, width: 2.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide:
+                    BorderSide(color: AppConstants.linkColor, width: 2.0),
+              ),
+            ),
+            maxLines: 1,
           ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text('Số điện thoại:'),
+          TextFormField(
+            textInputAction: TextInputAction.next,
+            controller: phoneNumberController,            
+            style: TextStyle(
+              fontSize: AppConstants.minFontSize,
+              fontFamily: 'Roboto',
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: BorderSide(color: Colors.white, width: 2.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide:
+                    BorderSide(color: AppConstants.linkColor, width: 2.0),
+              ),
+            ),
+            maxLines: 1,
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text('Ngày sinh:'),
+          TextFormField(
+            textInputAction: TextInputAction.next,
+            controller: dateOfBirthController,            
+            style: TextStyle(
+              fontSize: AppConstants.minFontSize,
+              fontFamily: 'Roboto',
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: BorderSide(color: Colors.white, width: 2.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide:
+                    BorderSide(color: AppConstants.linkColor, width: 2.0),
+              ),
+            ),
+            maxLines: 1,
+            onTap: () {},
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text('Giới tính của bạn là:'),
         ],
       ),
     ),
