@@ -10,11 +10,11 @@ class ErrorScreenState extends State<ErrorScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(        
+      home: Scaffold(
         body: Center(
-          child: Text('ERROR SCREEN'),
+          child: CircularProgressIndicator(),
         ),
       ),
-    );    
+    );
   }
 }

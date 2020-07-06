@@ -7,15 +7,22 @@ class Quotation {
   String note;
   User driver;
   Request request;
+  DateTime date;
 
   Quotation(
-      {this.quotationId, this.price, this.note, this.driver, this.request});
+      {this.quotationId,
+      this.price,
+      this.note,
+      this.driver,
+      this.request,
+      this.date});
 
   factory Quotation.fromJson(Map<String, dynamic> json) {
     return Quotation(
         quotationId: json['quotationId'],
         price: json['price'],
         note: json['note'],
+        date: DateTime.parse(json['date']),
         driver: User.fromJson(json['driver']),
         request: Request.fromJson(json['request']));
   }

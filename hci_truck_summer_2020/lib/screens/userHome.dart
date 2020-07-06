@@ -14,18 +14,16 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 List<String> screenTitle = <String>[
-  'Create request',
-  'My Requests',
-  'Chats',
-  'My Profile'
+  'Danh sách đơn hàng',
+  'Tin nhắn',
+  'Hồ sơ'
 ];
 
 class HomeScreenState extends State<UserHomeScreen> {
   int _selectesIndex = 0;
 
   List<Widget> _optionScreen = <Widget>[
-    UserCreateRequestScreen(),
-    ProfileScreen(),
+    UserListRequestScreen(),
     UserCreateRequestScreen(),
     ProfileScreen(),
   ];
@@ -40,21 +38,20 @@ class HomeScreenState extends State<UserHomeScreen> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppConstants.backgroundColor,
+          backgroundColor: Color.fromRGBO(240, 58, 58, 1),
           centerTitle: true,
-          elevation: 0.0,
           title: Text(
             screenTitle[_selectesIndex],
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontFamily: 'Poppins',
-              fontSize: 16,
+              fontSize: AppConstants.minFontSize,
             ),
           ),
           actions: <Widget>[
             Icon(
               Icons.notifications,
-              color: AppConstants.buttonColor,
+              color: Colors.white,
             ),
             SizedBox(
               width: 24.0,
@@ -71,12 +68,8 @@ class HomeScreenState extends State<UserHomeScreen> {
           showUnselectedLabels: false,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.playlist_add),
+              icon: Icon(Icons.list),
               title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              title: Text('History'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.message),

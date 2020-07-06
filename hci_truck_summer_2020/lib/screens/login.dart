@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/User.dart';
+import 'package:truck/screens/homeTruck.dart';
 import 'package:truck/screens/signup.dart';
 import 'package:truck/screens/userHome.dart';
 import 'package:truck/services/Dialog.dart';
@@ -34,6 +37,12 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    focus.dispose();
+    super.dispose();
   }
 
   Future<http.Response> fetchAlbum() {
@@ -162,7 +171,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
                   shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(20.0)), //this right here
-                  child: DialogMessage(message: 'Quên mật khẩu hả'),
+                  child: DialogMessage(message: 'Quên mật khẩu'),
                 );
               });
         },
@@ -182,33 +191,7 @@ Widget loginButtonGroup(BuildContext context, GlobalKey<FormState> formKey) {
       ),
       PrimaryButton(
         onPressed: () async {
-          if (formKey.currentState.validate()) {
-            String email = emailController.text.trim();
-            String pass = passwordController.text.trim();
-            var response = await http.get('https://truck-api.azurewebsites.net/api/login?userId=' +
-                email +
-                '&password=' +
-                pass);
-            if (response.statusCode == HttpStatus.ok) {
-              User user = User.fromJson(json.decode(response.body));
-              print(user.fullName);
-              if (user != null) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserHomeScreen()),
-                    (route) => false);
-              }
-            }else {
-              showDialog(context: context, builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(5.0)), //this right here
-                  child: DialogMessage(message: 'Sai email hoặc mật khẩu!'),
-                );
-              });
-            }
-          }
+          checkLogin(context, formKey);
         },
         text: 'Đăng Nhập',
       ),
@@ -252,4 +235,73 @@ Widget logo() {
       )
     ],
   );
+}
+
+Future checkLogin(context, formKey) async {
+  var progressDialog = ProgressDialog(context,
+      type: ProgressDialogType.Normal, isDismissible: false);
+  progressDialog.style(
+    progressWidget: Container(
+        padding: EdgeInsets.all(12), child: CircularProgressIndicator()),
+  );
+  if (formKey.currentState.validate()) {
+    await progressDialog.show();
+    String email = emailController.text.trim();
+    String pass = passwordController.text.trim();
+    var response = await http.get(
+        'https://truck-api.azurewebsites.net/api/login?userId=' +
+            email +
+            '&password=' +
+            pass);
+    if (response.statusCode == HttpStatus.ok) {
+      User user = User.fromJson(json.decode(response.body));
+      if (user != null) {
+        await progressDialog.hide().then(
+          (value) async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString('userId', user.userId);
+            await prefs.setString('fullname', user.fullName == null ? 'Empty' : user.fullName);
+            await prefs.setString('phoneNumber',
+                user.phoneNumber == null ? "Empty" : user.phoneNumber);
+            await prefs.setString(
+                'gender', user.gender == null ? "Empty" : user.gender);
+            await prefs.setString('dateOfBirth',
+                user.dateOfBirth == null ? "Empty" : user.dateOfBirth);
+            await prefs.setString('imagePath', user.imagePath == null ? 'Empty' : user.imagePath);
+            await prefs.setInt('roleId', user.role.roleId);
+            await prefs.setBool('isLoggedIn', true);
+            await prefs.setString('password', user.password);
+            if (user.roleId == 1) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                  (route) => false);
+            } else if (user.roleId == 2) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeTruckScreen()),
+                  (route) => false);
+            }
+          },
+        );
+      } else {
+        await progressDialog.hide();
+      }
+    } else {
+      await progressDialog.hide().then(
+            (value) => {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(5.0)), //this right here
+                      child: DialogMessage(message: 'Sai email hoặc mật khẩu!'),
+                    );
+                  })
+            },
+          );
+    }
+  }
 }

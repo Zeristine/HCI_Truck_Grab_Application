@@ -11,28 +11,19 @@ class RequestListTruckSate extends State<RequestListTruckScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppConstants.backgroundColor,
-          title: Text(
-            'Các đơn hàng vận chuyển',
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
-          elevation: 0.0,
-        ),
         body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                inProgressRequestList(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                availableRequestList(context),
-              ],
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            inProgressRequestList(),
+            SizedBox(
+              height: 10.0,
             ),
-          ),
-        ));
+            availableRequestList(context),
+          ],
+        ),
+      ),
+    ));
   }
 }
 
@@ -76,7 +67,7 @@ Widget availableRequestList(BuildContext context) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return RequestDetailScreen();
+                      return QuotationDetailScreen();
                     }));
                   },
                   child: Container(
@@ -239,7 +230,7 @@ Widget inProgressRequestList() {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RequestDetailScreen()));
+                            builder: (context) => QuotationDetailScreen()));
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:truck/screens/authenticate.dart';
-import 'package:truck/screens/chatdetail.dart';
-import 'package:truck/screens/message.dart';
-
-import 'screens/chatdetail.dart';
-import 'screens/message.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: MessageScreen(),
+    home: AuthenticateScreen(),
     // initialRoute: '/login',
     // routes: {
     //   '/': (context) => UserHomeScreen(),
