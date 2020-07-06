@@ -13,38 +13,38 @@ class ProfileScreen extends StatefulWidget {
 
 class ProfileState extends State<ProfileScreen> {
   SharedPreferences prefs;
-  String imagePath;
+  String imagePath = 'Empty';
 
   Future getImagePath() async {
     prefs = await SharedPreferences.getInstance();
     imagePath = prefs.getString('imagePath');
-  }  
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getImagePath(),
-      builder: (context, snapshot) {
-      return Scaffold(
-        backgroundColor: AppConstants.backgroundColor,
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 24,
+        future: getImagePath(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            backgroundColor: AppConstants.backgroundColor,
+            body: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 24,
+                    ),
+                    profileDetail(imagePath),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    profileButtonGroup(context)
+                  ],
                 ),
-                profileDetail(imagePath),
-                SizedBox(
-                  height: 24,
-                ),
-                profileButtonGroup(context)
-              ],
+              ),
             ),
-          ),
-        ),
-      );
-    });
+          );
+        });
   }
 }
 
@@ -55,8 +55,8 @@ Widget profileDetail(String imagePath) {
         radius: 64,
         backgroundImage: imagePath == 'Empty'
             ? AssetImage('assets/images/user_avatar.png')
-            : NetworkImage(
-                imagePath),
+            : NetworkImage(imagePath),
+        backgroundColor: Colors.blue,
       ),
       SizedBox(
         height: 12,
@@ -135,18 +135,6 @@ Widget profileButtonGroup(BuildContext context) {
             ],
           ),
           onTap: () {
-            // showDialog(
-            //   context: context,
-            //   child: Dialog(
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20.0)),
-            //     child: SingleChildScrollView(
-            //         child: Padding(
-            //       padding: EdgeInsets.all(10.0),
-            //       child: changePasswordDialog(context),
-            //     )),
-            //   ),
-            // );
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ChangePasswordScreen()));
           },

@@ -260,7 +260,7 @@ Future checkLogin(context, formKey) async {
           (value) async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('userId', user.userId);
-            await prefs.setString('fullname', user.fullName);
+            await prefs.setString('fullname', user.fullName == null ? 'Empty' : user.fullName);
             await prefs.setString('phoneNumber',
                 user.phoneNumber == null ? "Empty" : user.phoneNumber);
             await prefs.setString(
