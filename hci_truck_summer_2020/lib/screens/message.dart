@@ -1,20 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:truck/screens/chatdetail.dart';
 import '../constants/appConstans.dart';
 
 class MessageScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => MessageScreenState();
+  MessageScreenState createState() => MessageScreenState();
 }
 
 class MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    return Scaffold(
-      body: Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return ChatDetailPage();
+        },));
+      },
+      child: Container(
         padding: EdgeInsets.all(24.0),
         child: messageList(),
       ),
@@ -36,6 +40,7 @@ Widget chatItem() {
   return Container(
     padding: EdgeInsets.symmetric(vertical: 12.0),
     child: Row(
+      
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[

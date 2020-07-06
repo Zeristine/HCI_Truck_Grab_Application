@@ -8,7 +8,7 @@ import 'screens/message.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: ChatDetailPage(),
+    home: MessageScreen(),
     // initialRoute: '/login',
     // routes: {
     //   '/': (context) => UserHomeScreen(),

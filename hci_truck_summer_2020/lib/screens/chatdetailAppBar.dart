@@ -20,8 +20,11 @@ class ChatDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(
                   Icons.arrow_back,
                   color: Colors.black,
+                  
                 ),
-                onPressed: null,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
               SizedBox(
                 width: 2,
