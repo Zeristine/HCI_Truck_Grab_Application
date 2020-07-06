@@ -37,53 +37,56 @@ class QuotationDetailScreenState extends State<QuotationDetailScreen> {
           ),
         ),
         bottomSheet: detailButtonGroup(),
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height -
-                AppBar().preferredSize.height -
-                requestDetailButtonGroupHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                driverDetail(context),
-                truckInfo(),
-                SizedBox(
-                  height: 12.0,
-                ),
-                Card(
-                  margin: EdgeInsets.symmetric(horizontal: 24.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+        body: Container(
+          padding: EdgeInsets.only(bottom: 150),
+          child: SingleChildScrollView(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height -
+                  AppBar().preferredSize.height -
+                  requestDetailButtonGroupHeight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  driverDetail(context),
+                  truckInfo(),
+                  SizedBox(
+                    height: 12.0,
                   ),
-                  elevation: 0.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Icon(Icons.description, color: Colors.lime),
-                        SizedBox(
-                          width: 12.0,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Đường khó đi, Công an nhiều nên giá hơi cao, mong and/chị thông cảm',
-                            softWrap: true,
-                            style: TextStyle(color: Colors.grey[600]),
+                  Card(
+                    margin: EdgeInsets.symmetric(horizontal: 24.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 0.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(Icons.description, color: Colors.lime),
+                          SizedBox(
+                            width: 12.0,
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Text(
+                              'Đường khó đi, Công an nhiều nên giá hơi cao, mong and/chị thông cảm',
+                              softWrap: true,
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 12.0,
-                ),
-                //priceDetail(context),
-                driverJourneyDetail(),
-              ],
+                  SizedBox(
+                    height: 12.0,
+                  ),
+                  //priceDetail(context),
+                  driverJourneyDetail(),
+                ],
+              ),
             ),
           ),
         ));
@@ -94,7 +97,7 @@ Widget driverDetail(BuildContext context) {
   return Column(
     children: <Widget>[
       Padding(
-        padding: EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 12.0),
+        padding: EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 12.0),
         child: Card(
           shadowColor: Colors.red,
           color: Color.fromRGBO(240, 58, 58, .8),
