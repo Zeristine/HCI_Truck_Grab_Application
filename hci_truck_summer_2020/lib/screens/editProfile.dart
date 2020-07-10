@@ -142,7 +142,7 @@ class EditProfileState extends State<EditProfileScreen> {
                         }),
                   ),
                   ListTile(
-                    title: Text('Gai1'),
+                    title: Text('Gái'),
                     leading: Radio(
                         value: 'female',
                         groupValue: genderStr,
