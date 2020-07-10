@@ -42,14 +42,17 @@ class ChatDetailPage extends StatelessWidget {
       appBar: ChatDetailAppBar(),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            itemBuilder: (context, index) {
-              return ChatBubble(chatMessage: chatMessage[index]);
-            },
-            itemCount: chatMessage.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            physics: BouncingScrollPhysics(),
+          Container(
+            padding: EdgeInsets.only(bottom: 72),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return ChatBubble(chatMessage: chatMessage[index]);
+              },
+              itemCount: chatMessage.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              physics: BouncingScrollPhysics(),
+            ),
           ),
           Align(
             alignment: Alignment.bottomLeft,

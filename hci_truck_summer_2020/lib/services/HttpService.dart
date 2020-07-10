@@ -145,8 +145,9 @@ class HttpService {
     }
   }
 
-  static Future<List<Request>> getRequest(String userId) async {
-    String url = "https://truck-api.azurewebsites.net/api/requests";
+  static Future<List<Request>> getRequest(String userId, int statusId) async {
+    String url = "https://truck-api.azurewebsites.net/api/requests?status=" +
+        statusId.toString();
     var response = await http.get(url);
     List<Request> requests = new List<Request>();
     if (response.statusCode == 200) {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Place.dart';
@@ -9,6 +10,8 @@ import 'package:truck/screens/userRequestDetail.dart';
 import 'package:truck/services/HttpService.dart';
 
 class UserListRequestScreen extends StatefulWidget {
+  final int status;
+  UserListRequestScreen(this.status);
   @override
   UserListRequestScreenState createState() => UserListRequestScreenState();
 }
@@ -25,7 +28,8 @@ class UserListRequestScreenState extends State<UserListRequestScreen> {
   void getList() async {
     requests = List<Request>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await HttpService.getRequest(prefs.getString('userId')).then((value) {
+    await HttpService.getRequest(prefs.getString('userId'), widget.status)
+        .then((value) {
       setState(() {
         requests = value;
       });
@@ -34,22 +38,24 @@ class UserListRequestScreenState extends State<UserListRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.of(context)
-              .push(MaterialPageRoute(
-            builder: (context) => UserCreateRequestScreen(),
-          ))
-              .then((value) {
-            getList();
-          });
-        },
-        child: Icon(Icons.add),
-      ),
-      backgroundColor: AppConstants.backgroundColor,
-      body: listRequest(requests),
-    );
+    return requests != null || requests.length > 0
+        ? Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                await Navigator.of(context)
+                    .push(MaterialPageRoute(
+                  builder: (context) => UserCreateRequestScreen(),
+                ))
+                    .then((value) {
+                  getList();
+                });
+              },
+              child: Icon(Icons.add),
+            ),
+            backgroundColor: AppConstants.backgroundColor,
+            body: listRequest(requests),
+          )
+        : CircularProgressIndicator();
   }
 }
 

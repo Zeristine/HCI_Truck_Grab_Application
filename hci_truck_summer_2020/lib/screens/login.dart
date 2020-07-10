@@ -45,10 +45,6 @@ class LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<http.Response> fetchAlbum() {
-    return http.get('https://jsonplaceholder.typicode.com/albums/1');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,14 +256,16 @@ Future checkLogin(context, formKey) async {
           (value) async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('userId', user.userId);
-            await prefs.setString('fullname', user.fullName == null ? 'Empty' : user.fullName);
+            await prefs.setString(
+                'fullname', user.fullName == null ? 'Empty' : user.fullName);
             await prefs.setString('phoneNumber',
                 user.phoneNumber == null ? "Empty" : user.phoneNumber);
             await prefs.setString(
                 'gender', user.gender == null ? "Empty" : user.gender);
             await prefs.setString('dateOfBirth',
                 user.dateOfBirth == null ? "Empty" : user.dateOfBirth);
-            await prefs.setString('imagePath', user.imagePath == null ? 'Empty' : user.imagePath);
+            await prefs.setString(
+                'imagePath', user.imagePath == null ? 'Empty' : user.imagePath);
             await prefs.setInt('roleId', user.role.roleId);
             await prefs.setBool('isLoggedIn', true);
             await prefs.setString('password', user.password);

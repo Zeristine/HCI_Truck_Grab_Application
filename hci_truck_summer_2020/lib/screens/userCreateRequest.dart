@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Address.dart';
 import 'package:truck/models/CommodityOwner.dart';
@@ -82,13 +83,18 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
             SizedBox(height: 24),
             PrimaryButton(
               onPressed: () async {
+                var progressDialog = ProgressDialog(context,
+                    type: ProgressDialogType.Normal, isDismissible: false);
                 Request newRequest;
+                await progressDialog.show();
                 await HttpService.saveRequest(request, commodityOwner, reciver)
                     .then((value) {
                   newRequest = value;
                 });
                 if (newRequest != null) {
-                  Navigator.pop(context);
+                  progressDialog.hide().then(
+                        (value) => {Navigator.pop(context)},
+                      );
                 }
               },
               text: "Tạo đơn hàng",
@@ -386,6 +392,7 @@ Widget comodityWidget(BuildContext context, Request request) {
             lastDate: DateTime(DateTime.now().year + 1),
           ).then((value) {
             pickedDate = value;
+            request.validDate = pickedDate;
             String date = pickedDate.day.toString() +
                 "/" +
                 pickedDate.month.toString() +
@@ -403,38 +410,38 @@ Widget comodityWidget(BuildContext context, Request request) {
       SizedBox(
         height: 8,
       ),
-      textField(
-        context,
-        "Giờ hết hạn",
-        Icons.timer,
-        () async {
-          showTimePicker(
-            context: context,
-            initialTime: pickedTime,
-          ).then((value) {
-            if (value != null) {
-              pickedTime = value;
-              String time = pickedTime.hour.toString() +
-                  ":" +
-                  pickedTime.minute.toString();
-              timePickerController.text = time;
-              if (pickedDate != null && pickedTime != null) {
-                int year = int.parse(pickedDate.year.toString());
-                int month = int.parse(pickedDate.month.toString());
-                int day = int.parse(pickedDate.month.toString());
-                int hour = int.parse(pickedTime.hour.toString());
-                int minute = int.parse(pickedTime.minute.toString());
-                request.validDate = DateTime(year, month, day, hour, minute);
-              }
-            }
-          });
-        },
-        null,
-        timePickerController,
-        false,
-        null,
-        1,
-      ),
+      // textField(
+      //   context,
+      //   "Giờ hết hạn",
+      //   Icons.timer,
+      //   () async {
+      //     showTimePicker(
+      //       context: context,
+      //       initialTime: pickedTime,
+      //     ).then((value) {
+      //       if (value != null) {
+      //         pickedTime = value;
+      //         String time = pickedTime.hour.toString() +
+      //             ":" +
+      //             pickedTime.minute.toString();
+      //         timePickerController.text = time;
+      //         if (pickedDate != null && pickedTime != null) {
+      //           int year = int.parse(pickedDate.year.toString());
+      //           int month = int.parse(pickedDate.month.toString());
+      //           int day = int.parse(pickedDate.month.toString());
+      //           int hour = int.parse(pickedTime.hour.toString());
+      //           int minute = int.parse(pickedTime.minute.toString());
+      //           request.validDate = DateTime(year, month, day, hour, minute);
+      //         }
+      //       }
+      //     });
+      //   },
+      //   null,
+      //   timePickerController,
+      //   false,
+      //   null,
+      //   1,
+      // ),
       SizedBox(height: 12.0),
       Container(
         width: double.infinity,

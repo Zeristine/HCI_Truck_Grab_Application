@@ -148,179 +148,201 @@ class UserRequestDetailState extends State<UserRequestDetail> {
   }
 
   Widget listQuotaion(Request request) {
-    return ListView.builder(
-      controller: _scrollController,
-      physics: BouncingScrollPhysics(),
-      padding: EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 0),
-      itemCount: request.quotations.length,
-      itemBuilder: (BuildContext context, int index) {
-        Quotation quotaion = request.quotations[index];
-        return Card(
-          margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
-          elevation: 4.5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          //Color.fromRGBO(236, 126, 114, 1)
-          color: Colors.white,
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => QuotationDetailScreen(),
+    return request.quotations.length > 0
+        ? ListView.builder(
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 0),
+            itemCount: request.quotations.length,
+            itemBuilder: (BuildContext context, int index) {
+              Quotation quotaion = request.quotations[index];
+              return Card(
+                margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                elevation: 4.5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                //Color.fromRGBO(236, 126, 114, 1)
+                color: Colors.white,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => QuotationDetailScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            ClipOval(
+                              child: quotaion.driver.imagePath != null
+                                  ? Image.network(
+                                      quotaion.driver.imagePath,
+                                      height: 64,
+                                      width: 64,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      "assets/images/no-avatar.png",
+                                      height: 64,
+                                      width: 64,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                            SizedBox(
+                              height: 4.0,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.star,
+                                  size: 12.0,
+                                  color: Colors.yellow,
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  size: 12.0,
+                                  color: Colors.yellow,
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  size: 12.0,
+                                  color: Colors.yellow,
+                                ),
+                                Icon(
+                                  Icons.star_half,
+                                  size: 12.0,
+                                  color: Colors.yellow,
+                                ),
+                                Icon(
+                                  Icons.star_border,
+                                  size: 12.0,
+                                  color: Colors.yellow,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 12.0,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              quotaion.driver.fullName,
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                            SizedBox(
+                              height: 4.0,
+                            ),
+                            Text(
+                              numformat.format(quotaion.price) + " VND",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16.0,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8.0,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.grey,
+                                  size: 12.0,
+                                ),
+                                SizedBox(
+                                  width: 4.0,
+                                ),
+                                Text(
+                                  quotaion.date.day.toString(),
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12.0,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 24.0,
+                                ),
+                                Icon(
+                                  Icons.timer,
+                                  color: Colors.grey,
+                                  size: 12.0,
+                                ),
+                                SizedBox(
+                                  width: 4.0,
+                                ),
+                                Text(
+                                  quotaion.date.weekday.toString(),
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12.0,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[],
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: 8.0,
+                        ),
+                        Spacer(),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
-            child: Container(
-              padding: EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      ClipOval(
-                        child: quotaion.driver.imagePath != null
-                            ? Image.network(
-                                quotaion.driver.imagePath,
-                                height: 64,
-                                width: 64,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset(
-                                "assets/images/no-avatar.png",
-                                height: 64,
-                                width: 64,
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-                      SizedBox(
-                        height: 4.0,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.star,
-                            size: 12.0,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star,
-                            size: 12.0,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star,
-                            size: 12.0,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star_half,
-                            size: 12.0,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star_border,
-                            size: 12.0,
-                            color: Colors.yellow,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 12.0,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        quotaion.driver.fullName,
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 4.0,
-                      ),
-                      Text(
-                        numformat.format(quotaion.price) + " VND",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16.0,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.calendar_today,
-                            color: Colors.grey,
-                            size: 12.0,
-                          ),
-                          SizedBox(
-                            width: 4.0,
-                          ),
-                          Text(
-                            quotaion.date.day.toString(),
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12.0,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 24.0,
-                          ),
-                          Icon(
-                            Icons.timer,
-                            color: Colors.grey,
-                            size: 12.0,
-                          ),
-                          SizedBox(
-                            width: 4.0,
-                          ),
-                          Text(
-                            quotaion.date.weekday.toString(),
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12.0,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[],
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    width: 8.0,
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.chevron_right,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
+          )
+        : Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(24.0),
+            child: Text(
+              "Chưa có báo giá",
+              textAlign: TextAlign.center,
+            ));
   }
 }
 
 Widget header(Request request) {
+  String address1 = request.commodityOwner.address.streetName.toString() +
+      "," +
+      request.commodityOwner.address.places[2].name +
+      "," +
+      request.commodityOwner.address.places[1].name +
+      "," +
+      request.commodityOwner.address.places[0].name;
+  String address2 = request.reciver.address.streetName.toString() +
+      "," +
+      request.reciver.address.places[2].name +
+      "," +
+      request.reciver.address.places[1].name +
+      "," +
+      request.reciver.address.places[0].name;
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,7 +382,7 @@ Widget header(Request request) {
                       //textDirection: TextDirection.ltr,
                       //directionMarguee: DirectionMarguee.TwoDirection,
                       child: Text(
-                        "415/25 Trường Chinh, Phường 14, Quận Tân Bình, TP.HCM",
+                        address1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
                         style: TextStyle(
@@ -395,7 +417,7 @@ Widget header(Request request) {
                       //textDirection: TextDirection.ltr,
                       //directionMarguee: DirectionMarguee.TwoDirection,
                       child: Text(
-                        "585/5 Nguyễn Thị Thập, Phường 3, Quận 7, TP.HCM",
+                        address2,
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
                         style: TextStyle(

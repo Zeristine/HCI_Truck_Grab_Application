@@ -14,12 +14,14 @@ class MessageScreenState extends State<MessageScreen> {
     // TODO: implement build
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatDetailPage();
-        },));
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return ChatDetailPage();
+          },
+        ));
       },
       child: Container(
-        padding: EdgeInsets.all(24.0),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 0.0),
         child: messageList(),
       ),
     );
@@ -40,7 +42,6 @@ Widget chatItem() {
   return Container(
     padding: EdgeInsets.symmetric(vertical: 12.0),
     child: Row(
-      
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[

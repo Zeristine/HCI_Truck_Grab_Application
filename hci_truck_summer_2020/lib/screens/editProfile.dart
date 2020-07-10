@@ -60,6 +60,7 @@ class EditProfileState extends State<EditProfileScreen> {
         future: getUserData(),
         builder: (context, snapshot) {
           return Scaffold(
+            backgroundColor: AppConstants.backgroundColor,
             appBar: AppBar(
               backgroundColor: AppConstants.backgroundColor,
               leading: BackButton(
@@ -142,23 +143,41 @@ Widget imageChoose(BuildContext context, File image,
 
 Widget userForm(BuildContext context, User user) {
   final TextEditingController fullnameController = TextEditingController(
-    text: user.fullName == null ? '' : (user.fullName == 'Empty' ? '' : user.fullName),
+    text: user.fullName == null
+        ? ''
+        : (user.fullName == 'Empty' ? '' : user.fullName),
   );
   final TextEditingController phoneNumberController = TextEditingController(
-    text: user.phoneNumber == null ? '' : (user.phoneNumber == 'Empty' ? '' : user.phoneNumber),
+    text: user.phoneNumber == null
+        ? ''
+        : (user.phoneNumber == 'Empty' ? '' : user.phoneNumber),
   );
   final TextEditingController dateOfBirthController = TextEditingController(
-    text: user.dateOfBirth == null ? '' : (user.dateOfBirth == 'Empty' ? '' : user.dateOfBirth),
+    text: user.dateOfBirth == null
+        ? ''
+        : (user.dateOfBirth == 'Empty' ? '' : user.dateOfBirth),
   );
   return Form(
     child: Container(
+      margin: EdgeInsets.all(24.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text('Tên đầy đủ:'),
+          Text(
+            'Họ và Tên',
+            style: TextStyle(
+              fontSize: AppConstants.medFontSize,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[800],
+            ),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
           TextFormField(
             textInputAction: TextInputAction.next,
-            controller: fullnameController,            
+            controller: fullnameController,
             style: TextStyle(
               fontSize: AppConstants.minFontSize,
               fontFamily: 'Roboto',
@@ -179,12 +198,22 @@ Widget userForm(BuildContext context, User user) {
             maxLines: 1,
           ),
           SizedBox(
-            height: 10.0,
+            height: 12.0,
           ),
-          Text('Số điện thoại:'),
+          Text(
+            'Số điện thoại',
+            style: TextStyle(
+              fontSize: AppConstants.medFontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
           TextFormField(
             textInputAction: TextInputAction.next,
-            controller: phoneNumberController,            
+            controller: phoneNumberController,
             style: TextStyle(
               fontSize: AppConstants.minFontSize,
               fontFamily: 'Roboto',
@@ -210,7 +239,7 @@ Widget userForm(BuildContext context, User user) {
           Text('Ngày sinh:'),
           TextFormField(
             textInputAction: TextInputAction.next,
-            controller: dateOfBirthController,            
+            controller: dateOfBirthController,
             style: TextStyle(
               fontSize: AppConstants.minFontSize,
               fontFamily: 'Roboto',
