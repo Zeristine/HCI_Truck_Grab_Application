@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/user.dart';
+import 'package:truck/services/Dialog.dart';
+import 'package:http/http.dart' as http;
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -16,7 +20,11 @@ class EditProfileState extends State<EditProfileScreen> {
   SharedPreferences prefs;
   File imageFile;
   User user;
+  String genderStr = 'male';
   ImagePicker picker = ImagePicker();
+  TextEditingController fullnameController;
+  TextEditingController phoneNumberController;
+  TextEditingController dateOfBirthController;
   final GlobalKey<FormState> editProfileKey =
       GlobalKey(debugLabel: 'editProfileKey');
 
@@ -38,9 +46,27 @@ class EditProfileState extends State<EditProfileScreen> {
       dateOfBirth: prefs.getString('dateOfBirth'),
       imagePath: prefs.getString('imagePath'),
     );
+    fullnameController = TextEditingController(
+      text: user.fullName == null
+          ? ''
+          : (user.fullName == 'Empty' ? '' : user.fullName),
+    );
+    phoneNumberController = TextEditingController(
+      text: user.phoneNumber == null
+          ? ''
+          : (user.phoneNumber == 'Empty' ? '' : user.phoneNumber),
+    );
+    dateOfBirthController = TextEditingController(
+      text: user.dateOfBirth == null
+          ? ''
+          : (user.dateOfBirth == 'Empty' ? '' : user.dateOfBirth),
+    );
+    genderStr = user.gender == null
+        ? 'male'
+        : (user.gender == 'Empty' ? 'male' : user.gender);
   }
 
-  void saveUserDate(User user) async {
+  void saveUserDataOnPreferences(User user) async {
     prefs = await SharedPreferences.getInstance();
     await prefs.setString('userId', user.userId);
     await prefs.setString('fullname', user.fullName);
@@ -73,8 +99,20 @@ class EditProfileState extends State<EditProfileScreen> {
                 Padding(
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(
-                    onTap: () {},
-                    child: Text('Lưu'),
+                    onTap: () async {
+                      User userData = User(
+                        userId: user.userId,
+                        fullName: fullnameController.text,
+                        dateOfBirth: dateOfBirthController.text,
+                        gender: genderStr,
+                        phoneNumber: phoneNumberController.text,
+                      );
+                      updateUser(context, editProfileKey, userData, imageFile);
+                    },
+                    child: Text(
+                      'Lưu',
+                      style: TextStyle(color: Colors.black, fontSize: 35.0),
+                    ),
                   ),
                 ),
               ],
@@ -86,17 +124,51 @@ class EditProfileState extends State<EditProfileScreen> {
               elevation: 0.0,
             ),
             body: SingleChildScrollView(
-              child: editProfileOptions(context, imageFile, () async {
-                pickImageFromGallery();
-              }, user),
+              child: Column(
+                children: <Widget>[
+                  editProfileOptions(context, imageFile, () async {
+                    pickImageFromGallery();
+                  }, user, fullnameController, phoneNumberController,
+                      dateOfBirthController, editProfileKey),
+                  ListTile(
+                    title: Text('Trai'),
+                    leading: Radio(
+                        value: 'male',
+                        groupValue: genderStr,
+                        onChanged: (String value) {
+                          setState(() {
+                            this.genderStr = value;
+                          });
+                        }),
+                  ),
+                  ListTile(
+                    title: Text('Gai1'),
+                    leading: Radio(
+                        value: 'female',
+                        groupValue: genderStr,
+                        onChanged: (String value) {
+                          setState(() {
+                            this.genderStr = value;
+                          });
+                        }),
+                  ),
+                ],
+              ),
             ),
           );
         });
   }
 }
 
-Widget editProfileOptions(BuildContext context, File imageFile,
-    Function pickImageFromGallery, User user) {
+Widget editProfileOptions(
+    BuildContext context,
+    File imageFile,
+    Function pickImageFromGallery,
+    User user,
+    TextEditingController fullnameController,
+    TextEditingController phoneNumberController,
+    TextEditingController dateOfBirthController,
+    GlobalKey<FormState> formKey) {
   return Container(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -105,7 +177,8 @@ Widget editProfileOptions(BuildContext context, File imageFile,
         SizedBox(
           height: 24.0,
         ),
-        userForm(context, user),
+        userForm(context, user, fullnameController, phoneNumberController,
+            dateOfBirthController, formKey),
       ],
     ),
   );
@@ -141,23 +214,15 @@ Widget imageChoose(BuildContext context, File image,
   );
 }
 
-Widget userForm(BuildContext context, User user) {
-  final TextEditingController fullnameController = TextEditingController(
-    text: user.fullName == null
-        ? ''
-        : (user.fullName == 'Empty' ? '' : user.fullName),
-  );
-  final TextEditingController phoneNumberController = TextEditingController(
-    text: user.phoneNumber == null
-        ? ''
-        : (user.phoneNumber == 'Empty' ? '' : user.phoneNumber),
-  );
-  final TextEditingController dateOfBirthController = TextEditingController(
-    text: user.dateOfBirth == null
-        ? ''
-        : (user.dateOfBirth == 'Empty' ? '' : user.dateOfBirth),
-  );
+Widget userForm(
+    BuildContext context,
+    User user,
+    TextEditingController fullnameController,
+    TextEditingController phoneNumberController,
+    TextEditingController dateOfBirthController,
+    GlobalKey<FormState> editProfileKey) {
   return Form(
+    key: editProfileKey,
     child: Container(
       margin: EdgeInsets.all(24.0),
       child: Column(
@@ -264,8 +329,100 @@ Widget userForm(BuildContext context, User user) {
             height: 10.0,
           ),
           Text('Giới tính của bạn là:'),
+          SizedBox(
+            height: 10.0,
+          ),
         ],
       ),
     ),
   );
+}
+
+Future updateUser(BuildContext context, GlobalKey<FormState> formKey,
+    User userData, File imageFile) async {
+  var progressDialog = ProgressDialog(context,
+      type: ProgressDialogType.Normal, isDismissible: false);
+  progressDialog.style(
+    progressWidget: Container(
+        padding: EdgeInsets.all(12), child: CircularProgressIndicator()),
+  );
+  if (formKey.currentState.validate()) {
+    await progressDialog.show();
+
+    var response = await http.get(
+        'https://truck-api.azurewebsites.net/api/users/' + userData.userId);
+    if (response.statusCode == HttpStatus.ok) {
+      var uploadImageReponse = await http.post(
+        'https://truck-api.azurewebsites.net/api/files/images',
+        headers: {"Content-Type": "application/json"},
+        body: {
+          "Name": userData.userId +
+              (new DateTime.now().millisecondsSinceEpoch).toString() +
+              imageFile.path.split('/').last,
+          "File": imageFile.readAsStringSync(),
+        },
+      );
+      if (uploadImageReponse.statusCode == HttpStatus.ok) {
+        User userPreData = User.fromJson(json.decode(response.body));
+        if (userPreData != null) {
+          User updateValue = User(
+            userId: userPreData.userId,
+            fullName: userData.fullName,
+            dateOfBirth: userData.dateOfBirth,
+            gender: userData.gender,
+            imagePath: userData.imagePath,
+            phoneNumber: userData.phoneNumber,
+            quotations: userPreData.quotations,
+            requests: userPreData.requests,
+            role: userPreData.role,
+            roleId: userPreData.roleId,
+            password: userPreData.password,
+          );
+          var updateResponse = await http.put(
+              'https://truck-api.azurewebsites.net/api/users/' +
+                  updateValue.userId,
+              headers: {"Content-Type": "application/json"},
+              body: jsonEncode(updateValue.toJson()));
+          if (updateResponse.statusCode == HttpStatus.noContent) {
+            await progressDialog.hide().then((value) => showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(5.0)), //this right here
+                    child: DialogMessage(
+                        message: 'Cập nhật hồ sơ của bạn thành công!'),
+                  );
+                }));
+          } else {
+            print(updateResponse.statusCode);
+            await progressDialog.hide().then((value) => showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(5.0)), //this right here
+                    child: DialogMessage(
+                        message: 'Có sự cố trong việc thay đổi mật khẩu...'),
+                  );
+                }));
+          }
+        }
+      } else {
+        print(uploadImageReponse.statusCode);
+        await progressDialog.hide().then((value) => showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)), //this right here
+                child: DialogMessage(
+                    message: 'Có sự cố trong việc thay đổi mật khẩu...'),
+              );
+            }));
+      }
+    }
+  }
 }
