@@ -32,7 +32,9 @@ class EditProfileState extends State<EditProfileScreen> {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
-      imageFile = File(pickedFile.path);
+      if (pickedFile != null) {
+        imageFile = File(pickedFile.path);
+      }
     });
   }
 
@@ -201,9 +203,9 @@ Widget imageChoose(BuildContext context, File image,
               radius: 64,
               backgroundImage: image == null
                   ? (imagePath == null
-                      ? AssetImage('assets/images/user_avatar.png')
+                      ? AssetImage('assets/images/no-avatar.png')
                       : (imagePath == 'Empty'
-                          ? AssetImage('assets/images/user_avatar.png')
+                          ? AssetImage('assets/images/no-avatar.png')
                           : NetworkImage(imagePath)))
                   : FileImage(image),
             ),
@@ -269,7 +271,7 @@ Widget userForm(
             'Số điện thoại',
             style: TextStyle(
               fontSize: AppConstants.medFontSize,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: Colors.grey[800],
             ),
           ),
@@ -301,7 +303,14 @@ Widget userForm(
           SizedBox(
             height: 10.0,
           ),
-          Text('Ngày sinh:'),
+          Text(
+            'Ngày sinh:',
+            style: TextStyle(
+              fontSize: AppConstants.medFontSize,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[800],
+            ),
+          ),
           TextFormField(
             textInputAction: TextInputAction.next,
             controller: dateOfBirthController,
@@ -328,9 +337,13 @@ Widget userForm(
           SizedBox(
             height: 10.0,
           ),
-          Text('Giới tính của bạn là:'),
-          SizedBox(
-            height: 10.0,
+          Text(
+            'Giới tính:',
+            style: TextStyle(
+              fontSize: AppConstants.medFontSize,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[800],
+            ),
           ),
         ],
       ),

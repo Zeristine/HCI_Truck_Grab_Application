@@ -241,7 +241,7 @@ Widget targetWidget(BuildContext context, Reciver reciver) {
       SizedBox(
         height: 8,
       ),
-      textField(context, "Địa chỉ lấy hàng", null, () async {
+      textField(context, "Địa chỉ giao hàng", Icons.navigate_next, () async {
         var result = await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => AddressScreen(),
@@ -259,7 +259,7 @@ Widget targetWidget(BuildContext context, Reciver reciver) {
 
           reciverAdressController.text = address;
         }
-      }, null, reciverAdressController, false, null, 1),
+      }, null, reciverAdressController, true, null, 1),
       SizedBox(
         height: 8,
       ),
