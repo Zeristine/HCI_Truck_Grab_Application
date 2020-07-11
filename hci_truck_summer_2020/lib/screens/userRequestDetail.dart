@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Request.dart';
-import 'package:truck/screens/requestDetail.dart';
+import 'package:truck/screens/DriverQuotationDetail.dart';
 import 'package:truck/services/marquee.dart';
 
 class UserRequestDetail extends StatefulWidget {
