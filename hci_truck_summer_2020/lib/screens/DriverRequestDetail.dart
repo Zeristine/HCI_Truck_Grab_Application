@@ -288,50 +288,81 @@ Widget driverRequestDetailButtonGroup(Request request) {
             spreadRadius: .3,
           )
         ]),
-    child: Row(
+    child: Column(
       children: <Widget>[
-        Container(
-          width: 100.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: AppConstants.buttonColor,
-          ),
-          child: IconButton(
-            icon: Icon(Icons.message),
-            disabledColor: Colors.white,
-            onPressed: null,
-            iconSize: 20.0,
+        Text(
+          'Chủ đơn hàng',
+          style: TextStyle(
+            fontSize: AppConstants.medFontSize,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        Spacer(),
-        Container(
-          width: 100.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: AppConstants.buttonColor,
-          ),
-          child: IconButton(
-            icon: Icon(Icons.phone),
-            onPressed: null,
-            disabledColor: Colors.white,
-            color: Colors.white,
-            iconSize: 20.0,
+        SizedBox(
+          height: 50.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 64,
+                backgroundImage: request.user.imagePath == null ||
+                        request.user.imagePath == 'Empty'
+                    ? AssetImage('assets/images/no-avatar.png')
+                    : NetworkImage(request.user.imagePath),
+              ),
+              Text(request.user.fullName == null ||
+                      request.user.fullName == 'Empty'
+                  ? request.user.userId
+                  : request.user.fullName),
+            ],
           ),
         ),
-        Spacer(),
-        Container(
-          width: 100.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: Colors.green,
-          ),
-          child: IconButton(
-            icon: Icon(Icons.check),
-            disabledColor: Colors.white,
-            color: Colors.white,
-            onPressed: null,
-            iconSize: 20.0,
-          ),
+        Row(
+          children: <Widget>[
+            Container(
+              width: 100.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: AppConstants.buttonColor,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.message),
+                disabledColor: Colors.white,
+                onPressed: null,
+                iconSize: 20.0,
+              ),
+            ),
+            Spacer(),
+            Container(
+              width: 100.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: AppConstants.buttonColor,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.phone),
+                onPressed: null,
+                disabledColor: Colors.white,
+                color: Colors.white,
+                iconSize: 20.0,
+              ),
+            ),
+            Spacer(),
+            Container(
+              width: 100.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Colors.green,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.check),
+                disabledColor: Colors.white,
+                color: Colors.white,
+                onPressed: null,
+                iconSize: 20.0,
+              ),
+            ),
+          ],
         ),
       ],
     ),
