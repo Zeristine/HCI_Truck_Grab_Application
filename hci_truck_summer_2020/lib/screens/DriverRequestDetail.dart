@@ -85,7 +85,7 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
                 child: reciever(request),
               ),
               SizedBox(
-                height: 150.0,
+                height: 250.0,
               ),
             ],
           ),
@@ -299,17 +299,17 @@ Widget driverRequestDetailButtonGroup(Request request) {
           ),
         ),
         SizedBox(
-          height: 50.0,
+          height: 100.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CircleAvatar(
+              SizedBox(height: 50.0, width: 50.0, child: CircleAvatar(
                 radius: 64,
                 backgroundImage: request.user.imagePath == null ||
                         request.user.imagePath == 'Empty'
                     ? AssetImage('assets/images/no-avatar.png')
                     : NetworkImage(request.user.imagePath),
-              ),
+              ),),              
               Text(request.user.fullName == null ||
                       request.user.fullName == 'Empty'
                   ? request.user.userId
