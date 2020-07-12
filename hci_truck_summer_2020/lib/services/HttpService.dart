@@ -171,6 +171,17 @@ class HttpService {
     return null;
   }
 
+  static Future<Request> getRequestById(int requestId) async {
+    String url = "https://truck-api.azurewebsites.net/api/requests/" +
+        requestId.toString();
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      print(response.body);
+      return Request.fromJson(json.decode(response.body));
+    }
+    return null;
+  }
+
   static Future<User> getUser(String userId) async {
     String url = "https://truck-api.azurewebsites.net/api/users/" + userId;
     var response = await http.get(url);

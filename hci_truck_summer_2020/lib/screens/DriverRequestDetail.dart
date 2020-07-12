@@ -142,7 +142,7 @@ Widget header(Request request) {
             Icon(Icons.note),
             Expanded(
               child: Text(
-                'Ghi chú\n' + request.note,
+                'Ghi chú\n' + request.note.toString(),
                 softWrap: true,
                 style: TextStyle(color: Colors.white),
               ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/models/Request.dart';
 import 'package:truck/screens/DriverQuotationDetail.dart';
+import 'package:truck/screens/DriverRequestDetail.dart';
+import 'package:truck/services/HttpService.dart';
 
 class RequestListTruckScreen extends StatefulWidget {
   @override
@@ -64,11 +67,15 @@ Widget availableRequestList(BuildContext context) {
                 color: AppConstants.buttonColor,
                 elevation: 0.0,
                 child: InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return QuotationDetailScreen();
-                    }));
+                  onTap: () async {
+                    Request request;
+                    await HttpService.getRequestById(1).then((value) {
+                      request = value;
+                      Navigator.push(context,
+                          PageRouteBuilder(pageBuilder: (context, a, b) {
+                        return DriverRequestDetailScreen(request);
+                      }));
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),
