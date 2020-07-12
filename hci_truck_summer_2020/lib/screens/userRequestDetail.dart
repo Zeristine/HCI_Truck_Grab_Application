@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Request.dart';
-import 'package:truck/screens/requestDetail.dart';
+import 'package:truck/screens/DriverQuotaionDetail.dart';
+import 'package:truck/services/appUi.dart';
 import 'package:truck/services/marquee.dart';
 
 class UserRequestDetail extends StatefulWidget {
@@ -31,7 +32,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'background' + heroIndex.toString(),
+      tag: 'background' + request.requestId.toString(),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -58,7 +59,6 @@ class UserRequestDetailState extends State<UserRequestDetail> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              //Color.fromRGBO(236, 126, 114, 1)
               color: Color(0xff8d08cf),
               child: InkWell(
                 onTap: () {},
@@ -80,7 +80,11 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 color: Colors.white,
               ),
               child: Text(
-                'Báo giá',
+                request.statusId == 1
+                    ? 'Báo giá'
+                    : request.statusId == 2
+                        ? 'Đang vận chuyển'
+                        : request.statusId == 3 ? 'Hoàn Thành' : 'Đã hủy',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.grey[800],
@@ -91,11 +95,15 @@ class UserRequestDetailState extends State<UserRequestDetail> {
               ),
             ),
             Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: listQuotaion(request))),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: request.statusId == 1
+                    ? listQuotaion(request)
+                    : request.statusId == 2 ? transporting() : transporting(),
+              ),
+            ),
           ],
         ),
       ),
@@ -162,7 +170,6 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                //Color.fromRGBO(236, 126, 114, 1)
                 color: Colors.white,
                 child: InkWell(
                   onTap: () {
@@ -328,21 +335,84 @@ class UserRequestDetailState extends State<UserRequestDetail> {
   }
 }
 
+Widget transporting() {
+  return Container(
+    margin: EdgeInsets.fromLTRB(24, 12, 24, 24),
+    child: Column(
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              elevation: 3,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    billRow("Giá vận chuyển", "3.000.000", FontWeight.normal),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    billRow("Mã giảm giá", "2%", FontWeight.normal),
+                    Divider(),
+                    billRow("Tổng cộng", "2.800.000", FontWeight.w600),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    billRow("Thanh toán bằng", "Tiền mặt", FontWeight.normal),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 12,
+        ),
+        DriverCard(
+          titleColor: Colors.grey[800],
+        ),
+      ],
+    ),
+  );
+}
+
+Widget billRow(String text1, String text2, FontWeight fontWeight) {
+  return Row(
+    children: <Widget>[
+      Text(
+        text1,
+        style: TextStyle(
+            fontSize: AppConstants.minFontSize, fontWeight: fontWeight),
+      ),
+      Spacer(),
+      Text(
+        text2,
+        style: TextStyle(
+            fontSize: AppConstants.minFontSize, fontWeight: fontWeight),
+      ),
+    ],
+  );
+}
+
 Widget header(Request request) {
   String address1 = request.commodityOwner.address.streetName.toString() +
-      "," +
-      request.commodityOwner.address.places[2].name +
-      "," +
+      ", " +
+      request.commodityOwner.address.places[0].name +
+      ", " +
       request.commodityOwner.address.places[1].name +
-      "," +
-      request.commodityOwner.address.places[0].name;
+      ", " +
+      request.commodityOwner.address.places[2].name;
   String address2 = request.reciver.address.streetName.toString() +
-      "," +
-      request.reciver.address.places[2].name +
-      "," +
+      ", " +
+      request.reciver.address.places[0].name +
+      ", " +
       request.reciver.address.places[1].name +
-      "," +
-      request.reciver.address.places[0].name;
+      ", " +
+      request.reciver.address.places[2].name;
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,

@@ -16,7 +16,8 @@ class UserListRequestScreen extends StatefulWidget {
   UserListRequestScreenState createState() => UserListRequestScreenState();
 }
 
-class UserListRequestScreenState extends State<UserListRequestScreen> {
+class UserListRequestScreenState extends State<UserListRequestScreen>
+    with AutomaticKeepAliveClientMixin {
   List<Request> requests;
 
   @override
@@ -38,25 +39,17 @@ class UserListRequestScreenState extends State<UserListRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return requests != null || requests.length > 0
         ? Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                await Navigator.of(context)
-                    .push(MaterialPageRoute(
-                  builder: (context) => UserCreateRequestScreen(),
-                ))
-                    .then((value) {
-                  getList();
-                });
-              },
-              child: Icon(Icons.add),
-            ),
             backgroundColor: AppConstants.backgroundColor,
             body: listRequest(requests),
           )
         : CircularProgressIndicator();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 Widget listRequest(List<Request> requests) {
@@ -86,7 +79,7 @@ Widget listRequest(List<Request> requests) {
                 reciverPlaces[2].name;
 
             return Hero(
-              tag: 'background' + index.toString(),
+              tag: 'background' + requests[index].requestId.toString(),
               child: Card(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
                 shape: RoundedRectangleBorder(
@@ -98,7 +91,8 @@ Widget listRequest(List<Request> requests) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return UserRequestDetail(index, requests[index]);
+                      return UserRequestDetail(
+                          requests[index].requestId + 1, requests[index]);
                     }));
                   },
                   child: Container(

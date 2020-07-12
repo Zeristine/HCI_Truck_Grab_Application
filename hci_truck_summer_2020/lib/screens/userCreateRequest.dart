@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Address.dart';
 import 'package:truck/models/CommodityOwner.dart';
 import 'package:truck/models/Reciver.dart';
 import 'package:truck/models/Request.dart';
+import 'package:truck/models/user.dart';
 import 'package:truck/screens/inputAdress.dart';
 import 'package:truck/services/HttpService.dart';
 import 'package:truck/services/appUi.dart';
@@ -25,12 +27,36 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
   Reciver reciver = new Reciver();
   Request request = new Request();
   Widget body;
+  List<CommodityOwner> defaultComodityOwners;
+  bool isFirstTimes;
+
+  void getData() async {
+    await HttpService.getCommodityOwner("loinv@gmail.com", true).then(
+      (value) async {
+        if (value != null && value.length > 0) {
+          defaultComodityOwners = value;
+          commodityOwner = defaultComodityOwners[0];
+          isFirstTimes = false;
+        } else {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          commodityOwner.userId = prefs.getString('userId');
+          User user = await HttpService.getUser(commodityOwner.userId);
+          commodityOwner.fullName = user.fullName;
+          commodityOwner.phoneNumber = user.phoneNumber;
+          isFirstTimes = true;
+        }
+      },
+    );
+    setState(() {
+      body = body1();
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    body = body1();
     pickUpFieldController = new TextEditingController();
+    getData();
   }
 
   @override
@@ -44,7 +70,7 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
         ),
       ),
       backgroundColor: AppConstants.backgroundColor,
-      body: body,
+      body: body != null ? body : Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -54,7 +80,7 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            pickUpWidget(context, commodityOwner),
+            pickUpWidget(context, commodityOwner, isFirstTimes),
             SizedBox(height: 24),
             targetWidget(context, reciver),
             SizedBox(height: 12),
@@ -116,10 +142,26 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
   }
 }
 
-Widget pickUpWidget(BuildContext context, CommodityOwner commodityOwner) {
+Widget pickUpWidget(
+    BuildContext context, CommodityOwner commodityOwner, bool isFirstTimes) {
   TextEditingController fullNameController = new TextEditingController();
   TextEditingController ownerAdressController = new TextEditingController();
   TextEditingController ownerPhoneNo = new TextEditingController();
+  if (isFirstTimes == false) {
+    fullNameController.text = commodityOwner.fullName;
+    ownerPhoneNo.text = commodityOwner.phoneNumber;
+    String address = commodityOwner.address.streetName.toString() +
+        ', ' +
+        commodityOwner.address.places[0].name.toString() +
+        ', ' +
+        commodityOwner.address.places[1].name.toString() +
+        ', ' +
+        commodityOwner.address.places[2].name.toString();
+    ownerAdressController.text = address;
+  } else {
+    fullNameController.text = commodityOwner.fullName;
+    ownerPhoneNo.text = commodityOwner.phoneNumber;
+  }
   return Column(
     children: <Widget>[
       SizedBox(height: 12.0),
@@ -145,6 +187,8 @@ Widget pickUpWidget(BuildContext context, CommodityOwner commodityOwner) {
                 color: Colors.grey[800],
               ),
             ),
+            Spacer(),
+            Icon(Icons.list)
           ],
         ),
       ),
@@ -321,8 +365,6 @@ Widget textField(
 Widget comodityWidget(BuildContext context, Request request) {
   TextEditingController datePickerController = new TextEditingController();
   DateTime pickedDate = DateTime.now();
-  TextEditingController timePickerController = new TextEditingController();
-  TimeOfDay pickedTime = TimeOfDay.now();
   TextEditingController commodityNameController = new TextEditingController();
   TextEditingController weightController = new TextEditingController();
   TextEditingController noteController = new TextEditingController();
@@ -363,18 +405,41 @@ Widget comodityWidget(BuildContext context, Request request) {
       SizedBox(
         height: 8,
       ),
-      textField(
-        context,
-        "Khối Lượng",
-        null,
-        () async {},
-        (value) {
-          request.weight = double.parse(value);
-        },
-        weightController,
-        false,
-        TextInputType.number,
-        1,
+      Container(
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              child: textField(
+                context,
+                "Khối Lượng",
+                null,
+                () async {},
+                (value) {
+                  request.weight = double.parse(value);
+                },
+                weightController,
+                false,
+                TextInputType.number,
+                1,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 8),
+              padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Colors.blueGrey[100],
+              ),
+              child: Text(
+                "Tấn",
+                style: TextStyle(
+                  fontSize: AppConstants.minFontSize,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       SizedBox(
         height: 8,
@@ -410,38 +475,6 @@ Widget comodityWidget(BuildContext context, Request request) {
       SizedBox(
         height: 8,
       ),
-      // textField(
-      //   context,
-      //   "Giờ hết hạn",
-      //   Icons.timer,
-      //   () async {
-      //     showTimePicker(
-      //       context: context,
-      //       initialTime: pickedTime,
-      //     ).then((value) {
-      //       if (value != null) {
-      //         pickedTime = value;
-      //         String time = pickedTime.hour.toString() +
-      //             ":" +
-      //             pickedTime.minute.toString();
-      //         timePickerController.text = time;
-      //         if (pickedDate != null && pickedTime != null) {
-      //           int year = int.parse(pickedDate.year.toString());
-      //           int month = int.parse(pickedDate.month.toString());
-      //           int day = int.parse(pickedDate.month.toString());
-      //           int hour = int.parse(pickedTime.hour.toString());
-      //           int minute = int.parse(pickedTime.minute.toString());
-      //           request.validDate = DateTime(year, month, day, hour, minute);
-      //         }
-      //       }
-      //     });
-      //   },
-      //   null,
-      //   timePickerController,
-      //   false,
-      //   null,
-      //   1,
-      // ),
       SizedBox(height: 12.0),
       Container(
         width: double.infinity,

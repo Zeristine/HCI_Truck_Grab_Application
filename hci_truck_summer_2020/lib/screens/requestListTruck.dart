@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
-import 'package:truck/screens/requestDetail.dart';
+import 'package:truck/screens/DriverQuotaionDetail.dart';
 
 class RequestListTruckScreen extends StatefulWidget {
   @override
