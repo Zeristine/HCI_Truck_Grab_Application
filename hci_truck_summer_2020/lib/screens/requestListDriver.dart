@@ -83,7 +83,7 @@ Widget inProgressRequestList() {
                                     mainAxisSize: MainAxisSize.min,
                                    children: <Widget>[
                                   CircleAvatar(
-                                backgroundImage: AssetImage('assets/images/avatar4.jpg'),
+                                backgroundImage: AssetImage('assets/images/avatar6.png'),
                                 backgroundColor: Colors.lightGreen,
                                 radius: 28.0,
                               ),
