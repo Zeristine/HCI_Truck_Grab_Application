@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Request.dart';
+import 'package:truck/models/user.dart';
+import 'package:truck/services/HttpService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DriverRequestDetailScreen extends StatefulWidget {
   final Request request;
@@ -13,7 +16,24 @@ class DriverRequestDetailScreen extends StatefulWidget {
 
 class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
   Request request;
+  User user;
   DriverRequestDetailState(this.request);
+
+  void getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await HttpService.getUser(prefs.getString('userId')).then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +58,9 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
           },
         ),
       ),
-      bottomSheet: driverRequestDetailButtonGroup(request),
+      bottomSheet: user != null
+          ? driverRequestDetailButtonGroup(request, user)
+          : Container(),
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height -
@@ -274,7 +296,7 @@ Widget reciever(Request request) {
   );
 }
 
-Widget driverRequestDetailButtonGroup(Request request) {
+Widget driverRequestDetailButtonGroup(Request request, User user) {
   return Container(
     padding: EdgeInsets.all(24),
     decoration: BoxDecoration(
@@ -305,15 +327,13 @@ Widget driverRequestDetailButtonGroup(Request request) {
             children: <Widget>[
               CircleAvatar(
                 radius: 64,
-                backgroundImage: request.user.imagePath == null ||
-                        request.user.imagePath == 'Empty'
+                backgroundImage: user.imagePath == null
                     ? AssetImage('assets/images/no-avatar.png')
-                    : NetworkImage(request.user.imagePath),
+                    : NetworkImage(user.imagePath),
               ),
-              Text(request.user.fullName == null ||
-                      request.user.fullName == 'Empty'
-                  ? request.user.userId
-                  : request.user.fullName),
+              Text(user.fullName == null || user.fullName == 'Empty'
+                  ? user.userId
+                  : user.fullName),
             ],
           ),
         ),
