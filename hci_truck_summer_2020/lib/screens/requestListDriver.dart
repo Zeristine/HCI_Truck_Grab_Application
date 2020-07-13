@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/screens/DriverQuotationDetail.dart';
+import 'package:truck/screens/userHome.dart';
 
 class RequestListDriverScreen extends StatefulWidget {
   @override
@@ -15,25 +16,31 @@ class RequestListDriverSate extends State<RequestListDriverScreen> {
           backgroundColor: Colors.red,
       ),
          
-        body: SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            inProgressRequestList(),
-            SizedBox(
-              height: 10.0,
-            ),
-          ],
+        body: Container(
+        child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: TabBar(labelColor: Colors.grey[800], tabs: [
+              Tab(
+                text: "Chờ báo giá",
+              ),
+              Tab(
+                text: "Đang vận chuyển",
+              ),
+              Tab(
+                text: "Hoàn thành",
+              ),
+            ]),
+            body: TabBarView(children: [
+              inProgressRequestList(),
+              UserHomeScreen(),
+              UserHomeScreen(),
+            ]),
+          ),
         ),
-      ),
     ));
   }
 }
-final tab = new TabBar(tabs: <Tab>[
-  new Tab(icon: new Icon(Icons.arrow_forward)),
-  new Tab(icon: new Icon(Icons.arrow_downward)),
-  new Tab(icon: new Icon(Icons.arrow_back)),
-]);
 Widget inProgressRequestList() {
   return Container(
       child: Column(
@@ -83,7 +90,7 @@ Widget inProgressRequestList() {
                                     mainAxisSize: MainAxisSize.min,
                                    children: <Widget>[
                                   CircleAvatar(
-                                backgroundImage: AssetImage('assets/images/avatar6.png'),
+                                backgroundImage: AssetImage('assets/images/avatar4.jpg'),
                                 backgroundColor: Colors.lightGreen,
                                 radius: 28.0,
                               ),
