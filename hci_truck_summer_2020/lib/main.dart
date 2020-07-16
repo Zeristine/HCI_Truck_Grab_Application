@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:truck/screens/authenticate.dart';
-import 'package:truck/screens/requestListDriver.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: RequestListDriverScreen(),
+    home: AuthenticateScreen(),
     // initialRoute: '/login',
     // routes: {
     //   '/': (context) => UserHomeScreen(),

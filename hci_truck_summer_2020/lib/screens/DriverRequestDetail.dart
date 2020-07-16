@@ -129,7 +129,9 @@ Widget header(Request request) {
           children: <Widget>[
             Icon(Icons.access_time),
             Text(
-              'Ngày hết hạn\n' + request.validDate.toString(),
+              'Ngày hết hạn\n' 
+              // + request.validDate.toString()
+              ,
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -142,7 +144,9 @@ Widget header(Request request) {
             Icon(Icons.note),
             Expanded(
               child: Text(
-                'Ghi chú\n' + request.note,
+                'Ghi chú\n'
+                // + request.note
+                ,
                 softWrap: true,
                 style: TextStyle(color: Colors.white),
               ),
@@ -155,13 +159,13 @@ Widget header(Request request) {
 }
 
 Widget owner(Request request) {
-  String address = request.commodityOwner.address.streetName.toString() +
-      "," +
-      request.commodityOwner.address.places[2].name +
-      "," +
-      request.commodityOwner.address.places[1].name +
-      "," +
-      request.commodityOwner.address.places[0].name;
+  // String address = request.commodityOwner.address.streetName.toString() +
+  //     "," +
+  //     request.commodityOwner.address.places[2].name +
+  //     "," +
+  //     request.commodityOwner.address.places[1].name +
+  //     "," +
+  //     request.commodityOwner.address.places[0].name;
   return Container(
     padding: EdgeInsets.all(24.0),
     child: Column(
@@ -181,7 +185,9 @@ Widget owner(Request request) {
           children: <Widget>[
             Icon(Icons.person),
             Text(
-              'Họ và tên\n' + request.reciver.fullName,
+              'Họ và tên\n' 
+              // + request.reciver.fullName
+              ,
             ),
           ],
         ),
@@ -192,7 +198,9 @@ Widget owner(Request request) {
           children: <Widget>[
             Icon(Icons.phone),
             Text(
-              'Số điện thoại\n' + request.reciver.phoneNumber,
+              'Số điện thoại\n' 
+              // + request.reciver.phoneNumber
+              ,
             ),
           ],
         ),
@@ -204,7 +212,9 @@ Widget owner(Request request) {
             Icon(Icons.location_on),
             Expanded(
               child: Text(
-                'Địa Chỉ\n' + address,
+                'Địa Chỉ\n' 
+                // + address
+                ,
                 softWrap: true,
               ),
             ),
@@ -216,14 +226,14 @@ Widget owner(Request request) {
 }
 
 Widget reciever(Request request) {
-  String address = request.reciver.address.streetName.toString() +
-      "," +
-      request.reciver.address.places[2].name +
-      "," +
-      request.reciver.address.places[1].name +
-      "," +
-      request.reciver.address.places[0].name;
-  return Container(
+  // String address = request.reciver.address.streetName.toString() +
+  //     "," +
+  //     request.reciver.address.places[2].name +
+  //     "," +
+  //     request.reciver.address.places[1].name +
+  //     "," +
+  //     request.reciver.address.places[0].name;
+  return Container(  
     padding: EdgeInsets.all(24.0),
     child: Column(
       children: <Widget>[
@@ -241,7 +251,9 @@ Widget reciever(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.person),
-            Text('Họ và tên\n' + request.reciver.fullName),
+            Text('Họ và tên\n' 
+            // + request.reciver.fullName
+            ,),
           ],
         ),
         SizedBox(
@@ -251,7 +263,9 @@ Widget reciever(Request request) {
           children: <Widget>[
             Icon(Icons.phone),
             Text(
-              'Số điện thoại\n' + request.reciver.phoneNumber,
+              'Số điện thoại\n' 
+              // + request.reciver.phoneNumber
+              ,
             ),
           ],
         ),
@@ -263,7 +277,9 @@ Widget reciever(Request request) {
             Icon(Icons.location_on),
             Expanded(
               child: Text(
-                'Địa Chỉ\n' + address,
+                'Địa Chỉ\n' 
+                // + address
+                ,
                 softWrap: true,
               ),
             ),
@@ -276,7 +292,8 @@ Widget reciever(Request request) {
 
 Widget driverRequestDetailButtonGroup(Request request) {
   return Container(
-    padding: EdgeInsets.all(24),
+    height: 180.0,
+    padding: EdgeInsets.all(12),
     decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
@@ -299,23 +316,37 @@ Widget driverRequestDetailButtonGroup(Request request) {
           ),
         ),
         SizedBox(
-          height: 100.0,
+          height: 10.0,
+        ),
+        SizedBox(
+          height: 50.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 50.0, width: 50.0, child: CircleAvatar(
-                radius: 64,
-                backgroundImage: request.user.imagePath == null ||
-                        request.user.imagePath == 'Empty'
-                    ? AssetImage('assets/images/no-avatar.png')
-                    : NetworkImage(request.user.imagePath),
-              ),),              
-              Text(request.user.fullName == null ||
-                      request.user.fullName == 'Empty'
-                  ? request.user.userId
-                  : request.user.fullName),
+              SizedBox(
+                height: 50.0,
+                width: 50.0,
+                child: CircleAvatar(
+                    radius: 64,
+                    backgroundImage:
+                        // request.user.imagePath == null ||
+                        //         request.user.imagePath == 'Empty'
+                        //     ? AssetImage('assets/images/no-avatar.png')
+                        //     : NetworkImage(request.user.imagePath),
+                        AssetImage('assets/images/no-avatar.png')),
+              ),
+              SizedBox(width: 10.0,),
+              Text(
+                  // request.user.fullName == null ||
+                  //       request.user.fullName == 'Empty'
+                  //   ? request.user.userId
+                  //   : request.user.fullName
+                  request.userId),
             ],
           ),
+        ),
+        SizedBox(
+          height: 10.0,
         ),
         Row(
           children: <Widget>[

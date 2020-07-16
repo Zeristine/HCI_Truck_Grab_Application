@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
-import 'package:truck/screens/DriverQuotationDetail.dart';
-import 'package:truck/screens/userHome.dart';
+import 'package:truck/models/Place.dart';
+import 'package:truck/models/Request.dart';
+import 'package:truck/screens/DriverRequestDetail.dart';
+import 'package:truck/services/HttpService.dart';
 
 class RequestListDriverScreen extends StatefulWidget {
   @override
@@ -12,68 +15,117 @@ class RequestListDriverSate extends State<RequestListDriverScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-          backgroundColor: Colors.red,
-      ),
-         
+        backgroundColor: AppConstants.backgroundColor,
         body: Container(
-        child: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            appBar: TabBar(labelColor: Colors.grey[800], tabs: [
-              Tab(
-                text: "Chờ báo giá",
-              ),
-              Tab(
-                text: "Đang vận chuyển",
-              ),
-              Tab(
-                text: "Hoàn thành",
-              ),
-            ]),
-            body: TabBarView(children: [
-              inProgressRequestList(),
-              UserHomeScreen(),
-              UserHomeScreen(),
-            ]),
+          child: DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              appBar: TabBar(labelColor: Colors.grey[800], tabs: [
+                Tab(
+                  text: "Chờ báo giá",
+                ),
+                Tab(
+                  text: "Đang vận chuyển",
+                ),
+                Tab(
+                  text: "Hoàn thành",
+                ),
+              ]),
+              body: TabBarView(children: [
+                RequestListDriverType(1),
+                RequestListDriverType(2),
+                RequestListDriverType(3),
+              ]),
+            ),
           ),
-        ),
-    ));
+        ));
   }
 }
-Widget inProgressRequestList() {
-  return Container(
-      child: Column(
-    children: <Widget>[
-      Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Row(
-            children: <Widget>[
 
-            ],
-          )),
-      SizedBox(
-        height: 10.0,
-      ),
-      ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.fromLTRB(24.0, 4.0, 24.0, 0),
-          itemCount: 2,
-          itemBuilder: (context, index) {
+class RequestListDriverType extends StatefulWidget {
+  final int status;
+  RequestListDriverType(this.status);
+  @override
+  RequestListDriverTypeState createState() => RequestListDriverTypeState();
+}
+
+class RequestListDriverTypeState extends State<RequestListDriverType> {
+  List<Request> requests;
+
+  void getList() async {
+    requests = List<Request>();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    await HttpService.getRequest(
+            // prefs.getString('userId')
+            'loivn@gmail.com',
+            widget.status)
+        .then((value) {
+      setState(() {
+        requests = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getList();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return requests != null || requests.length > 0
+        ? Scaffold(
+            backgroundColor: AppConstants.backgroundColor,
+            body: requestList(requests),
+          )
+        : CircularProgressIndicator();
+  }
+}
+
+Widget requestList(List<Request> requests) {
+  return requests.length != null
+      ? ListView.builder(
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
+          itemCount: requests.length,
+          itemBuilder: (BuildContext context, int index) {
+            List<Place> ownerPlaces =
+                requests[index].commodityOwner.address.places;
+            List<Place> reciverPlaces = requests[index].reciver.address.places;
+            String ownerAddress =
+                requests[index].commodityOwner.address.streetName +
+                    ", " +
+                    ownerPlaces[0].name +
+                    ", " +
+                    ownerPlaces[1].name +
+                    ", " +
+                    ownerPlaces[2].name;
+            String reciverAddress = requests[index].reciver.address.streetName +
+                ", " +
+                reciverPlaces[0].name +
+                ", " +
+                reciverPlaces[1].name +
+                ", " +
+                reciverPlaces[2].name;            
             return Hero(
-              tag: 'inprogress' + index.toString(),
+              tag: 'background' + index.toString(),
               child: Card(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
                 color: Colors.white,
-                elevation: 0.0,
+                elevation: 3,
                 child: InkWell(
-                  onTap: null,
+                  onTap: () {
+                    Navigator.push(context,
+                        PageRouteBuilder(pageBuilder: (context, a, b) {
+                      return DriverRequestDetailScreen(requests[index]);
+                    }));
+                  },
                   child: Container(
-                    padding: EdgeInsets.all(12),
+                    padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,72 +137,39 @@ Widget inProgressRequestList() {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                   children: <Widget>[
-                                  CircleAvatar(
-                                backgroundImage: AssetImage('assets/images/avatar4.jpg'),
-                                backgroundColor: Colors.lightGreen,
-                                radius: 28.0,
-                              ),
-                               SizedBox(
-                                width: 8,
-                                    ),
-                               Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                  '#456' + index.toString() + '  - '+' Sat Thep ',
-                                  overflow: TextOverflow.ellipsis,
+                                Text(
+                                  '#' +
+                                      requests[index].requestId.toString() +
+                                      " - " +
+                                      requests[index].commodityName,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontSize: AppConstants.minFontSize,
-                                    fontFamily: 'Poppins',
+                                    fontFamily: 'Roboto',
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
                                 ),
-                                Text(
-                                  "Nguyen Van Loi",
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: AppConstants.minFontSize,
-                                    fontFamily: 'Poppins',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                  ],
-                               ),
-                                
-                               
-                               
                                 SizedBox(
                                   height: 8,
                                 ),
-                                     ],
-                                       ),  
-                              
-                                
                                 Row(
                                   children: <Widget>[
                                     Icon(
                                       Icons.my_location,
-                                      color: Colors.purple,
+                                      color: Colors.red,
                                     ),
                                     SizedBox(
                                       width: 8,
                                     ),
                                     Flexible(
                                       child: Text(
-                                        "415/25 Trường Chinh, Phường 14, Quận Tân Bình, TP.HCM",
+                                        ownerAddress,
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: true,
                                         style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Poppins',
+                                          color: Colors.grey[700],
+                                          fontFamily: 'Roboto',
                                         ),
                                       ),
                                     ),
@@ -161,19 +180,18 @@ Widget inProgressRequestList() {
                                 ),
                                 Row(
                                   children: <Widget>[
-                                    Icon(Icons.location_on,
-                                        color: Colors.blue),
+                                    Icon(Icons.location_on, color: Colors.blue),
                                     SizedBox(
                                       width: 8,
                                     ),
                                     Flexible(
                                       child: Text(
-                                        "585/5 Nguyễn Thị Thập, Phường 3, Quận 7, TP.HCM",
+                                        reciverAddress,
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: true,
                                         style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Poppins',
+                                          color: Colors.grey[700],
+                                          fontFamily: 'Roboto',
                                         ),
                                       ),
                                     ),
@@ -182,6 +200,50 @@ Widget inProgressRequestList() {
                                 SizedBox(
                                   height: 12.0,
                                 ),
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.fromLTRB(
+                                          12.0, 4.0, 12.0, 4.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        borderRadius:
+                                            BorderRadius.circular(25.0),
+                                        color: Colors.green[700],
+                                      ),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(
+                                            requests[index]
+                                                    .quotations
+                                                    .length
+                                                    .toString() +
+                                                ' báo giá',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Icon(
+                                      Icons.fiber_manual_record,
+                                      color:
+                                          Color(requests[index].status.color),
+                                      size: 16.0,
+                                    ),
+                                    SizedBox(
+                                      width: 4.0,
+                                    ),
+                                    Text(
+                                      requests[index].status.value.toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    )
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -192,7 +254,7 @@ Widget inProgressRequestList() {
                 ),
               ),
             );
-          })
-    ],
-  ));
+          },
+        )
+      : Container();
 }

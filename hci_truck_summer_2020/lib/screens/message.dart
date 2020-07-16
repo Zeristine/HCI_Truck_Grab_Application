@@ -11,7 +11,6 @@ class MessageScreen extends StatefulWidget {
 class MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(

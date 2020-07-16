@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class ChatDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -20,7 +19,6 @@ class ChatDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(
                   Icons.arrow_back,
                   color: Colors.black,
-                  
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -64,6 +62,5 @@ class ChatDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
