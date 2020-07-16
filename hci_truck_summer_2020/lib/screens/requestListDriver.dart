@@ -1,10 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Place.dart';
 import 'package:truck/models/Request.dart';
 import 'package:truck/screens/DriverRequestDetail.dart';
-import 'package:truck/services/HttpService.dart';
+import 'package:http/http.dart' as http;
 
 class RequestListDriverScreen extends StatefulWidget {
   @override
@@ -54,16 +57,21 @@ class RequestListDriverTypeState extends State<RequestListDriverType> {
 
   void getList() async {
     requests = List<Request>();
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    await HttpService.getRequest(
-            // prefs.getString('userId')
-            'loivn@gmail.com',
-            widget.status)
-        .then((value) {
-      setState(() {
-        requests = value;
-      });
-    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
+    var response = await http.get(
+        'https://truck-api.azurewebsites.net/api/users/' +
+            userId +
+            '/requests?isDriver=true');
+    if (response.statusCode == HttpStatus.ok) {
+      var jsonRe = json.decode(response.body);
+      if (jsonRe != null) {
+        var list = jsonRe as List;
+        if (list.length > 0) {
+          requests = list.map((e) => Request.fromJson(e)).toList();
+        }
+      }
+    }
   }
 
   @override
@@ -77,37 +85,44 @@ class RequestListDriverTypeState extends State<RequestListDriverType> {
     return requests != null || requests.length > 0
         ? Scaffold(
             backgroundColor: AppConstants.backgroundColor,
-            body: requestList(requests),
+            body: requestList(requests, widget.status),
           )
         : CircularProgressIndicator();
   }
 }
 
-Widget requestList(List<Request> requests) {
-  return requests.length != null
+Widget requestList(List<Request> requests, int status) {
+  List<Request> requestsOnStatus = List();
+  for (var request in requests) {
+    if (request.status.statusId == status) {
+      requestsOnStatus.add(request);
+    }
+  }
+  return requestsOnStatus.length != null
       ? ListView.builder(
           physics: BouncingScrollPhysics(),
           padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
-          itemCount: requests.length,
+          itemCount: requestsOnStatus.length,
           itemBuilder: (BuildContext context, int index) {
             List<Place> ownerPlaces =
-                requests[index].commodityOwner.address.places;
+                requestsOnStatus[index].commodityOwner.address.places;
             List<Place> reciverPlaces = requests[index].reciver.address.places;
             String ownerAddress =
-                requests[index].commodityOwner.address.streetName +
+                requestsOnStatus[index].commodityOwner.address.streetName +
                     ", " +
                     ownerPlaces[0].name +
                     ", " +
                     ownerPlaces[1].name +
                     ", " +
                     ownerPlaces[2].name;
-            String reciverAddress = requests[index].reciver.address.streetName +
-                ", " +
-                reciverPlaces[0].name +
-                ", " +
-                reciverPlaces[1].name +
-                ", " +
-                reciverPlaces[2].name;            
+            String reciverAddress =
+                requestsOnStatus[index].reciver.address.streetName +
+                    ", " +
+                    reciverPlaces[0].name +
+                    ", " +
+                    reciverPlaces[1].name +
+                    ", " +
+                    reciverPlaces[2].name;
             return Hero(
               tag: 'background' + index.toString(),
               child: Card(
@@ -121,7 +136,7 @@ Widget requestList(List<Request> requests) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return DriverRequestDetailScreen(requests[index]);
+                      return DriverRequestDetailScreen(requestsOnStatus[index]);
                     }));
                   },
                   child: Container(
@@ -139,9 +154,11 @@ Widget requestList(List<Request> requests) {
                               children: <Widget>[
                                 Text(
                                   '#' +
-                                      requests[index].requestId.toString() +
+                                      requestsOnStatus[index]
+                                          .requestId
+                                          .toString() +
                                       " - " +
-                                      requests[index].commodityName,
+                                      requestsOnStatus[index].commodityName,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontSize: AppConstants.minFontSize,
@@ -214,7 +231,7 @@ Widget requestList(List<Request> requests) {
                                       child: Row(
                                         children: <Widget>[
                                           Text(
-                                            requests[index]
+                                            requestsOnStatus[index]
                                                     .quotations
                                                     .length
                                                     .toString() +
@@ -229,15 +246,18 @@ Widget requestList(List<Request> requests) {
                                     Spacer(),
                                     Icon(
                                       Icons.fiber_manual_record,
-                                      color:
-                                          Color(requests[index].status.color),
+                                      color: Color(
+                                          requestsOnStatus[index].status.color),
                                       size: 16.0,
                                     ),
                                     SizedBox(
                                       width: 4.0,
                                     ),
                                     Text(
-                                      requests[index].status.value.toString(),
+                                      requestsOnStatus[index]
+                                          .status
+                                          .value
+                                          .toString(),
                                       style: TextStyle(
                                         color: Colors.black,
                                       ),
