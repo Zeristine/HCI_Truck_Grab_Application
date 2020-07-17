@@ -5,6 +5,8 @@ import 'package:truck/screens/requestListDriver.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
 import 'package:truck/constants/appConstans.dart';
 
+import 'message.dart';
+
 class HomeTruckScreen extends StatefulWidget {
   @override
   HomeTruckState createState() => HomeTruckState();
@@ -18,7 +20,7 @@ List<String> screenTitle = <String>[
 
 List<Widget> _optionScreen = <Widget>[
   RequestListDriverScreen(),
-  UserLocationScreen(),
+  MessageScreen(),
   ProfileScreen(),
 ];
 
@@ -28,10 +30,11 @@ class HomeTruckState extends State<HomeTruckScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           screenTitle[index],
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontFamily: 'Poppins',
             fontSize: 16,
           ),

@@ -25,13 +25,13 @@ class RequestListDriverSate extends State<RequestListDriverScreen> {
             child: Scaffold(
               appBar: TabBar(labelColor: Colors.grey[800], tabs: [
                 Tab(
-                  text: "Chờ báo giá",
+                  text: "Đơn gợi ý",
                 ),
                 Tab(
-                  text: "Đang vận chuyển",
+                  text: "Đang thực hiện",
                 ),
                 Tab(
-                  text: "Hoàn thành",
+                  text: "Đã hoàn thành",
                 ),
               ]),
               body: TabBarView(children: [
@@ -63,21 +63,23 @@ class RequestListDriverTypeState extends State<RequestListDriverType> {
         'https://truck-api.azurewebsites.net/api/users/' +
             userId +
             '/requests?isDriver=true');
-    if (response.statusCode == HttpStatus.ok) {
-      var jsonRe = json.decode(response.body);
-      if (jsonRe != null) {
-        var list = jsonRe as List;
-        if (list.length > 0) {
-          requests = list.map((e) => Request.fromJson(e)).toList();
+    setState(() {
+      if (response.statusCode == HttpStatus.ok) {
+        var jsonRe = json.decode(response.body);
+        if (jsonRe != null) {
+          var list = jsonRe as List;
+          if (list.length > 0) {
+            requests = list.map((e) => Request.fromJson(e)).toList();
+          }
         }
       }
-    }
+    });
   }
 
   @override
   void initState() {
-    getList();
     super.initState();
+    getList();
   }
 
   @override
@@ -92,37 +94,30 @@ class RequestListDriverTypeState extends State<RequestListDriverType> {
 }
 
 Widget requestList(List<Request> requests, int status) {
-  List<Request> requestsOnStatus = List();
-  for (var request in requests) {
-    if (request.status.statusId == status) {
-      requestsOnStatus.add(request);
-    }
-  }
-  return requestsOnStatus.length != null
+  return requests != null
       ? ListView.builder(
           physics: BouncingScrollPhysics(),
           padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
-          itemCount: requestsOnStatus.length,
+          itemCount: requests.length,
           itemBuilder: (BuildContext context, int index) {
             List<Place> ownerPlaces =
-                requestsOnStatus[index].commodityOwner.address.places;
+                requests[index].commodityOwner.address.places;
             List<Place> reciverPlaces = requests[index].reciver.address.places;
             String ownerAddress =
-                requestsOnStatus[index].commodityOwner.address.streetName +
+                requests[index].commodityOwner.address.streetName +
                     ", " +
                     ownerPlaces[0].name +
                     ", " +
                     ownerPlaces[1].name +
                     ", " +
                     ownerPlaces[2].name;
-            String reciverAddress =
-                requestsOnStatus[index].reciver.address.streetName +
-                    ", " +
-                    reciverPlaces[0].name +
-                    ", " +
-                    reciverPlaces[1].name +
-                    ", " +
-                    reciverPlaces[2].name;
+            String reciverAddress = requests[index].reciver.address.streetName +
+                ", " +
+                reciverPlaces[0].name +
+                ", " +
+                reciverPlaces[1].name +
+                ", " +
+                reciverPlaces[2].name;
             return Hero(
               tag: 'background' + index.toString(),
               child: Card(
@@ -136,7 +131,7 @@ Widget requestList(List<Request> requests, int status) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return DriverRequestDetailScreen(requestsOnStatus[index]);
+                      return DriverRequestDetailScreen(requests[index]);
                     }));
                   },
                   child: Container(
@@ -154,11 +149,9 @@ Widget requestList(List<Request> requests, int status) {
                               children: <Widget>[
                                 Text(
                                   '#' +
-                                      requestsOnStatus[index]
-                                          .requestId
-                                          .toString() +
+                                      requests[index].requestId.toString() +
                                       " - " +
-                                      requestsOnStatus[index].commodityName,
+                                      requests[index].commodityName,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontSize: AppConstants.minFontSize,
@@ -231,7 +224,7 @@ Widget requestList(List<Request> requests, int status) {
                                       child: Row(
                                         children: <Widget>[
                                           Text(
-                                            requestsOnStatus[index]
+                                            requests[index]
                                                     .quotations
                                                     .length
                                                     .toString() +
@@ -246,18 +239,15 @@ Widget requestList(List<Request> requests, int status) {
                                     Spacer(),
                                     Icon(
                                       Icons.fiber_manual_record,
-                                      color: Color(
-                                          requestsOnStatus[index].status.color),
+                                      color:
+                                          Color(requests[index].status.color),
                                       size: 16.0,
                                     ),
                                     SizedBox(
                                       width: 4.0,
                                     ),
                                     Text(
-                                      requestsOnStatus[index]
-                                          .status
-                                          .value
-                                          .toString(),
+                                      requests[index].status.value.toString(),
                                       style: TextStyle(
                                         color: Colors.black,
                                       ),
