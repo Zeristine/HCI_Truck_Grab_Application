@@ -70,7 +70,6 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
               Card(
                 margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
                 elevation: 3.0,
-                shadowColor: Color(0xff8d08cf),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -84,7 +83,6 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
               Card(
                 margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
                 elevation: 3.0,
-                shadowColor: Color(0xff8d08cf),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -121,10 +119,11 @@ Widget header(Request request) {
   return Container(
     padding: EdgeInsets.all(24.0),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           // '#' + request.requestId.toString() + ' - ' + request.commodityName,
-          'Test',
+          '#2345 - Xe máy SH',
           style: TextStyle(
             fontSize: AppConstants.medFontSize,
             color: Colors.white,
@@ -136,10 +135,12 @@ Widget header(Request request) {
         ),
         Row(
           children: <Widget>[
-            Icon(Icons.help),
+            Icon(Icons.donut_small),
+            SizedBox(
+              width: 8.0,
+            ),
             Text(
-              // 'Khối lượng\n' + request.weight.toString() + ' tấn'
-              'Test',
+              'Khối lượng\n' + request.weight.toString() + ' tấn',
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -150,6 +151,9 @@ Widget header(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.access_time),
+            SizedBox(
+              width: 8.0,
+            ),
             Text(
               'Ngày hết hạn\n' + request.validDate.toString(),
               style: TextStyle(color: Colors.white),
@@ -162,6 +166,9 @@ Widget header(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.note),
+            SizedBox(
+              width: 8.0,
+            ),
             Expanded(
               child: Text(
                 'Ghi chú\n' + request.note.toString(),
@@ -187,6 +194,7 @@ Widget owner(Request request) {
   return Container(
     padding: EdgeInsets.all(24.0),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           'Thông tin chủ hàng',
@@ -202,6 +210,9 @@ Widget owner(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.person),
+            SizedBox(
+              width: 8.0,
+            ),
             Text(
               'Họ và tên\n' + request.reciver.fullName,
             ),
@@ -213,6 +224,9 @@ Widget owner(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.phone),
+            SizedBox(
+              width: 8.0,
+            ),
             Text(
               'Số điện thoại\n' + request.reciver.phoneNumber,
             ),
@@ -222,8 +236,12 @@ Widget owner(Request request) {
           height: 8.0,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Icon(Icons.location_on),
+            SizedBox(
+              width: 8.0,
+            ),
             Expanded(
               child: Text(
                 'Địa Chỉ\n' + address,
@@ -248,6 +266,7 @@ Widget reciever(Request request) {
   return Container(
     padding: EdgeInsets.all(24.0),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           'Thông tin người nhận',
@@ -263,6 +282,9 @@ Widget reciever(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.person),
+            SizedBox(
+              width: 8.0,
+            ),
             Text('Họ và tên\n' + request.reciver.fullName),
           ],
         ),
@@ -272,6 +294,9 @@ Widget reciever(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.phone),
+            SizedBox(
+              width: 8.0,
+            ),
             Text(
               'Số điện thoại\n' + request.reciver.phoneNumber,
             ),
@@ -283,6 +308,9 @@ Widget reciever(Request request) {
         Row(
           children: <Widget>[
             Icon(Icons.location_on),
+            SizedBox(
+              width: 8.0,
+            ),
             Expanded(
               child: Text(
                 'Địa Chỉ\n' + address,
@@ -311,9 +339,11 @@ Widget driverRequestDetailButtonGroup(Request request, User user) {
           )
         ]),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text(
-          'Chủ đơn hàng',
+          'Người tạo đơn',
           style: TextStyle(
             fontSize: AppConstants.medFontSize,
             color: Colors.black,
@@ -321,70 +351,85 @@ Widget driverRequestDetailButtonGroup(Request request, User user) {
           ),
         ),
         SizedBox(
-          height: 100.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 50.0,
-                width: 50.0,
-                child: CircleAvatar(
-                  radius: 64,
-                  backgroundImage: user.imagePath == null
-                      ? AssetImage('assets/images/no-avatar.png')
-                      : NetworkImage(user.imagePath),
-                ),
-              ),
-              Text(user.fullName == null || user.fullName == 'Empty'
-                  ? user.userId
-                  : user.fullName),
-            ],
-          ),
+          height: 12.0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 32,
+              backgroundImage: user.imagePath == null
+                  ? AssetImage('assets/images/no-avatar.png')
+                  : NetworkImage(user.imagePath),
+            ),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text(
+              // user.fullName == null || user.fullName == 'Empty'
+              //     ? user.userId
+              //     : user.fullName,
+              'Nguyen Van Loi',
+              style: TextStyle(fontSize: AppConstants.minFontSize),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
             Container(
+              height: 48,
               width: 100.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: AppConstants.buttonColor,
               ),
-              child: IconButton(
-                icon: Icon(Icons.message),
-                disabledColor: Colors.white,
-                onPressed: null,
-                iconSize: 20.0,
+              child: Center(
+                child: Text('Nhắn tin',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: AppConstants.minFontSize,
+                    )),
               ),
             ),
             Spacer(),
             Container(
+              height: 48,
               width: 100.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: AppConstants.buttonColor,
               ),
-              child: IconButton(
-                icon: Icon(Icons.phone),
-                onPressed: null,
-                disabledColor: Colors.white,
-                color: Colors.white,
-                iconSize: 20.0,
+              child: Center(
+                child: Text('Gọi',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: AppConstants.minFontSize,
+                    )),
               ),
             ),
             Spacer(),
             Container(
+              height: 48,
               width: 100.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: Colors.green,
               ),
-              child: IconButton(
-                icon: Icon(Icons.check),
-                disabledColor: Colors.white,
-                color: Colors.white,
-                onPressed: null,
-                iconSize: 20.0,
-              ),
+              child: Center(
+                  child: Text('Báo giá',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: AppConstants.minFontSize,
+                      ))),
+              // IconButton(
+              //   icon: Icon(Icons.check),
+              //   disabledColor: Colors.white,
+              //   color: Colors.white,
+              //   onPressed: null,
+              //   iconSize: 20.0,
             ),
           ],
         ),
