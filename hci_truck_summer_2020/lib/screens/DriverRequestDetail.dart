@@ -62,6 +62,7 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
           ? driverRequestDetailButtonGroup(request, user)
           : Container(),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: SizedBox(
           height: MediaQuery.of(context).size.height -
               AppBar().preferredSize.height,
@@ -96,7 +97,7 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
               Card(
                 margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
                 elevation: 3.0,
-                shadowColor: Color(0xff8d08cf),
+                shadowColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -130,47 +131,88 @@ Widget header(Request request) {
           ),
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
-            Icon(Icons.donut_small),
+            Icon(
+              Icons.donut_small,
+              color: Colors.white,
+            ),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
-            Text(
-              'Khối lượng\n' + request.weight.toString() + ' tấn',
-              style: TextStyle(color: Colors.white),
-            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Khối lượng',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(request.weight.toString() + ' Tấn',
+                    style: TextStyle(color: Colors.white))
+              ],
+            )
           ],
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
-            Icon(Icons.access_time),
+            Icon(
+              Icons.access_time,
+              color: Colors.white,
+            ),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
-            Text(
-              'Ngày hết hạn\n' + request.validDate.toString(),
-              style: TextStyle(color: Colors.white),
-            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Ngày hết hạn',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                Text(request.validDate.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ))
+              ],
+            )
           ],
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
-            Icon(Icons.note),
+            Icon(
+              Icons.note,
+              color: Colors.white,
+            ),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
             Expanded(
-              child: Text(
-                'Ghi chú\n' + request.note.toString(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Ghi chú',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    request.note.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -202,13 +244,13 @@ Widget owner(Request request) {
           ),
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
             Icon(Icons.person),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
             Text(
               'Họ và tên\n' + request.reciver.fullName,
@@ -216,13 +258,13 @@ Widget owner(Request request) {
           ],
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
             Icon(Icons.phone),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
             Text(
               'Số điện thoại\n' + request.reciver.phoneNumber,
@@ -230,14 +272,14 @@ Widget owner(Request request) {
           ],
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Icon(Icons.location_on),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
             Expanded(
               child: Text(
@@ -274,25 +316,25 @@ Widget reciever(Request request) {
           ),
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
             Icon(Icons.person),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
             Text('Họ và tên\n' + request.reciver.fullName),
           ],
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
             Icon(Icons.phone),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
             Text(
               'Số điện thoại\n' + request.reciver.phoneNumber,
@@ -300,13 +342,13 @@ Widget reciever(Request request) {
           ],
         ),
         SizedBox(
-          height: 8.0,
+          height: 12.0,
         ),
         Row(
           children: <Widget>[
             Icon(Icons.location_on),
             SizedBox(
-              width: 8.0,
+              width: 12.0,
             ),
             Expanded(
               child: Text(
@@ -323,7 +365,7 @@ Widget reciever(Request request) {
 
 Widget driverRequestDetailButtonGroup(Request request, User user) {
   return Container(
-    height: 180.0,
+    height: 184.0,
     padding: EdgeInsets.all(12),
     decoration: BoxDecoration(
         color: Colors.white,
@@ -351,31 +393,26 @@ Widget driverRequestDetailButtonGroup(Request request, User user) {
         SizedBox(
           height: 12.0,
         ),
-        SizedBox(
-          height: 50.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 50.0,
-                width: 50.0,
-                child: CircleAvatar(
-                  radius: 64,
-                  backgroundImage: request.user.imagePath == null ||
-                          request.user.imagePath == 'Empty'
-                      ? AssetImage('assets/images/no-avatar.png')
-                      : NetworkImage(request.user.imagePath),
-                ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 32,
+              backgroundImage: request.user.imagePath == null ||
+                      request.user.imagePath == 'Empty'
+                  ? AssetImage('assets/images/no-avatar.png')
+                  : NetworkImage(request.user.imagePath),
+            ),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text(
+              request.user.fullName.toString(),
+              style: TextStyle(
+                fontSize: 16,
               ),
-              SizedBox(
-                width: 12.0,
-              ),
-              Text(request.user.fullName == null ||
-                      request.user.fullName == 'Empty'
-                  ? request.user.userId
-                  : request.user.fullName),
-            ],
-          ),
+            ),
+          ],
         ),
         SizedBox(
           height: 10.0,
