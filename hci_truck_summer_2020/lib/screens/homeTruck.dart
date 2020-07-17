@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/screens/profile.dart';
-import 'package:truck/screens/requestListTruck.dart';
+import 'package:truck/screens/requestListDriver.dart';
 import 'package:truck/screens/userLocationOnMap.dart';
 import 'package:truck/constants/appConstans.dart';
+
+import 'message.dart';
 
 class HomeTruckScreen extends StatefulWidget {
   @override
@@ -17,8 +19,8 @@ List<String> screenTitle = <String>[
 ];
 
 List<Widget> _optionScreen = <Widget>[
-  RequestListTruckScreen(),
-  UserLocationScreen(),
+  RequestListDriverScreen(),
+  MessageScreen(),
   ProfileScreen(),
 ];
 
@@ -28,10 +30,11 @@ class HomeTruckState extends State<HomeTruckScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           screenTitle[index],
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontFamily: 'Poppins',
             fontSize: 16,
           ),

@@ -6,6 +6,9 @@ import 'package:truck/screens/changePassword.dart';
 import 'package:truck/screens/editProfile.dart';
 import 'package:truck/screens/login.dart';
 
+import '../models/user.dart';
+import '../services/HttpService.dart';
+
 class ProfileScreen extends StatefulWidget {
   @override
   ProfileState createState() => ProfileState();
@@ -14,16 +17,22 @@ class ProfileScreen extends StatefulWidget {
 class ProfileState extends State<ProfileScreen> {
   SharedPreferences prefs;
   String imagePath = 'Empty';
+  User user;
 
   Future getImagePath() async {
-    prefs = await SharedPreferences.getInstance();
     imagePath = prefs.getString('imagePath');
+  }
+
+  getData() async {
+    prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
+    user = await HttpService.getUser(userId);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getImagePath(),
+        future: getData(),
         builder: (context, snapshot) {
           return Scaffold(
             backgroundColor: AppConstants.backgroundColor,
@@ -34,7 +43,7 @@ class ProfileState extends State<ProfileScreen> {
                     SizedBox(
                       height: 24,
                     ),
-                    profileDetail(imagePath),
+                    profileDetail(user),
                     SizedBox(
                       height: 12.0,
                     ),
@@ -48,32 +57,35 @@ class ProfileState extends State<ProfileScreen> {
   }
 }
 
-Widget profileDetail(String imagePath) {
-  return Column(
-    children: <Widget>[
-      CircleAvatar(
-        radius: 64,
-        backgroundImage: imagePath == null || imagePath == 'Empty'
-            ? AssetImage('assets/images/no-avatar.png')
-            : NetworkImage(imagePath),
-      ),
-      SizedBox(
-        height: 12,
-      ),
-      Text(
-        'Nguyễn Văn Lợi',
-        style: TextStyle(
-            fontSize: AppConstants.minFontSize, fontWeight: FontWeight.bold),
-      ),
-      SizedBox(
-        height: 8.0,
-      ),
-      Text(
-        'Loinguyen.hg.n@gmail.com',
-        style: TextStyle(fontSize: AppConstants.minFontSize),
-      ),
-    ],
-  );
+Widget profileDetail(User user) {
+  return user != null
+      ? Column(
+          children: <Widget>[
+            CircleAvatar(
+              radius: 64,
+              backgroundImage: user.imagePath == null
+                  ? AssetImage('assets/images/no-avatar.png')
+                  : NetworkImage(user.imagePath),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Text(
+              user.fullName,
+              style: TextStyle(
+                  fontSize: AppConstants.minFontSize,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            Text(
+              user.userId,
+              style: TextStyle(fontSize: AppConstants.minFontSize),
+            ),
+          ],
+        )
+      : Container();
 }
 
 Widget profileButtonGroup(BuildContext context) {

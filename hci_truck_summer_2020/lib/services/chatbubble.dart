@@ -14,7 +14,6 @@ class ChatBubble extends StatefulWidget {
 class _ChatBubbleState extends State<ChatBubble> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       padding: EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
       child: Align(

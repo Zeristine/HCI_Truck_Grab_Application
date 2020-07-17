@@ -36,8 +36,7 @@ class ChatDetailPage extends StatelessWidget {
     ChatMessage(message: "Hi Lợi", type: MessageType.Sender),
   ];
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: ChatDetailAppBar(),
       body: Stack(

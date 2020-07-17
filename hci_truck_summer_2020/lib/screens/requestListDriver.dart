@@ -1,58 +1,100 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Place.dart';
 import 'package:truck/models/Request.dart';
-import 'package:truck/screens/userCreateRequest.dart';
-import 'package:truck/screens/userRequestDetail.dart';
-import 'package:truck/services/HttpService.dart';
+import 'package:truck/screens/DriverRequestDetail.dart';
+import 'package:http/http.dart' as http;
 
-class UserListRequestScreen extends StatefulWidget {
-  final int status;
-  UserListRequestScreen(this.status);
+class RequestListDriverScreen extends StatefulWidget {
   @override
-  UserListRequestScreenState createState() => UserListRequestScreenState();
+  RequestListDriverSate createState() => RequestListDriverSate();
 }
 
-class UserListRequestScreenState extends State<UserListRequestScreen>
-    with AutomaticKeepAliveClientMixin {
-  List<Request> requests;
-
+class RequestListDriverSate extends State<RequestListDriverScreen> {
   @override
-  void initState() {
-    getList();
-    super.initState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: AppConstants.backgroundColor,
+        body: Container(
+          child: DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              appBar: TabBar(labelColor: Colors.grey[800], tabs: [
+                Tab(
+                  text: "Đơn gợi ý",
+                ),
+                Tab(
+                  text: "Đang thực hiện",
+                ),
+                Tab(
+                  text: "Đã hoàn thành",
+                ),
+              ]),
+              body: TabBarView(children: [
+                RequestListDriverType(1),
+                RequestListDriverType(2),
+                RequestListDriverType(3),
+              ]),
+            ),
+          ),
+        ));
   }
+}
+
+class RequestListDriverType extends StatefulWidget {
+  final int status;
+  RequestListDriverType(this.status);
+  @override
+  RequestListDriverTypeState createState() => RequestListDriverTypeState();
+}
+
+class RequestListDriverTypeState extends State<RequestListDriverType> {
+  List<Request> requests;
 
   void getList() async {
     requests = List<Request>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await HttpService.getRequest(prefs.getString('userId'), widget.status)
-        .then((value) {
-      setState(() {
-        requests = value;
-      });
+    String userId = prefs.getString('userId');
+    var response = await http.get(
+        'https://truck-api.azurewebsites.net/api/users/' +
+            userId +
+            '/requests?isDriver=true');
+    setState(() {
+      if (response.statusCode == HttpStatus.ok) {
+        var jsonRe = json.decode(response.body);
+        if (jsonRe != null) {
+          var list = jsonRe as List;
+          if (list.length > 0) {
+            requests = list.map((e) => Request.fromJson(e)).toList();
+          }
+        }
+      }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return requests != null || requests.length > 0
-        ? Scaffold(
-            backgroundColor: AppConstants.backgroundColor,
-            body: listRequest(requests),
-          )
-        : CircularProgressIndicator();
+  void initState() {
+    super.initState();
+    getList();
   }
 
   @override
-  bool get wantKeepAlive => true;
+  Widget build(BuildContext context) {
+    return requests != null || requests.length > 0
+        ? Scaffold(
+            backgroundColor: AppConstants.backgroundColor,
+            body: requestList(requests, widget.status),
+          )
+        : CircularProgressIndicator();
+  }
 }
 
-Widget listRequest(List<Request> requests) {
-  return requests.length != null
+Widget requestList(List<Request> requests, int status) {
+  return requests != null
       ? ListView.builder(
           physics: BouncingScrollPhysics(),
           padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
@@ -76,9 +118,8 @@ Widget listRequest(List<Request> requests) {
                 reciverPlaces[1].name +
                 ", " +
                 reciverPlaces[2].name;
-
             return Hero(
-              tag: 'background' + requests[index].requestId.toString(),
+              tag: 'background' + index.toString(),
               child: Card(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
                 shape: RoundedRectangleBorder(
@@ -90,8 +131,7 @@ Widget listRequest(List<Request> requests) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return UserRequestDetail(
-                          requests[index].requestId + 1, requests[index]);
+                      return DriverRequestDetailScreen(requests[index]);
                     }));
                   },
                   child: Container(

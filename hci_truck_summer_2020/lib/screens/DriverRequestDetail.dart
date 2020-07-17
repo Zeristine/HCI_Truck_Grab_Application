@@ -122,8 +122,7 @@ Widget header(Request request) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          // '#' + request.requestId.toString() + ' - ' + request.commodityName,
-          '#2345 - Xe máy SH',
+          '#' + request.requestId.toString() + ' - ' + request.commodityName,
           style: TextStyle(
             fontSize: AppConstants.medFontSize,
             color: Colors.white,
@@ -172,8 +171,6 @@ Widget header(Request request) {
             Expanded(
               child: Text(
                 'Ghi chú\n' + request.note.toString(),
-                softWrap: true,
-                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -326,7 +323,8 @@ Widget reciever(Request request) {
 
 Widget driverRequestDetailButtonGroup(Request request, User user) {
   return Container(
-    padding: EdgeInsets.all(24),
+    height: 180.0,
+    padding: EdgeInsets.all(12),
     decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
@@ -353,29 +351,34 @@ Widget driverRequestDetailButtonGroup(Request request, User user) {
         SizedBox(
           height: 12.0,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 32,
-              backgroundImage: user.imagePath == null
-                  ? AssetImage('assets/images/no-avatar.png')
-                  : NetworkImage(user.imagePath),
-            ),
-            SizedBox(
-              width: 12.0,
-            ),
-            Text(
-              // user.fullName == null || user.fullName == 'Empty'
-              //     ? user.userId
-              //     : user.fullName,
-              'Nguyen Van Loi',
-              style: TextStyle(fontSize: AppConstants.minFontSize),
-            ),
-          ],
+        SizedBox(
+          height: 50.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 50.0,
+                width: 50.0,
+                child: CircleAvatar(
+                  radius: 64,
+                  backgroundImage: request.user.imagePath == null ||
+                          request.user.imagePath == 'Empty'
+                      ? AssetImage('assets/images/no-avatar.png')
+                      : NetworkImage(request.user.imagePath),
+                ),
+              ),
+              SizedBox(
+                width: 12.0,
+              ),
+              Text(request.user.fullName == null ||
+                      request.user.fullName == 'Empty'
+                  ? request.user.userId
+                  : request.user.fullName),
+            ],
+          ),
         ),
         SizedBox(
-          height: 12.0,
+          height: 10.0,
         ),
         Row(
           children: <Widget>[

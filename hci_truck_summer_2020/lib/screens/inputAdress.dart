@@ -87,7 +87,6 @@ class AddressScreenState extends State<AddressScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     streetFieldController = new TextEditingController();
     getList(0);
@@ -224,7 +223,9 @@ class AddressScreenState extends State<AddressScreen> {
                 children: <Widget>[
                   Text(
                     "Phường/Xã",
-                    style: TextStyle(fontSize: AppConstants.minFontSize, fontFamily: "Poppins"),
+                    style: TextStyle(
+                        fontSize: AppConstants.minFontSize,
+                        fontFamily: "Poppins"),
                   ),
                   Spacer(),
                   Text(
