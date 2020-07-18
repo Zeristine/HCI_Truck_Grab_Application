@@ -71,7 +71,7 @@ Widget profileDetail(User user) {
               height: 12,
             ),
             Text(
-              user.fullName,
+              user.fullName == null ? '' : user.fullName,
               style: TextStyle(
                   fontSize: AppConstants.minFontSize,
                   fontWeight: FontWeight.bold),

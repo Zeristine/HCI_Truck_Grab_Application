@@ -6,8 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Place.dart';
 import 'package:truck/models/Request.dart';
+import 'package:truck/models/user.dart';
 import 'package:truck/screens/DriverRequestDetail.dart';
 import 'package:http/http.dart' as http;
+import 'package:truck/services/HttpService.dart';
 
 class RequestListDriverScreen extends StatefulWidget {
   @override
@@ -15,33 +17,76 @@ class RequestListDriverScreen extends StatefulWidget {
 }
 
 class RequestListDriverSate extends State<RequestListDriverScreen> {
+  User user;
+  SharedPreferences prefs;
+
+  getData() async {
+    prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
+    user = await HttpService.getUser(userId);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppConstants.backgroundColor,
-        body: Container(
-          child: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              appBar: TabBar(labelColor: Colors.grey[800], tabs: [
-                Tab(
-                  text: "Đơn gợi ý",
-                ),
-                Tab(
-                  text: "Đang thực hiện",
-                ),
-                Tab(
-                  text: "Đã hoàn thành",
-                ),
-              ]),
-              body: TabBarView(children: [
-                RequestListDriverType(1),
-                RequestListDriverType(2),
-                RequestListDriverType(3),
-              ]),
-            ),
-          ),
-        ));
+    return FutureBuilder(
+        future: getData(),
+        builder: (context, snapshot) {
+          return user == null
+              ? Container()
+              : Scaffold(
+                  appBar: AppBar(
+                    title: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 75.0,
+                            width: 75.0,
+                            child: CircleAvatar(
+                              radius: 64,
+                              backgroundImage: user.imagePath == null
+                                  ? AssetImage('assets/images/no-avatar.png')
+                                  : NetworkImage(user.imagePath),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            user.fullName == null ? '' : user.fullName,
+                            style: TextStyle(
+                                fontSize: AppConstants.minFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  backgroundColor: AppConstants.backgroundColor,
+                  body: Container(
+                    child: DefaultTabController(
+                      length: 3,
+                      child: Scaffold(
+                        appBar: TabBar(labelColor: Colors.grey[800], tabs: [
+                          Tab(
+                            text: "Đơn gợi ý",
+                          ),
+                          Tab(
+                            text: "Đang thực hiện",
+                          ),
+                          Tab(
+                            text: "Đã hoàn thành",
+                          ),
+                        ]),
+                        body: TabBarView(children: [
+                          RequestListDriverType(1),
+                          RequestListDriverType(2),
+                          RequestListDriverType(3),
+                        ]),
+                      ),
+                    ),
+                  ));
+        });
   }
 }
 
