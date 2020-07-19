@@ -6,8 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Place.dart';
 import 'package:truck/models/Request.dart';
+import 'package:truck/models/user.dart';
 import 'package:truck/screens/DriverRequestDetail.dart';
 import 'package:http/http.dart' as http;
+import 'package:truck/services/HttpService.dart';
 
 class RequestListDriverScreen extends StatefulWidget {
   @override
@@ -25,13 +27,13 @@ class RequestListDriverSate extends State<RequestListDriverScreen> {
             child: Scaffold(
               appBar: TabBar(labelColor: Colors.grey[800], tabs: [
                 Tab(
-                  text: "Đơn gợi ý",
-                ),
-                Tab(
                   text: "Đang thực hiện",
                 ),
                 Tab(
-                  text: "Đã hoàn thành",
+                  text: "Đơn hàng",
+                ),
+                Tab(
+                  text: "Lịch sử",
                 ),
               ]),
               body: TabBarView(children: [
@@ -55,7 +57,7 @@ class RequestListDriverType extends StatefulWidget {
 class RequestListDriverTypeState extends State<RequestListDriverType> {
   List<Request> requests;
 
-  void getList() async {
+  Future getList() async {
     requests = List<Request>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.getString('userId');
@@ -73,13 +75,14 @@ class RequestListDriverTypeState extends State<RequestListDriverType> {
           }
         }
       }
+      print(requests.toString());
     });
   }
 
   @override
   void initState() {
-    super.initState();
     getList();
+    super.initState();
   }
 
   @override
@@ -136,126 +139,115 @@ Widget requestList(List<Request> requests, int status) {
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Flexible(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  '#' +
-                                      requests[index].requestId.toString() +
-                                      " - " +
-                                      requests[index].commodityName,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: AppConstants.minFontSize,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 75.0,
+                                width: 75.0,
+                                child: CircleAvatar(
+                                  radius: 64,
+                                  backgroundImage:
+                                      requests[index].user.imagePath == null
+                                          ? AssetImage(
+                                              'assets/images/no-avatar.png')
+                                          : NetworkImage(
+                                              requests[index].user.imagePath),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    '#' +
+                                        requests[index].requestId.toString() +
+                                        " - " +
+                                        requests[index].commodityName,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: AppConstants.minFontSize,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.my_location,
-                                      color: Colors.red,
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        ownerAddress,
-                                        overflow: TextOverflow.ellipsis,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontFamily: 'Roboto',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8.0,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Icon(Icons.location_on, color: Colors.blue),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        reciverAddress,
-                                        overflow: TextOverflow.ellipsis,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontFamily: 'Roboto',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 12.0,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.fromLTRB(
-                                          12.0, 4.0, 12.0, 4.0),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        color: Colors.green[700],
-                                      ),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                            requests[index]
-                                                    .quotations
-                                                    .length
-                                                    .toString() +
-                                                ' báo giá',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.fiber_manual_record,
-                                      color:
-                                          Color(requests[index].status.color),
-                                      size: 16.0,
-                                    ),
-                                    SizedBox(
-                                      width: 4.0,
-                                    ),
-                                    Text(
-                                      requests[index].status.value.toString(),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    requests[index].user.fullName == null
+                                        ? ''
+                                        : requests[index].user.fullName,
+                                    style: TextStyle(
+                                        fontSize: AppConstants.minFontSize,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.my_location,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      ownerAddress,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.grey[700],
+                                        fontFamily: 'Roboto',
                                       ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8.0,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(Icons.location_on, color: Colors.blue),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      reciverAddress,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontFamily: 'Roboto',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
