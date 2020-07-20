@@ -27,19 +27,19 @@ class RequestListDriverSate extends State<RequestListDriverScreen> {
             child: Scaffold(
               appBar: TabBar(labelColor: Colors.grey[800], tabs: [
                 Tab(
-                  text: "Đang thực hiện",
+                  text: "Chờ lấy hàng",
                 ),
                 Tab(
-                  text: "Đơn hàng",
+                  text: "Đang vận chuyển",
                 ),
                 Tab(
-                  text: "Lịch sử",
+                  text: "Đã lấy hàng",
                 ),
               ]),
               body: TabBarView(children: [
-                RequestListDriverType(1),
                 RequestListDriverType(2),
                 RequestListDriverType(3),
+                RequestListDriverType(4),
               ]),
             ),
           ),
