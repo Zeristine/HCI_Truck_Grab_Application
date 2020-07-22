@@ -58,24 +58,21 @@ Widget listRequest(List<Request> requests) {
           padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
           itemCount: requests.length,
           itemBuilder: (BuildContext context, int index) {
-            List<Place> ownerPlaces =
-                requests[index].commodityOwner.address.places;
-            List<Place> reciverPlaces = requests[index].reciver.address.places;
             String ownerAddress =
                 requests[index].commodityOwner.address.streetName +
                     ", " +
-                    ownerPlaces[0].name +
+                    requests[index].commodityOwner.address.ward +
                     ", " +
-                    ownerPlaces[1].name +
+                    requests[index].commodityOwner.address.district +
                     ", " +
-                    ownerPlaces[2].name;
+                    requests[index].commodityOwner.address.province;
             String reciverAddress = requests[index].reciver.address.streetName +
                 ", " +
-                reciverPlaces[0].name +
+                requests[index].reciver.address.ward +
                 ", " +
-                reciverPlaces[1].name +
+                requests[index].reciver.address.district +
                 ", " +
-                reciverPlaces[2].name;
+                requests[index].reciver.address.province;
 
             return Hero(
               tag: 'background' + requests[index].requestId.toString(),

@@ -5,6 +5,7 @@ import 'package:truck/models/Address.dart';
 import 'package:truck/models/CommodityOwner.dart';
 import 'package:http/http.dart' as http;
 import 'package:truck/models/Place.dart';
+import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Reciver.dart';
 import 'package:truck/models/Request.dart';
 import 'package:truck/models/user.dart';
@@ -209,5 +210,22 @@ class HttpService {
       }
     }
     return commodityOwners;
+  }
+
+  static Future<Reciver> addQuotation(Quotation quotation) async {
+    String commodityUrl = "https://truck-api.azurewebsites.net/api/quotations";
+    Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    //Create CommodityOwner Info
+    var response = await http.post(
+      commodityUrl,
+      headers: headers,
+      body: jsonEncode(quotation.toJson()),
+    );
+    Reciver reResponse;
+    if (response.statusCode == 201)
+      reResponse = Reciver.fromJson(json.decode(response.body));
+    return reResponse;
   }
 }

@@ -25,6 +25,15 @@ class CommodityOwner {
       this.requests});
 
   factory CommodityOwner.fromJson(Map<String, dynamic> json) {
+    List<Request> requests = new List<Request>();
+    if (json != null) {
+      if (json['requests'] != null) {
+        var list = json['requests'] as List;
+        if (list.length > 0) {
+          requests = list.map((e) => Request.fromJson(e)).toList();
+        }
+      }
+    }
     return CommodityOwner(
       commodityOwnerId: json['commodityOwnerId'],
       addressId: json['addressId'],
@@ -34,9 +43,7 @@ class CommodityOwner {
       fullName: json['fullName'],
       isDefault: json['isDefault'],
       phoneNumber: json['phoneNumber'],
-      requests: json['requests'] != null
-          ? List.from(json['requests'])
-          : new List<Request>(),
+      requests: requests,
     );
   }
 

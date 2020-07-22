@@ -83,8 +83,10 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 request.statusId == 1
                     ? 'Báo giá'
                     : request.statusId == 2
-                        ? 'Đang vận chuyển'
-                        : request.statusId == 3 ? 'Hoàn Thành' : 'Đã hủy',
+                        ? 'Chờ vận chuyển'
+                        : request.statusId == 3
+                            ? 'Đang vận chuyển'
+                            : request.statusId == 4 ? 'Hoàn thành' : 'Đã hủy',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.grey[800],
@@ -266,26 +268,26 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                             ),
                             Row(
                               children: <Widget>[
-                                Icon(
-                                  Icons.calendar_today,
-                                  color: Colors.grey,
-                                  size: 12.0,
-                                ),
-                                SizedBox(
-                                  width: 4.0,
-                                ),
-                                Text(
-                                  quotaion.date.day.toString(),
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12.0,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 24.0,
-                                ),
+                                // Icon(
+                                //   Icons.calendar_today,
+                                //   color: Colors.grey,
+                                //   size: 12.0,
+                                // ),
+                                // SizedBox(
+                                //   width: 4.0,
+                                // ),
+                                // Text(
+                                //   quotaion.date,
+                                //   style: TextStyle(
+                                //     color: Colors.grey,
+                                //     fontSize: 12.0,
+                                //     fontFamily: 'Poppins',
+                                //     fontWeight: FontWeight.w400,
+                                //   ),
+                                // ),
+                                // SizedBox(
+                                //   width: 24.0,
+                                // ),
                                 Icon(
                                   Icons.timer,
                                   color: Colors.grey,
@@ -295,7 +297,11 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                                   width: 4.0,
                                 ),
                                 Text(
-                                  quotaion.date.weekday.toString(),
+                                  quotaion.date
+                                          .difference(DateTime.now())
+                                          .inDays
+                                          .toString() +
+                                      ' ngày trước',
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12.0,

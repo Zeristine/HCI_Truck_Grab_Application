@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/screens/profile.dart';
 import 'package:truck/screens/requestListDriver.dart';
-import 'package:truck/screens/userLocationOnMap.dart';
 import 'package:truck/constants/appConstans.dart';
 
 import 'message.dart';
@@ -12,11 +11,7 @@ class HomeTruckScreen extends StatefulWidget {
   HomeTruckState createState() => HomeTruckState();
 }
 
-List<String> screenTitle = <String>[
-  'Đơn hàng vận chuyển',
-  'Chats',
-  'Hồ sơ của bạn'
-];
+List<String> screenTitle = <String>['Đơn hàng', 'Chats', 'Hồ sơ của bạn'];
 
 List<Widget> _optionScreen = <Widget>[
   RequestListDriverScreen(),

@@ -15,7 +15,7 @@ class RequestMenuState extends State<RequestMenu> {
   Widget build(BuildContext context) {
     return Container(
       child: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
@@ -30,6 +30,9 @@ class RequestMenuState extends State<RequestMenu> {
               text: "Chờ báo giá",
             ),
             Tab(
+              text: "Chờ vận chuyển",
+            ),
+            Tab(
               text: "Đang vận chuyển",
             ),
             Tab(
@@ -40,6 +43,7 @@ class RequestMenuState extends State<RequestMenu> {
             UserListRequestScreen(1),
             UserListRequestScreen(2),
             UserListRequestScreen(3),
+            UserListRequestScreen(4),
           ]),
         ),
       ),

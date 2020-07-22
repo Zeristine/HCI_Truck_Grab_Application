@@ -6,10 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Place.dart';
 import 'package:truck/models/Request.dart';
-import 'package:truck/models/user.dart';
+import 'package:truck/screens/CreateDriverJourney.dart';
 import 'package:truck/screens/DriverRequestDetail.dart';
 import 'package:http/http.dart' as http;
-import 'package:truck/services/HttpService.dart';
 
 class RequestListDriverScreen extends StatefulWidget {
   @override
@@ -20,6 +19,25 @@ class RequestListDriverSate extends State<RequestListDriverScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: RaisedButton(
+          padding: EdgeInsets.all(12),
+          textColor: Colors.white,
+          color: Colors.blue,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateDriverJourneyScreen(),
+              ),
+            );
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[Text('Tạo lộ trình '), Icon(Icons.add)],
+          ),
+        ),
         backgroundColor: AppConstants.backgroundColor,
         body: Container(
           child: DefaultTabController(
@@ -145,7 +163,7 @@ Widget requestList(List<Request> requests, int status) {
                       children: <Widget>[
                         Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(
                                 height: 75.0,

@@ -1,11 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Request.dart';
 import 'package:truck/models/user.dart';
 import 'package:truck/services/HttpService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:truck/services/appUi.dart';
 
 class DriverRequestDetailScreen extends StatefulWidget {
   final Request request;
@@ -59,7 +63,7 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
         ),
       ),
       bottomSheet: user != null
-          ? driverRequestDetailButtonGroup(request, user)
+          ? driverRequestDetailButtonGroup(context, request, user)
           : Container(),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -69,7 +73,7 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
           child: ListView(
             children: <Widget>[
               Card(
-                margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
+                margin: EdgeInsets.fromLTRB(24, 8, 24, 0),
                 elevation: 3.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -79,10 +83,10 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
                 child: header(request),
               ),
               SizedBox(
-                height: 10.0,
+                height: 8.0,
               ),
               Card(
-                margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
+                margin: EdgeInsets.fromLTRB(24, 8, 24, 0),
                 elevation: 3.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -92,10 +96,10 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
                 child: owner(request),
               ),
               SizedBox(
-                height: 10.0,
+                height: 8.0,
               ),
               Card(
-                margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
+                margin: EdgeInsets.fromLTRB(24, 8, 24, 0),
                 elevation: 3.0,
                 shadowColor: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -106,7 +110,7 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
                 child: reciever(request),
               ),
               SizedBox(
-                height: 250.0,
+                height: 224.0,
               ),
             ],
           ),
@@ -363,7 +367,8 @@ Widget reciever(Request request) {
   );
 }
 
-Widget driverRequestDetailButtonGroup(Request request, User user) {
+Widget driverRequestDetailButtonGroup(
+    BuildContext context, Request request, User user) {
   return Container(
     height: 184.0,
     padding: EdgeInsets.all(12),
@@ -451,28 +456,147 @@ Widget driverRequestDetailButtonGroup(Request request, User user) {
               ),
             ),
             Spacer(),
-            Container(
-              height: 48,
-              width: 100.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.green,
+            InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: quotationDialog(context, request.requestId),
+                      );
+                    });
+              },
+              child: Container(
+                height: 48,
+                width: 100.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  color: Colors.green,
+                ),
+                child: Center(
+                    child: Text('Báo giá',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: AppConstants.minFontSize,
+                        ))),
+                // IconButton(
+                //   icon: Icon(Icons.check),
+                //   disabledColor: Colors.white,
+                //   color: Colors.white,
+                //   onPressed: null,
+                //   iconSize: 20.0,
               ),
-              child: Center(
-                  child: Text('Báo giá',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: AppConstants.minFontSize,
-                      ))),
-              // IconButton(
-              //   icon: Icon(Icons.check),
-              //   disabledColor: Colors.white,
-              //   color: Colors.white,
-              //   onPressed: null,
-              //   iconSize: 20.0,
             ),
           ],
         ),
+      ],
+    ),
+  );
+}
+
+Widget quotationDialog(BuildContext context, int requestId) {
+  String note;
+  String price;
+  return Container(
+    padding: EdgeInsets.all(24.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(
+          'Báo giá',
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
+        ),
+        SizedBox(
+          height: 24.0,
+        ),
+        TextFormField(
+          style: TextStyle(
+            fontSize: AppConstants.minFontSize,
+            fontFamily: 'Roboto',
+          ),
+          decoration: InputDecoration(
+            hintText: 'Nhập giá tiền',
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              borderSide: BorderSide(color: Colors.grey[400], width: 2.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
+            ),
+          ),
+          maxLines: 1,
+          controller: null,
+          onChanged: (value) {
+            price = value;
+          },
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        TextField(
+          style: TextStyle(
+            fontSize: AppConstants.minFontSize,
+            fontFamily: 'Roboto',
+          ),
+          decoration: InputDecoration(
+            hintText: 'Nhập ghi chú cho chủ hàng',
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              borderSide: BorderSide(color: Colors.grey[400], width: 2.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              borderSide: BorderSide(color: AppConstants.linkColor, width: 2.0),
+            ),
+          ),
+          maxLines: 5,
+          controller: null,
+          onChanged: (value) {
+            note = value;
+          },
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        PrimaryButton(
+          onPressed: () async {
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
+            String userId = preferences.getString('userId');
+
+            Quotation quotation = new Quotation();
+            quotation.quotationId = 0;
+            quotation.date = DateTime.now();
+            quotation.driverId = userId;
+            quotation.price = double.parse(price);
+            quotation.note = note;
+            quotation.requestId = requestId;
+
+            var result = await HttpService.addQuotation(quotation);
+            Navigator.pop(context);
+            if (result != null) {}
+          },
+          text: 'Xác nhận',
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        PrimaryButton(
+          color: Colors.red[400],
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          text: 'Hủy bỏ',
+        )
       ],
     ),
   );

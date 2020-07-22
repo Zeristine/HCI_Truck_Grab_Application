@@ -31,20 +31,22 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
   bool isFirstTimes;
 
   void getData() async {
-    await HttpService.getCommodityOwner("loinv@gmail.com", true).then(
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
+    await HttpService.getCommodityOwner(userId, true).then(
       (value) async {
-        if (value != null && value.length > 0) {
-          defaultComodityOwners = value;
-          commodityOwner = defaultComodityOwners[0];
-          isFirstTimes = false;
-        } else {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          commodityOwner.userId = prefs.getString('userId');
-          User user = await HttpService.getUser(commodityOwner.userId);
-          commodityOwner.fullName = user.fullName;
-          commodityOwner.phoneNumber = user.phoneNumber;
-          isFirstTimes = true;
-        }
+        // if (value != null && value.length > 0) {
+        //   defaultComodityOwners = value;
+        //   commodityOwner = defaultComodityOwners[0];
+        //   isFirstTimes = false;
+        // } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        commodityOwner.userId = prefs.getString('userId');
+        User user = await HttpService.getUser(commodityOwner.userId);
+        commodityOwner.fullName = user.fullName;
+        commodityOwner.phoneNumber = user.phoneNumber;
+        isFirstTimes = true;
+        //}
       },
     );
     setState(() {
@@ -188,7 +190,7 @@ Widget pickUpWidget(
               ),
             ),
             Spacer(),
-            Icon(Icons.list)
+            //Icon(Icons.list)
           ],
         ),
       ),
