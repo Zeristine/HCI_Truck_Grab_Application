@@ -177,7 +177,10 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => QuotationDetailScreen(),
+                        builder: (context) => QuotationDetailScreen(
+                          request: request,
+                          quotation: quotaion,
+                        ),
                       ),
                     );
                   },

@@ -228,4 +228,19 @@ class HttpService {
       reResponse = Reciver.fromJson(json.decode(response.body));
     return reResponse;
   }
+
+  static Future updateRequest(Request request) async {
+    String url = "https://truck-api.azurewebsites.net/api/requests/" +
+        request.requestId.toString();
+    Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var response = await http.put(url,
+        body: json.encode(request.toJson()), headers: headers);
+
+    if (response.statusCode == 204) {
+      return true;
+    }
+    return false;
+  }
 }

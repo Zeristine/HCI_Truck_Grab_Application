@@ -82,7 +82,8 @@ class RequestListDriverTypeState extends State<RequestListDriverType> {
     var response = await http.get(
         'https://truck-api.azurewebsites.net/api/users/' +
             userId +
-            '/requests?isDriver=true');
+            '/requests?isDriver=true&status=' +
+            widget.status.toString());
     setState(() {
       if (response.statusCode == HttpStatus.ok) {
         var jsonRe = json.decode(response.body);

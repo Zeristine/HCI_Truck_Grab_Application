@@ -31,6 +31,15 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    List<Request> requests = new List<Request>();
+    if (json != null) {
+      if (json['quotations'] != null) {
+        var list = json['quotations'] as List;
+        if (list.length > 0) {
+          requests = list.map((e) => Request.fromJson(e)).toList();
+        }
+      }
+    }
     return json != null
         ? User(
             userId: json['userId'],
@@ -42,9 +51,7 @@ class User {
             imagePath: json['imagePath'],
             roleId: json['roleId'],
             role: Role.fromJson(json['role']),
-            requests: json['requests'] != null
-                ? List.from(json['requests'])
-                : new List<Request>(),
+            requests: requests,
             quotations: json['quotations'] != null
                 ? List.from(json['quotations'])
                 : new List<Quotation>(),

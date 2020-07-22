@@ -2,10 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/models/Quotation.dart';
+import 'package:truck/models/Request.dart';
+import 'package:truck/services/HttpService.dart';
 
 final double requestDetailButtonGroupHeight = 75.0;
 
+// ignore: must_be_immutable
 class QuotationDetailScreen extends StatefulWidget {
+  Request request;
+  Quotation quotation;
+  QuotationDetailScreen({this.request, this.quotation});
+
   @override
   QuotationDetailScreenState createState() => QuotationDetailScreenState();
 }
@@ -36,7 +44,7 @@ class QuotationDetailScreenState extends State<QuotationDetailScreen> {
             },
           ),
         ),
-        bottomSheet: detailButtonGroup(),
+        bottomSheet: detailButtonGroup(widget.request, widget.quotation),
         body: Container(
           padding: EdgeInsets.only(bottom: 150),
           child: SingleChildScrollView(
@@ -268,7 +276,7 @@ Widget driverJourneyDetail() {
   );
 }
 
-Widget detailButtonGroup() {
+Widget detailButtonGroup(Request requestw, Quotation quotation) {
   return Container(
     padding: EdgeInsets.all(24),
     decoration: BoxDecoration(
@@ -309,7 +317,7 @@ Widget detailButtonGroup() {
                 SizedBox(
                   height: 4.0,
                 ),
-                Text("5.000.000 VNĐ",
+                Text("4.000.000 VNĐ",
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontWeight: FontWeight.w500,
@@ -363,7 +371,11 @@ Widget detailButtonGroup() {
                 icon: Icon(Icons.check),
                 disabledColor: Colors.white,
                 color: Colors.white,
-                onPressed: null,
+                onPressed: () async {
+                  requestw.driverId = quotation.driverId;
+                  requestw.statusId = 2;
+                  await HttpService.updateRequest(requestw);
+                },
                 iconSize: 20.0,
               ),
             ),
