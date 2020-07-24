@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Request.dart';
 
 class DriverRequestDetailScreen extends StatefulWidget {
@@ -14,6 +16,18 @@ class DriverRequestDetailScreen extends StatefulWidget {
 class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
   Request request;
   DriverRequestDetailState(this.request);
+  String driverId = '';
+
+  void getUserId() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    driverId = preferences.getString('userId');
+  }
+
+  @override
+  void initState() {
+    getUserId();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +52,7 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
           },
         ),
       ),
-      bottomSheet: driverRequestDetailButtonGroup(request),
+      bottomSheet: driverRequestDetailButtonGroup(request, driverId),
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height -
@@ -274,7 +288,15 @@ Widget reciever(Request request) {
   );
 }
 
-Widget driverRequestDetailButtonGroup(Request request) {
+Widget driverRequestDetailButtonGroup(Request request, String userId) {
+  Quotation quotation;
+  if (userId != '') {
+    for (var quote in request.quotations) {
+      if (quote.driver.userId == userId) {
+        quotation = quote;
+      }
+    }
+  }
   return Container(
     height: 180.0,
     padding: EdgeInsets.all(12),
@@ -321,10 +343,27 @@ Widget driverRequestDetailButtonGroup(Request request) {
               SizedBox(
                 width: 10.0,
               ),
-              Text(request.user.fullName == null ||
-                      request.user.fullName == 'Empty'
-                  ? request.user.userId
-                  : request.user.fullName),
+              Column(
+                children: <Widget>[
+                  Text(request.user.fullName == null ||
+                          request.user.fullName == 'Empty'
+                      ? request.user.userId
+                      : request.user.fullName),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text('Giá đã báo: ' + quotation.price.toString()),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {},
+                        child: Icon(Icons.edit),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ),
