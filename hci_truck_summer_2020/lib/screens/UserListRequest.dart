@@ -15,7 +15,8 @@ class UserListRequestScreen extends StatefulWidget {
   UserListRequestScreenState createState() => UserListRequestScreenState();
 }
 
-class UserListRequestScreenState extends State<UserListRequestScreen> {
+class UserListRequestScreenState extends State<UserListRequestScreen>
+    with AutomaticKeepAliveClientMixin {
   List<Request> requests;
 
   @override
@@ -37,25 +38,17 @@ class UserListRequestScreenState extends State<UserListRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return requests != null || requests.length > 0
         ? Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                await Navigator.of(context)
-                    .push(MaterialPageRoute(
-                  builder: (context) => UserCreateRequestScreen(),
-                ))
-                    .then((value) {
-                  getList();
-                });
-              },
-              child: Icon(Icons.add),
-            ),
             backgroundColor: AppConstants.backgroundColor,
             body: listRequest(requests),
           )
         : CircularProgressIndicator();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 Widget listRequest(List<Request> requests) {
@@ -65,27 +58,24 @@ Widget listRequest(List<Request> requests) {
           padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
           itemCount: requests.length,
           itemBuilder: (BuildContext context, int index) {
-            List<Place> ownerPlaces =
-                requests[index].commodityOwner.address.places;
-            List<Place> reciverPlaces = requests[index].reciver.address.places;
             String ownerAddress =
                 requests[index].commodityOwner.address.streetName +
                     ", " +
-                    ownerPlaces[0].name +
+                    requests[index].commodityOwner.address.ward +
                     ", " +
-                    ownerPlaces[1].name +
+                    requests[index].commodityOwner.address.district +
                     ", " +
-                    ownerPlaces[2].name;
+                    requests[index].commodityOwner.address.province;
             String reciverAddress = requests[index].reciver.address.streetName +
                 ", " +
-                reciverPlaces[0].name +
+                requests[index].reciver.address.ward +
                 ", " +
-                reciverPlaces[1].name +
+                requests[index].reciver.address.district +
                 ", " +
-                reciverPlaces[2].name;
+                requests[index].reciver.address.province;
 
             return Hero(
-              tag: 'background' + index.toString(),
+              tag: 'background' + requests[index].requestId.toString(),
               child: Card(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
                 shape: RoundedRectangleBorder(
@@ -97,7 +87,8 @@ Widget listRequest(List<Request> requests) {
                   onTap: () {
                     Navigator.push(context,
                         PageRouteBuilder(pageBuilder: (context, a, b) {
-                      return UserRequestDetail(index, requests[index]);
+                      return UserRequestDetail(
+                          requests[index].requestId + 1, requests[index]);
                     }));
                   },
                   child: Container(
@@ -189,16 +180,18 @@ Widget listRequest(List<Request> requests) {
                                       ),
                                       child: Row(
                                         children: <Widget>[
-                                          Text(
-                                            requests[index]
-                                                    .quotations
-                                                    .length
-                                                    .toString() +
-                                                ' báo giá',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          )
+                                          requests[index].statusId == 1
+                                              ? Text(
+                                                  requests[index]
+                                                          .quotations
+                                                          .length
+                                                          .toString() +
+                                                      ' báo giá',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              : SizedBox(),
                                         ],
                                       ),
                                     ),

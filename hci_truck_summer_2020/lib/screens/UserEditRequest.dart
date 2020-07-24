@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
@@ -16,13 +17,14 @@ import 'package:truck/screens/inputAdress.dart';
 import 'package:truck/services/HttpService.dart';
 import 'package:truck/services/appUi.dart';
 
-class UserCreateRequestScreen extends StatefulWidget {
+class UserEditRequestScreen extends StatefulWidget {
+  Request request;
+  UserEditRequestScreen({this.request});
   @override
-  _UserCreateRequestScreenState createState() =>
-      _UserCreateRequestScreenState();
+  _UserEditRequestScreenState createState() => _UserEditRequestScreenState();
 }
 
-class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
+class _UserEditRequestScreenState extends State<UserEditRequestScreen> {
   TextEditingController pickUpFieldController;
   List<DropdownMenuItem> wardListMenuItem = new List();
   CommodityOwner commodityOwner = new CommodityOwner();
@@ -79,7 +81,7 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(240, 58, 58, 1),
         title: Text(
-          "Tạo đơn hàng",
+          "Sửa đơn hàng",
           style: TextStyle(fontWeight: FontWeight.normal),
         ),
       ),
@@ -96,9 +98,9 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            pickUpWidget(context, commodityOwner, isFirstTimes),
+            pickUpWidget(context, widget.request.commodityOwner, isFirstTimes),
             SizedBox(height: 24),
-            targetWidget(context, reciver),
+            targetWidget(context, widget.request.reciver),
             SizedBox(height: 12),
             PrimaryButton(
               onPressed: () {
@@ -121,25 +123,25 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            comodityWidget(),
+            comodityWidget(widget.request),
             SizedBox(height: 24),
             PrimaryButton(
-              onPressed: () async {
-                var progressDialog = ProgressDialog(context,
-                    type: ProgressDialogType.Normal, isDismissible: false);
-                Request newRequest;
-                await progressDialog.show();
-                await HttpService.saveRequest(request, commodityOwner, reciver)
-                    .then((value) {
-                  newRequest = value;
-                });
-                if (newRequest != null) {
-                  progressDialog.hide().then(
-                        (value) => {Navigator.pop(context)},
-                      );
-                }
-              },
-              text: "Tạo đơn hàng",
+              // onPressed: () async {
+              //   var progressDialog = ProgressDialog(context,
+              //       type: ProgressDialogType.Normal, isDismissible: false);
+              //   Request newRequest;
+              //   await progressDialog.show();
+              //   await HttpService.saveRequest(request, commodityOwner, reciver)
+              //       .then((value) {
+              //     newRequest = value;
+              //   });
+              //   if (newRequest != null) {
+              //     progressDialog.hide().then(
+              //           (value) => {Navigator.pop(context)},
+              //         );
+              //   }
+              // },
+              text: "Sửa đơn hàng",
             ),
             SizedBox(height: 12),
             PrimaryButton(
@@ -157,12 +159,26 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
     );
   }
 
-  Widget comodityWidget() {
+  Widget comodityWidget(Request request) {
     TextEditingController datePickerController = new TextEditingController();
-    DateTime pickedDate = DateTime.now();
+    datePickerController.text = DateFormat.yMMMd().format(request.validDate);
+    DateTime pickedDate = request.validDate;
     TextEditingController commodityNameController = new TextEditingController();
+    commodityNameController.text = request.commodityName;
     TextEditingController weightController = new TextEditingController();
+    weightController.text = request.weight.toString();
     TextEditingController noteController = new TextEditingController();
+    noteController.text = request.note;
+
+    TextEditingController wide = new TextEditingController();
+    wide.text = "50";
+
+    TextEditingController dai = new TextEditingController();
+    dai.text = "50";
+
+    TextEditingController height = new TextEditingController();
+    height.text = "60";
+
     return Column(
       children: <Widget>[
         SizedBox(height: 12.0),
@@ -269,7 +285,7 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
                         "Dài",
                         () async {},
                         (value) {},
-                        null,
+                        wide,
                         false,
                         TextInputType.text,
                         1,
@@ -288,7 +304,7 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
                         "Rộng",
                         () async {},
                         (value) {},
-                        null,
+                        dai,
                         false,
                         TextInputType.text,
                         1,
@@ -307,7 +323,7 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
                         "Cao",
                         () async {},
                         (value) {},
-                        null,
+                        height,
                         false,
                         TextInputType.text,
                         1,
@@ -400,22 +416,20 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
                                 : AssetImage('assets/images/add-image.png'),
                           ),
                         ),
-                        imageFile1 != null
-                            ? Positioned(
-                                top: -10,
-                                right: -10,
-                                child: IconButton(
-                                    iconSize: 32,
-                                    color: Colors.red,
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        imageFile1 = null;
-                                        body = body2();
-                                      });
-                                    }),
-                              )
-                            : SizedBox()
+                        Positioned(
+                          top: -10,
+                          right: -10,
+                          child: IconButton(
+                              iconSize: 32,
+                              color: Colors.red,
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  imageFile1 = null;
+                                  body = body2();
+                                });
+                              }),
+                        )
                       ],
                     ),
                   ),
@@ -447,22 +461,20 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
                                 : AssetImage('assets/images/add-image.png'),
                           ),
                         ),
-                        imageFile2 != null
-                            ? Positioned(
-                                top: -10,
-                                right: -10,
-                                child: IconButton(
-                                    iconSize: 32,
-                                    color: Colors.red,
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        imageFile2 = null;
-                                        body = body2();
-                                      });
-                                    }),
-                              )
-                            : SizedBox()
+                        Positioned(
+                          top: -10,
+                          right: -10,
+                          child: IconButton(
+                              iconSize: 32,
+                              color: Colors.red,
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  imageFile2 = null;
+                                  body = body2();
+                                });
+                              }),
+                        )
                       ],
                     ),
                   ),
@@ -495,22 +507,20 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
                                 : AssetImage('assets/images/add-image.png'),
                           ),
                         ),
-                        imageFile3 != null
-                            ? Positioned(
-                                top: -10,
-                                right: -10,
-                                child: IconButton(
-                                    iconSize: 32,
-                                    color: Colors.red,
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        imageFile3 = null;
-                                        body = body2();
-                                      });
-                                    }),
-                              )
-                            : SizedBox()
+                        Positioned(
+                          top: -10,
+                          right: -10,
+                          child: IconButton(
+                              iconSize: 32,
+                              color: Colors.red,
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  imageFile3 = null;
+                                  body = body2();
+                                });
+                              }),
+                        )
                       ],
                     ),
                   ),
@@ -570,8 +580,17 @@ class _UserCreateRequestScreenState extends State<UserCreateRequestScreen> {
 Widget pickUpWidget(
     BuildContext context, CommodityOwner commodityOwner, bool isFirstTimes) {
   TextEditingController fullNameController = new TextEditingController();
+  fullNameController.text = commodityOwner.fullName;
   TextEditingController ownerAdressController = new TextEditingController();
+  ownerAdressController.text = commodityOwner.address.streetName +
+      ", " +
+      commodityOwner.address.ward +
+      ", " +
+      commodityOwner.address.district +
+      ", " +
+      commodityOwner.address.province;
   TextEditingController ownerPhoneNo = new TextEditingController();
+  ownerPhoneNo.text = commodityOwner.phoneNumber;
   if (isFirstTimes == false) {
     fullNameController.text = commodityOwner.fullName;
     ownerPhoneNo.text = commodityOwner.phoneNumber;
@@ -667,8 +686,17 @@ Widget pickUpWidget(
 
 Widget targetWidget(BuildContext context, Reciver reciver) {
   TextEditingController fullNameController = new TextEditingController();
+  fullNameController.text = reciver.fullName;
   TextEditingController reciverAdressController = new TextEditingController();
+  reciverAdressController.text = reciver.address.streetName +
+      ", " +
+      reciver.address.ward +
+      ", " +
+      reciver.address.district +
+      ", " +
+      reciver.address.province;
   TextEditingController reciverPhoneNoController = new TextEditingController();
+  reciverPhoneNoController.text = reciver.phoneNumber;
   return Column(
     children: <Widget>[
       Container(

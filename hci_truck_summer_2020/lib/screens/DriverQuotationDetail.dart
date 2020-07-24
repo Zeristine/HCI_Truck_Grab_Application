@@ -2,10 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:truck/constants/appConstans.dart';
+import 'package:truck/models/Quotation.dart';
+import 'package:truck/models/Request.dart';
+import 'package:truck/services/HttpService.dart';
+import 'package:truck/services/appUi.dart';
 
 final double requestDetailButtonGroupHeight = 75.0;
 
+// ignore: must_be_immutable
 class QuotationDetailScreen extends StatefulWidget {
+  Request request;
+  Quotation quotation;
+  QuotationDetailScreen({this.request, this.quotation});
+
   @override
   QuotationDetailScreenState createState() => QuotationDetailScreenState();
 }
@@ -36,7 +45,8 @@ class QuotationDetailScreenState extends State<QuotationDetailScreen> {
             },
           ),
         ),
-        bottomSheet: detailButtonGroup(),
+        bottomSheet:
+            detailButtonGroup(context, widget.request, widget.quotation),
         body: Container(
           padding: EdgeInsets.only(bottom: 150),
           child: SingleChildScrollView(
@@ -86,7 +96,7 @@ class QuotationDetailScreenState extends State<QuotationDetailScreen> {
                           height: 12.0,
                         ),
                         //priceDetail(context),
-                        driverJourneyDetail(),
+                        //driverJourneyDetail(),
                         SizedBox(
                           height: 150.0,
                         ),
@@ -208,67 +218,68 @@ Widget priceDetail(BuildContext context) {
   );
 }
 
-Widget driverJourneyDetail() {
-  return Card(
-    margin: EdgeInsets.symmetric(horizontal: 24.0),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    elevation: 0.0,
-    child: Container(
-      padding: EdgeInsets.all(12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "Hành trình",
-            style: TextStyle(
-              fontSize: AppConstants.medFontSize,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey[800],
-            ),
-          ),
-          SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Icon(
-                Icons.adjust,
-                color: Colors.red,
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              Text(
-                'Nguyễn Văn Phủ, Phường Đa Kao',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
-            ],
-          ),
-          SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Icon(
-                Icons.location_on,
-                color: Colors.blue,
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              Text(
-                'Nguyễn Văn Phủ, Phường Đa Kao',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-}
+// Widget driverJourneyDetail() {
+//   return Card(
+//     margin: EdgeInsets.symmetric(horizontal: 24.0),
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(10.0),
+//     ),
+//     elevation: 0.0,
+//     child: Container(
+//       padding: EdgeInsets.all(12.0),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: <Widget>[
+//           Text(
+//             "Hành trình",
+//             style: TextStyle(
+//               fontSize: AppConstants.medFontSize,
+//               fontWeight: FontWeight.w600,
+//               color: Colors.grey[800],
+//             ),
+//           ),
+//           SizedBox(height: 8.0),
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.start,
+//             children: <Widget>[
+//               Icon(
+//                 Icons.adjust,
+//                 color: Colors.red,
+//               ),
+//               SizedBox(
+//                 width: 8.0,
+//               ),
+//               Text(
+//                 'Nguyễn Văn Phủ, Phường Đa Kao',
+//                 style: TextStyle(color: Colors.grey[600]),
+//               ),
+//             ],
+//           ),
+//           SizedBox(height: 8.0),
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.start,
+//             children: <Widget>[
+//               Icon(
+//                 Icons.location_on,
+//                 color: Colors.blue,
+//               ),
+//               SizedBox(
+//                 width: 8.0,
+//               ),
+//               Text(
+//                 'Nguyễn Văn Phủ, Phường Đa Kao',
+//                 style: TextStyle(color: Colors.grey[600]),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     ),
+//   );
+// }
 
-Widget detailButtonGroup() {
+Widget detailButtonGroup(
+    BuildContext context, Request requestw, Quotation quotation) {
   return Container(
     padding: EdgeInsets.all(24),
     decoration: BoxDecoration(
@@ -309,7 +320,7 @@ Widget detailButtonGroup() {
                 SizedBox(
                   height: 4.0,
                 ),
-                Text("5.000.000 VNĐ",
+                Text("4.000.000 VNĐ",
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontWeight: FontWeight.w500,
@@ -363,7 +374,30 @@ Widget detailButtonGroup() {
                 icon: Icon(Icons.check),
                 disabledColor: Colors.white,
                 color: Colors.white,
-                onPressed: null,
+                onPressed: () async {
+                  requestw.driverId = quotation.driverId;
+                  requestw.statusId = 2;
+
+                  await HttpService.updateRequest(requestw);
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Chấp nhận báo giá thành công'),
+                        content: Text(
+                            'Tài xế sẽ liên hệ với bạn để xác nhận trong thời gian sớm nhất!'),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 iconSize: 20.0,
               ),
             ),

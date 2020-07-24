@@ -275,7 +275,13 @@ class AddressScreenState extends State<AddressScreen> {
               list.add(district);
               list.add(province);
               String streetLine = streetFieldController.text;
-              Address address = Address(places: list, streetName: streetLine);
+              Address address = Address(
+                places: list,
+                streetName: streetLine,
+                province: province.name,
+                district: district.name,
+                ward: ward.name,
+              );
 
               Navigator.pop(context, address);
             },

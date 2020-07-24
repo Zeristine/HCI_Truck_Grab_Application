@@ -1,24 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truck/screens/UserListRequest.dart';
+import 'package:truck/screens/userCreateRequest.dart';
 
 class RequestMenu extends StatefulWidget {
   RequestMenu({Key key}) : super(key: key);
 
   @override
-  _requestMenuState createState() => _requestMenuState();
+  RequestMenuState createState() => RequestMenuState();
 }
 
-class _requestMenuState extends State<RequestMenu> {
+class RequestMenuState extends State<RequestMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
       child: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => UserCreateRequestScreen(),
+              ));
+            },
+            child: Icon(Icons.add),
+          ),
           appBar: TabBar(labelColor: Colors.grey[800], tabs: [
             Tab(
               text: "Chờ báo giá",
+            ),
+            Tab(
+              text: "Chờ lấy hàng",
             ),
             Tab(
               text: "Đang vận chuyển",
@@ -31,6 +43,7 @@ class _requestMenuState extends State<RequestMenu> {
             UserListRequestScreen(1),
             UserListRequestScreen(2),
             UserListRequestScreen(3),
+            UserListRequestScreen(4),
           ]),
         ),
       ),

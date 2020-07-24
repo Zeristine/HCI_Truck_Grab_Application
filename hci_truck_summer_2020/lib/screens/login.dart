@@ -220,7 +220,7 @@ Widget logo() {
         height: 12.0,
       ),
       Text(
-        'DELTRU',
+        'CoTransport',
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: 'Oswald',

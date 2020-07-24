@@ -19,6 +19,7 @@ class Request {
   String note;
   String userId;
   User user;
+  String driverId;
   List<Quotation> quotations;
   CommodityOwner commodityOwner;
   Reciver reciver;
@@ -34,6 +35,7 @@ class Request {
     this.statusId,
     this.note,
     this.userId,
+    this.driverId,
     this.user,
     this.quotations,
     this.reciver,
@@ -58,10 +60,15 @@ class Request {
             commodityOwnerId: json['commodityOwnerId'],
             reciverId: json['reciverId'],
             weight: json['weight'],
-            dateCreate: DateTime.parse(json['dateCreate']),
-            validDate: DateTime.parse(json['validDate']),
+            dateCreate: json['dateCreate'] != null
+                ? DateTime.parse(json['dateCreate'])
+                : null,
+            validDate: json['dateCreate'] != null
+                ? DateTime.parse(json['validDate'])
+                : null,
             statusId: json['statusId'],
             status: Status.fromJson(json['status']),
+            driverId: json['driverId'],
             note: json['note'],
             userId: json['userId'],
             user: json['user'] != null ? User.fromJson(json['user']) : null,
@@ -82,6 +89,7 @@ class Request {
         "commodityOwnerId": commodityOwnerId,
         "reciverId": reciverId,
         "weight": weight,
+        "driverId": driverId,
         "dateCreate": dateCreate.toIso8601String(),
         "validDate": validDate.toIso8601String(),
         "statusId": statusId,

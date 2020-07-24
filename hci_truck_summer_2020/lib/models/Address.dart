@@ -4,8 +4,17 @@ class Address {
   int addressId;
   List<Place> places;
   String streetName;
+  String province;
+  String district;
+  String ward;
 
-  Address({this.addressId, this.places, this.streetName});
+  Address(
+      {this.addressId,
+      this.places,
+      this.streetName,
+      this.province,
+      this.district,
+      this.ward});
 
   factory Address.fromJson(Map<String, dynamic> json) {
     List<Place> places = new List<Place>();
@@ -19,12 +28,18 @@ class Address {
         ? Address(
             addressId: json["addressId"],
             places: places,
+            province: json['province'],
+            district: json['district'],
+            ward: json['ward'],
             streetName: json["streetName"])
         : null;
   }
   Map toJson() => {
         "addressId": addressId,
         "streetName": streetName,
+        "province": province,
+        "district": district,
+        "ward": ward,
       };
 
   // List<Place> getPlaces(Map<String, dynamic> jsonPlaces) {

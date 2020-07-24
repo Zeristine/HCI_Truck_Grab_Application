@@ -5,6 +5,7 @@ import 'package:truck/models/Address.dart';
 import 'package:truck/models/CommodityOwner.dart';
 import 'package:http/http.dart' as http;
 import 'package:truck/models/Place.dart';
+import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Reciver.dart';
 import 'package:truck/models/Request.dart';
 import 'package:truck/models/user.dart';
@@ -61,11 +62,16 @@ class HttpService {
       return commodityOwner;
     } else {
       var address1;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       await saveAddress(address).then((value) {
         address1 = value;
       });
+
       commodityOwner.commodityOwnerId = 0;
+      commodityOwner.userId = prefs.getString('userId');
+      commodityOwner.isDefault = true;
       commodityOwner.addressId = address1.addressId;
+
       savePlace(places, address1.addressId);
       String commodityUrl =
           "https://truck-api.azurewebsites.net/api/commodity-owners";
@@ -89,12 +95,15 @@ class HttpService {
     if (reciver.reciverId != null && reciver.reciverId > 0) {
       return reciver;
     } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       var address1;
       await saveAddress(address).then((value) {
         address1 = value;
       });
       reciver.reciverId = 0;
       reciver.addressId = address1.addressId;
+      reciver.userId = prefs.getString('userId');
+      reciver.isDefault = true;
       savePlace(places, address1.addressId);
       String commodityUrl = "https://truck-api.azurewebsites.net/api/recivers";
       Map<String, String> headers = <String, String>{
@@ -151,12 +160,6 @@ class HttpService {
     var response = await http.get(url);
     List<Request> requests = new List<Request>();
     if (response.statusCode == 200) {
-      // List<String> list = List.from(
-      //   json.decode(response.body),
-      // );
-      // for (var i = 0; i < list.length; i++) {
-      //   requests.add(Request.fromJson(json.decode(list[i])));
-      // }
       var jsonRe = json.decode(response.body);
       if (jsonRe != null) {
         var list = jsonRe as List;
@@ -169,14 +172,75 @@ class HttpService {
     return null;
   }
 
+  static Future<Request> getRequestById(int requestId) async {
+    String url = "https://truck-api.azurewebsites.net/api/requests/" +
+        requestId.toString();
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      print(response.body);
+      return Request.fromJson(json.decode(response.body));
+    }
+    return null;
+  }
+
   static Future<User> getUser(String userId) async {
     String url = "https://truck-api.azurewebsites.net/api/users/" + userId;
     var response = await http.get(url);
     User user;
     if (response.statusCode == 200) {
-      print(response.body);
       user = User.fromJson(json.decode(response.body));
     }
     return user;
+  }
+
+  static Future<List<CommodityOwner>> getCommodityOwner(
+      String userId, bool isDefault) async {
+    String url =
+        "https://truck-api.azurewebsites.net/api/commodity-owners?userId=" +
+            userId +
+            "&isDefault=" +
+            isDefault.toString();
+    var response = await http.get(url);
+    List<CommodityOwner> commodityOwners = new List<CommodityOwner>();
+    if (response.statusCode == 200) {
+      var jsonCO = json.decode(response.body);
+      var list = jsonCO as List;
+      if (list.length > 0) {
+        commodityOwners = list.map((e) => CommodityOwner.fromJson(e)).toList();
+      }
+    }
+    return commodityOwners;
+  }
+
+  static Future<Reciver> addQuotation(Quotation quotation) async {
+    String commodityUrl = "https://truck-api.azurewebsites.net/api/quotations";
+    Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    //Create CommodityOwner Info
+    var response = await http.post(
+      commodityUrl,
+      headers: headers,
+      body: jsonEncode(quotation.toJson()),
+    );
+    Reciver reResponse;
+    if (response.statusCode == 201)
+      reResponse = Reciver.fromJson(json.decode(response.body));
+    return reResponse;
+  }
+
+  static Future updateRequest(Request request) async {
+    String url = "https://truck-api.azurewebsites.net/api/requests/" +
+        request.requestId.toString();
+    Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var response = await http.put(url,
+        body: json.encode(request.toJson()), headers: headers);
+
+    if (response.statusCode == 204) {
+      return true;
+    }
+    return false;
   }
 }
