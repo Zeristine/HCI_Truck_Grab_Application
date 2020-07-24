@@ -6,6 +6,7 @@ import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Request.dart';
 import 'package:truck/screens/DriverQuotationDetail.dart';
+import 'package:truck/screens/UserRequestInfo.dart';
 import 'package:truck/services/appUi.dart';
 import 'package:truck/services/marquee.dart';
 
@@ -61,7 +62,13 @@ class UserRequestDetailState extends State<UserRequestDetail> {
               ),
               color: Color(0xff8d08cf),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserRequestInfoScreen(request),
+                      ));
+                },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 200),
                   curve: Curves.easeIn,
@@ -83,7 +90,7 @@ class UserRequestDetailState extends State<UserRequestDetail> {
                 request.statusId == 1
                     ? 'Báo giá'
                     : request.statusId == 2
-                        ? 'Chờ vận chuyển'
+                        ? 'Chờ lấy hàng'
                         : request.statusId == 3
                             ? 'Đang vận chuyển'
                             : request.statusId == 4 ? 'Hoàn thành' : 'Đã hủy',

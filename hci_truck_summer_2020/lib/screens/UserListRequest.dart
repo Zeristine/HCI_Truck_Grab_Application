@@ -180,16 +180,18 @@ Widget listRequest(List<Request> requests) {
                                       ),
                                       child: Row(
                                         children: <Widget>[
-                                          Text(
-                                            requests[index]
-                                                    .quotations
-                                                    .length
-                                                    .toString() +
-                                                ' báo giá',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          )
+                                          requests[index].statusId == 1
+                                              ? Text(
+                                                  requests[index]
+                                                          .quotations
+                                                          .length
+                                                          .toString() +
+                                                      ' báo giá',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              : SizedBox(),
                                         ],
                                       ),
                                     ),

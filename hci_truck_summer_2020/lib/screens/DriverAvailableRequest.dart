@@ -6,97 +6,59 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Place.dart';
 import 'package:truck/models/Request.dart';
-import 'package:truck/screens/DriverAvailableRequest.dart';
 import 'package:truck/screens/DriverRequestDetail.dart';
 import 'package:http/http.dart' as http;
 
-class RequestListDriverScreen extends StatefulWidget {
+class DriverAvailableRequestScreen extends StatefulWidget {
   @override
-  RequestListDriverSate createState() => RequestListDriverSate();
+  DriverAvailableRequestSate createState() => DriverAvailableRequestSate();
 }
 
-class RequestListDriverSate extends State<RequestListDriverScreen> {
+class DriverAvailableRequestSate extends State<DriverAvailableRequestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: RaisedButton(
-          padding: EdgeInsets.all(12),
-          textColor: Colors.white,
-          color: Colors.blue,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DriverAvailableRequestScreen(),
-              ),
-            );
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text('Xem các đơn hàng đang đợi báo giá '),
-              Icon(Icons.view_list)
-            ],
-          ),
-        ),
         backgroundColor: AppConstants.backgroundColor,
         body: Container(
           child: DefaultTabController(
-            length: 4,
+            length: 3,
             child: Scaffold(
-              appBar: TabBar(labelColor: Colors.grey[800], tabs: [
-                Tab(
-                  text: "Chờ lấy hàng",
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text(
+                  "Danh sách đơn đợi báo giá",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                  ),
                 ),
-                Tab(
-                  text: "Đang vận chuyển",
-                ),
-                Tab(
-                  text: "Đã hủy",
-                ),
-                Tab(
-                  text: "Đã báo giá",
-                ),
-              ]),
-              body: TabBarView(children: [
-                RequestListDriverType(2),
-                RequestListDriverType(3),
-                RequestListDriverType(4),
-                RequestListDriverType(1),
-              ]),
+              ),
+              body: DriverAvailableRequestType(),
             ),
           ),
         ));
   }
 }
 
-class RequestListDriverType extends StatefulWidget {
-  final int status;
-  RequestListDriverType(this.status);
+class DriverAvailableRequestType extends StatefulWidget {
   @override
-  RequestListDriverTypeState createState() => RequestListDriverTypeState();
+  DriverAvailableRequestTypeState createState() =>
+      DriverAvailableRequestTypeState();
 }
 
-class RequestListDriverTypeState extends State<RequestListDriverType> {
+class DriverAvailableRequestTypeState
+    extends State<DriverAvailableRequestType> {
   List<Request> requests;
 
   Future getList() async {
     requests = List<Request>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.getString('userId');
-    var response;
-    if (widget.status == 1) {
-      response = await http.get(
-          'https://truck-api.azurewebsites.net/api/requests?status=1&driverId=$userId&isQuote=true');
-    } else {
-      response = await http.get(
-          'https://truck-api.azurewebsites.net/api/users/' +
-              userId +
-              '/requests?isDriver=true&status=' +
-              widget.status.toString());
-    }
+    var response = await http.get(
+        'https://truck-api.azurewebsites.net/api/requests?status=1' +
+            '&driverId=' +
+            userId);
     setState(() {
       if (response.statusCode == HttpStatus.ok) {
         var jsonRe = json.decode(response.body);
@@ -121,7 +83,7 @@ class RequestListDriverTypeState extends State<RequestListDriverType> {
     return requests != null || requests.length > 0
         ? Scaffold(
             backgroundColor: AppConstants.backgroundColor,
-            body: requestList(requests, widget.status),
+            body: requestList(requests, 1),
           )
         : CircularProgressIndicator();
   }

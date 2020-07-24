@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,18 +5,19 @@ import 'package:truck/constants/appConstans.dart';
 import 'package:truck/models/Quotation.dart';
 import 'package:truck/models/Request.dart';
 import 'package:truck/models/user.dart';
+import 'package:truck/screens/UserEditRequest.dart';
 import 'package:truck/services/HttpService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truck/services/appUi.dart';
 
-class DriverRequestDetailScreen extends StatefulWidget {
+class UserRequestInfoScreen extends StatefulWidget {
   final Request request;
-  DriverRequestDetailScreen(this.request);
+  UserRequestInfoScreen(this.request);
   @override
   DriverRequestDetailState createState() => DriverRequestDetailState(request);
 }
 
-class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
+class DriverRequestDetailState extends State<UserRequestInfoScreen> {
   Request request;
   User user;
   DriverRequestDetailState(this.request);
@@ -62,9 +61,6 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
           },
         ),
       ),
-      bottomSheet: user != null
-          ? driverRequestDetailButtonGroup(context, request, user)
-          : Container(),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: SizedBox(
@@ -122,8 +118,20 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
                 color: Colors.white,
                 child: reciever(request),
               ),
+              PrimaryButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserEditRequestScreen(
+                          request: widget.request,
+                        ),
+                      ));
+                },
+                text: 'Sửa đơn hàng',
+              ),
               SizedBox(
-                height: 224.0,
+                height: 48.0,
               ),
             ],
           ),
@@ -131,6 +139,14 @@ class DriverRequestDetailState extends State<DriverRequestDetailScreen> {
       ),
     );
   }
+}
+
+Widget showImage(String path) {
+  return Image(
+    image: AssetImage(path),
+    width: 520,
+    height: 520,
+  );
 }
 
 Widget header(Request request) {
@@ -269,14 +285,6 @@ Widget header(Request request) {
         ),
       ],
     ),
-  );
-}
-
-Widget showImage(String path) {
-  return Image(
-    image: AssetImage(path),
-    width: 520,
-    height: 520,
   );
 }
 
@@ -511,167 +519,6 @@ Widget reciever(Request request) {
                 'Địa Chỉ\n' + address,
                 softWrap: true,
               ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
-Widget driverRequestDetailButtonGroup(
-    BuildContext context, Request request, User user) {
-  return Container(
-    height: 184.0,
-    padding: EdgeInsets.all(12),
-    decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.grey[400],
-            offset: Offset(0, -3),
-            blurRadius: 5.0,
-            spreadRadius: .3,
-          )
-        ]),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          'Người tạo đơn',
-          style: TextStyle(
-            fontSize: AppConstants.medFontSize,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(
-          height: 12.0,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 32,
-              backgroundImage: request.user.imagePath == null ||
-                      request.user.imagePath == 'Empty'
-                  ? AssetImage('assets/images/no-avatar.png')
-                  : NetworkImage(request.user.imagePath),
-            ),
-            SizedBox(
-              width: 12.0,
-            ),
-            Text(
-              request.user.fullName.toString(),
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10.0,
-        ),
-        Row(
-          children: <Widget>[
-            Container(
-              height: 48,
-              width: 100.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: AppConstants.buttonColor,
-              ),
-              child: Center(
-                child: Text('Nhắn tin',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: AppConstants.minFontSize,
-                    )),
-              ),
-            ),
-            Spacer(),
-            Container(
-              height: 48,
-              width: 100.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: AppConstants.buttonColor,
-              ),
-              child: Center(
-                child: Text('Gọi',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: AppConstants.minFontSize,
-                    )),
-              ),
-            ),
-            Spacer(),
-            InkWell(
-              onTap: () {
-                if (request.statusId == 1) {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: quotationDialog(context, request.requestId),
-                        );
-                      });
-                }
-              },
-              child: request.statusId == 1
-                  ? Container(
-                      height: 48,
-                      width: 100.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.red,
-                      ),
-                      child: Center(
-                          child: Text('Hủy',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: AppConstants.minFontSize,
-                              ))),
-                    )
-                  : Container(
-                      height: 48,
-                      width: 100.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.green,
-                      ),
-                      child: request.statusId == 2
-                          ? Center(
-                              child: Text('Đã lấy hàng',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: AppConstants.minFontSize,
-                                  )))
-                          : request.statusId == 3
-                              ? Center(
-                                  child: Text('Đã giao hàng',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: AppConstants.minFontSize,
-                                      )))
-                              : Center(
-                                  child: Text('Đã giao hàng',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: AppConstants.minFontSize,
-                                      ))),
-                      // IconButton(
-                      //   icon: Icon(Icons.check),
-                      //   disabledColor: Colors.white,
-                      //   color: Colors.white,
-                      //   onPressed: null,
-                      //   iconSize: 20.0,
-                    ),
             ),
           ],
         ),

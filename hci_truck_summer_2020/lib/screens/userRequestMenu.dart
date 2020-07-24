@@ -30,7 +30,7 @@ class RequestMenuState extends State<RequestMenu> {
               text: "Chờ báo giá",
             ),
             Tab(
-              text: "Chờ vận chuyển",
+              text: "Chờ lấy hàng",
             ),
             Tab(
               text: "Đang vận chuyển",

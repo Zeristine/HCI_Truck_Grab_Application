@@ -33,10 +33,20 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     List<Request> requests = new List<Request>();
     if (json != null) {
+      if (json['requests'] != null) {
+        var list = json['requests'] as List;
+        if (list.length > 0) {
+          requests = list.map((e) => Request.fromJson(e)).toList();
+        }
+      }
+    }
+
+    List<Quotation> quotations = new List<Quotation>();
+    if (json != null) {
       if (json['quotations'] != null) {
         var list = json['quotations'] as List;
         if (list.length > 0) {
-          requests = list.map((e) => Request.fromJson(e)).toList();
+          quotations = list.map((e) => Quotation.fromJson(e)).toList();
         }
       }
     }
@@ -52,9 +62,7 @@ class User {
             roleId: json['roleId'],
             role: Role.fromJson(json['role']),
             requests: requests,
-            quotations: json['quotations'] != null
-                ? List.from(json['quotations'])
-                : new List<Quotation>(),
+            quotations: quotations,
           )
         : null;
   }

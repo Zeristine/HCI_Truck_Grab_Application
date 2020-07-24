@@ -60,8 +60,12 @@ class Request {
             commodityOwnerId: json['commodityOwnerId'],
             reciverId: json['reciverId'],
             weight: json['weight'],
-            dateCreate: DateTime.parse(json['dateCreate']),
-            validDate: DateTime.parse(json['validDate']),
+            dateCreate: json['dateCreate'] != null
+                ? DateTime.parse(json['dateCreate'])
+                : null,
+            validDate: json['dateCreate'] != null
+                ? DateTime.parse(json['validDate'])
+                : null,
             statusId: json['statusId'],
             status: Status.fromJson(json['status']),
             driverId: json['driverId'],
